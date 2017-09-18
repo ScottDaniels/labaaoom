@@ -10,11 +10,14 @@ package com.rocklizard.labaaoom;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import static android.R.attr.duration;
 import static com.rocklizard.labaaoom.M5hash.Mk_md5;
+import static com.rocklizard.labaaoom.R.id.text;
 
 public class LaBaaooM extends AppCompatActivity {
 
@@ -50,7 +53,11 @@ public class LaBaaooM extends AppCompatActivity {
             target = new Intent( this, targetc );   // can't pass new... on startActivity() call
             startActivity( target );
         } else {
-            Toast.makeText(this, "Invalid credentials entered " + result, Toast.LENGTH_LONG).show();
+            Toast t;
+
+            t = Toast.makeText(this, "Invalid credentials entered", Toast.LENGTH_LONG);
+            t.setGravity( Gravity.TOP | Gravity.START, 100, 100);
+            t.show();
         }
     }
 }

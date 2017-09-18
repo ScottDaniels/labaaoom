@@ -12,12 +12,14 @@ public class Eval_set {
 	private int idx;					// insert point
 
 	public Eval_set( ) {
-		evals = new Evaluation[1024];		// assuming 1/week this is about 40 years worth :)
+		evals = new Evaluation[512];		// assuming 1/week this is about 20 years worth :)
 		idx = 0;
 	}
 
 	/*
 		Convert a comma sep list of eval info into an entry and add it to the list.
+		The csl string must be in the order that the evaluation expects:
+			date, set-name, type-name, words per min
 	*/
 	public void Add_entry( String csl ) {
 		if( idx >= evals.length ) {
@@ -30,7 +32,7 @@ public class Eval_set {
 	/*
 		Return a 4-tuple:  min, max, average and number of instances.
  	*/
-	public double[] mmai( ) {
+	public double[] Get_mmai( ) {
 		double[] rv;
 		int i;
 
@@ -44,7 +46,7 @@ public class Eval_set {
 		rv[2] = evals[0].GetWpm();
 		rv[3] = 1;
 
-		for( i = 0; i < idx; i++ ) {
+		for( i = 1; i < idx; i++ ) {
 			if( rv[0] > evals[i].GetWpm() ) {
 				rv[0] = evals[i].GetWpm();
 			}
@@ -52,10 +54,13 @@ public class Eval_set {
 				rv[1] = evals[i].GetWpm();
 			}
 
+			rv[2] += evals[i].GetWpm();		// sum values during loop
 			rv[3]++;
 		}
 
-		rv[2] /= idx;
+		if( rv[3] > 0 ) {
+			rv[2] /= rv[3];
+		}
 		return rv;
 	}
 }

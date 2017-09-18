@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Start Evaluation"
-            android:onClick="Go_evaulate"
+            android:onClick="Go_evaluate"
             android:textColor="#00d000"
             android:textSize="24sp"
             tools:layout_editor_absoluteX="16dp"
