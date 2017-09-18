@@ -9,15 +9,15 @@ package com.rocklizard.labaaoom;
 
 
 public class Evaluation {
-	String	date;			// date that the evaluation occurred
-	double	wpm;			// words per minute of the eval
-	String	eval_set;		// reading set id (e.g. K-1)
-	String	eval_type;		// norm/lc or maybe somthing else
+	private String	date;			// date that the evaluation occurred
+	private double	wpm;			// words per minute of the eval
+	private String	eval_set;		// reading set id (e.g. K-1)
+	private String	eval_type;		// norm/lc or maybe somthing else
 
 	/*
 		Constructor from a new evaluation
 	*/
-	Public Evaluation( String date, double wpm, String set ) {
+	public Evaluation( String date, String set, String type, double wpm ) {
 		this.date = date;
 		this.wpm = wpm;
 		eval_set = set;
@@ -27,21 +27,22 @@ public class Evaluation {
 	/*
 		Constructor for a stirng read from the datacache (comma separated fields)
 	*/
-	public Evaluation( String csepfields ) {
+	public Evaluation( String csl ) {
 		String[] tokens;
 
-		tokens = csepfields.split( "," );
-		if(  tokens.lengh < 4 ) {
-			return null;
+		tokens = csl.split( "," );
+		if(  tokens.length >= 4 ) {
+			date = tokens[ 0 ];
+			eval_set = tokens[ 1 ];
+			eval_type = tokens[ 2 ];
+			wpm = Double.parseDouble( tokens[ 3 ] );
 		}
-
-		date = tokens[0];
-		eval_set = tokens[1];
-		eval_type = tokens[2];
-		wpm = Double.parseDouble( tokens[3] );
 	}
 
-	public double GetWPM( ) {
+	/*
+		Fetch up the evaluation's word per minute score.
+	*/
+	public double GetWpm( ) {
 		return wpm;
 	}
 
