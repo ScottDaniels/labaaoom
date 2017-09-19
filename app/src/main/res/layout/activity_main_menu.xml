@@ -36,13 +36,13 @@
             android:id="@+id/add_student_option"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0.05"
             android:onClick="Go_add_student"
-            android:text="Add New Student"
+            android:text="Add Student"
             android:textColor="#00d000"
             android:textSize="24sp"
             tools:layout_editor_absoluteX="76dp"
-            tools:layout_editor_absoluteY="72dp"
-            android:layout_weight="0.05"/>
+            tools:layout_editor_absoluteY="72dp"/>
 
         <CheckedTextView
             android:id="@+id/view_student_option"

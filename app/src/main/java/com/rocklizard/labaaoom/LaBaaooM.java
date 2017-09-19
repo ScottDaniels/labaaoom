@@ -7,6 +7,9 @@
 
 package com.rocklizard.labaaoom;
 
+import android.app.ActionBar;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,9 +18,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import static android.R.attr.duration;
 import static com.rocklizard.labaaoom.M5hash.Mk_md5;
-import static com.rocklizard.labaaoom.R.id.text;
 
 public class LaBaaooM extends AppCompatActivity {
 
@@ -26,7 +27,10 @@ public class LaBaaooM extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_labaoom );
 
-        //TODO:  grab an instance of the database, if no user exists (first invocation) get a user and password
+        //future:  grab an instance of the database, if no user exists (first invocation) get a user and password
+
+        //ActionBar actionBar = getActionBar();
+        //actionBar.setBackgroundDrawable(new ColorDrawable( Color.GREEN));
     }
 
     /*
@@ -46,17 +50,17 @@ public class LaBaaooM extends AppCompatActivity {
         un_thing = (EditText) findViewById(R.id.user_name);
         result = Mk_md5(  un_thing.getText().toString(), pw_thing.getText().toString() );
 
-        pw_thing.setText( "" );                 // safe to clear the pw field now
+        pw_thing.setText( "" );                         // safe to clear the pw field now
 
-        if( result.equals( master_hash ) ) {           // future:  check what they might have changed it to as well
+        if( result.equals( master_hash ) ) {            // future:  check what they might have changed it to as well
             targetc = Main_menu.class;
-            target = new Intent( this, targetc );   // can't pass new... on startActivity() call
+            target = new Intent( this, targetc );
             startActivity( target );
         } else {
             Toast t;
 
             t = Toast.makeText(this, "Invalid credentials entered", Toast.LENGTH_LONG);
-            t.setGravity( Gravity.TOP | Gravity.START, 100, 100);
+            t.setGravity( Gravity.TOP | Gravity.START, 200, 200);
             t.show();
         }
     }
