@@ -30,6 +30,32 @@ public class Eval_set {
 	}
 
 	/*
+		Return an array of strings which are the entries in a datacache savable format.
+	*/
+	public String[] ToStrings( ) {
+		String[] strs;
+		int i;
+
+		if( idx == 0 ) {
+			return null;
+		}
+
+		strs = new String[idx];
+		for( i = 0; i < idx; i++ ) {
+			strs[i] = evals[i].ToString();
+		}
+
+		return strs;
+	}
+
+	/*
+		Return the total number of entries.
+	*/
+	public int GetSize() {
+			return idx;
+	}
+
+	/*
 		Return a 4-tuple:  min, max, average and number of instances.
  	*/
 	public double[] Get_mmai( ) {
