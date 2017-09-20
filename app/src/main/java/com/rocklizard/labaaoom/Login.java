@@ -7,9 +7,7 @@
 
 package com.rocklizard.labaaoom;
 
-import android.app.ActionBar;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,34 +18,15 @@ import android.widget.Toast;
 
 import static com.rocklizard.labaaoom.M5hash.Mk_md5;
 
-public class LaBaaooM extends AppCompatActivity {
+public class Login extends Activity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+	@Override
+	protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_labaoom );
-
-        //ActionBar actionBar = getActionBar();
-        //actionBar.setBackgroundDrawable(new ColorDrawable( Color.GREEN));
+        setContentView( R.layout.activity_login );
     }
 
-    /*
-        This is a dummy class that always pushes to the login activity so that we can make things
-        like the end of an evaluation revert to login.
-    */
-    protected void onResume( ) {
-        //Class targetc;          // class which is the target destination as this is a hopping point only
-        //Intent target;         // intent to push the focus to
-
-        super.onResume();
-
-		/*
-        targetc = Login.class;
-        target = new Intent( this, targetc );
-        startActivity( target );
-        */
-    }
+        //future:  grab an instance of the database, if no user exists (first invocation) get a user and password
 
     /*
         Invoked when user enters login button on the login page
@@ -80,4 +59,5 @@ public class LaBaaooM extends AppCompatActivity {
             t.show();
         }
     }
+
 }
