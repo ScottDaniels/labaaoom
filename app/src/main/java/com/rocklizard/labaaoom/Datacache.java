@@ -1,0 +1,298 @@
+
+/*
+	Mnemonic:	Datacache.java
+	Abstract:	The class that provides the datacache for LaBaaooM.
+				The datacache is a singleton class and so it's not created by 
+				a 'new' call, but a call to the Mk_dtacache() static function
+				that returns the object creating it if needed.
+
+	Date:		17 September 2017
+	Author:		E. Scott Daniels edaniels7@gatech for CS6460 Fall 2017
+*/
+
+package com.rocklizard.labaaoom;
+import android.content.Context;
+
+//import java.io.FileNotFoundException;
+//import java.io.FileOutputStream;
+//import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Set;
+
+import com.rocklizard.labaaoom.Student;
+
+public class Datacache {
+	private	static Datacache db = null;			// singleton
+
+	private HashMap<String,Boolean> student_map;
+	private HashMap<String,Boolean> sections_map;		// allow for mutiple sections in the same grade level
+	private Context ctx;								// the application's context
+
+	/*
+		Constructor that only we can invoke. We must have the context to
+		save application private files.
+	*/
+	private Datacache( Context ctx ) {
+		student_map  = new HashMap<String,Boolean>();
+		sections_map  = new HashMap<String,Boolean>();
+		this.ctx = ctx;
+
+		load_maps( );				// Populate maps based on what we have on disk
+	}
+
+	// ------------------ private things ---------------------------------------------------
+
+	/*
+		Accepts a prefix, and a name and builds a file name that has all 
+		spaces replaced with underbars (_).
+	*/
+	private String build_fname( String prefix, String name ) {
+		String fname;
+		int i;
+		String[] tokens;
+
+		fname = prefix; 		// seed
+		tokens = name.split( " " );
+		for( i = 0; i < tokens.length; i++ ) {
+			fname += "_" + tokens[i];
+		}
+
+		return fname;
+	}
+
+	/*
+		Accepts a name and builds a key string that has all spaces replaced with underbars (_).
+	*/
+	private String build_key( String name ) {
+		String key;
+		int i;
+		String[] tokens;
+
+		tokens = name.split( " " );
+		key = tokens[0]; 							// seed first frist token
+		for( i = 1; i < tokens.length; i++ ) {		// add remaining tokens
+			key += "_" + tokens[i];
+		}
+
+		return key;
+	}
+
+	/*
+		Add the student 'key' to the hash.  Name may contain spaces and will be normalised
+		to remove them.
+	*/
+	private void add_student( String name ) {
+		if( student_map.containsKey( name ) ) {
+			return;
+		}
+
+		student_map.put( name, true );
+	}
+
+	/*
+		Open up the directoy and look for all important, map related, file names.  Mark
+		the corresponding map[key] to serve as our index when needed.
+	*/
+	private void load_maps( ) {
+		File[] files;
+		String[] tokens;
+		int i;
+
+		if( ctx != null ) {				// no ctx, probably testing
+			files = ctx.getFilesDir().listFiles();
+
+			for( i = 0; (null != files) && (i < files.length); i++ ) {
+				tokens = files[i].getName().split( "_", 2 );	// all interesting map files are xxx_something
+
+				if( tokens.length > 1 ) {						// ignore if not interesting
+					switch( tokens[0] ) {
+						case "student":
+							student_map.put( tokens[1], true );
+							break;
+
+						case "sect":
+							sections_map.put( tokens[1], true );
+							break;
+
+						default:				// ignore the unrecognised/unimportant
+							break;
+					}
+				}
+			}
+		}
+	}
+
+	/*
+		Writes an entry to the datacache.  The entry is a series of strings which are 
+		written as newline terminated records.  The prefix is something like "student_".
+		Data may be in any order, however element 0 is assumed to be the 'key' which is 
+		used to create the flie name:  e.g.  name: Fred Flintstone  would be converted to
+		prefix_Fred_flintsone  as the filename.  Returns the filename where the data was
+		stashed.
+	*/
+	private String stash_in_dc( String prefix, String[] data ){
+		FileOutputStream f;	// if we have ctx then this writes in a private space
+		String[] tokens;
+		String fname;						// file name
+		int i;
+
+		if( data == null || ctx == null ) {
+			return null;
+		}
+
+		if( data.length < 1 ) {				// must have at least the student name 
+			return null;
+		}
+
+		tokens = data[0].split( ":", 2 );		// pull the key and prep the remaining string to convert to filename (remove blanks)
+		if( tokens.length < 2 ) {
+			return null;
+		}
+
+		fname = build_fname( prefix, tokens[1] );		// replace spaces with underbars and add prefix
+
+		try {								// the following could be refactored into a common function for both player/crypto
+			f =	 ctx.openFileOutput( fname, Context.MODE_PRIVATE );  // cant get context generated in test
+		} catch(  IOException e ) {
+			e.printStackTrace();
+			return null;
+		}
+
+		try {
+			Writer writer = new OutputStreamWriter(f);
+			for( i = 1; i < data.length; i++ ) {  	// initial index is 1; key is not saved
+				if( data[i] != null ) {
+					writer.write( data[i] + "\n" );
+					writer.flush();
+				}
+			}
+
+			writer.close(); 				// closes all sub objects too
+		} catch( IOException e ) {
+			return null;
+		}
+
+		return fname;
+	}
+
+	/*
+		Open the named file and read all records (new line terminated) into an array
+		and return the array. Nil is returned on error.
+	*/
+	private String[] readFromDc( String fname ) {
+		String[] data;			// date read from the file
+		byte[] rbuf;			// read buffer
+		String stuff;			// stuff read converted to string
+		FileInputStream f;
+
+		rbuf = new byte[4096];				// first cut; one read with a max of 4k (a cyper of more than a few hundred chars  seems insane
+
+		try {
+			f =	 ctx.openFileInput(fname);  // cant get context generated in test
+		} catch(  IOException e ) {
+			e.printStackTrace();
+			return null;
+		}
+
+		try {
+			if ( f.read( rbuf ) < 0 ) {
+				f.close();
+				return null;
+			}
+
+			stuff = new String( rbuf );
+			data = stuff.split( "\n" );
+
+			f.close();
+		} catch( IOException e ) {
+			return null;
+		}
+
+		return data;
+	}
+
+	// ------ public things ------------------------------------
+
+	/*
+		User application will call this to get a copy of the datacache
+		instance.  The instance is created on the first call.
+	*/
+	public static Datacache Mk_database( Context ctx ) {
+		if( db == null ) {
+			db = new Datacache( ctx );			// private constructor
+		}
+
+		return db;
+	}
+
+	/*
+		Writes student information out. Return of true means things were
+		good; false, not so much. (java really needs the concept of error
+		return and multi-value return; 'throwing' an execption is just messy.
+	*/
+	public boolean DepositStudent( Student s ) {
+		String dcname;			// name where entry
+		String sid;
+
+		if( s == null ){
+			return false;
+		}
+		sid = stash_in_dc( "student_", s.GenDcEntry() );
+
+		if( sid  == null ){
+			return false;
+		}
+
+		add_student( sid );					// add to our hash
+		return true;
+	}
+
+	/*
+		Returns true if we know about this student.
+	*/
+	public boolean HasStudent(  String skey ) {
+		if( skey == null ) {
+			return false;
+		}
+
+		return student_map.containsKey( skey );
+	}
+
+
+	/*
+		Given the student name (key) find the student data and build a student object
+		from it.  Returns nil if not found.
+
+		Name may contain spaces which will be replaced with dashes.
+	*/
+	public Student ExtractStudent( String name ) {
+		String fname; 			// flie name to extract info from
+
+		if( name == null || !HasStudent( name )){
+			return null;
+		}
+
+		fname = build_fname( "student", name );		// replace spaces with underbars and add prefix
+		return new Student( readFromDc( fname ) );
+	}
+
+	/*
+		Returns an array of student IDs. We pull this list from the map
+		we loaded from the filesystem at start and assume that when new ones
+		are added they are added to the map so we don't need to refresh.
+	*/
+	public String[] GetStudentList( ) {
+		String[] sids;
+		Set<String> raw_keys;
+		int i;
+
+		raw_keys = student_map.keySet();
+		sids = raw_keys.toArray( new String[raw_keys.size()] );
+
+		//future:  convert to space separated names and sort
+
+		return sids;
+	}
+}
