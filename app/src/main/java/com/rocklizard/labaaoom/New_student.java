@@ -34,7 +34,7 @@ public class New_student extends Activity {
 		name = findViewById( R.id.student_name );
 		sect = findViewById( R.id.section_id );
 
-		if( name.toString().equals( "" ) || sect.toString().equals( "" ) ) {
+		if( name.getText().toString().equals( "" ) || sect.getText().toString().equals( "" ) ) {
 			Toast.makeText(this, "Invalid name or section", Toast.LENGTH_LONG).show();
 			return;
 		}
@@ -45,11 +45,11 @@ public class New_student extends Activity {
 			return;
 		}
 
-		if( ! dc.HasStudent( name.toString()) ) {					// truly new
+		if( ! dc.HasStudent( name.getText().toString()) ) {					// truly new
 			Class targetc;
 			Intent target;         // after add we'll return
 
-			st = new Student( name.toString(), sect.toString() );	// mk and add to dc
+			st = new Student( name.getText().toString(), sect.getText().toString() );	// mk and add to dc
 			if( dc.DepositStudent( st ) ) {
 				Toast.makeText(this, "student added.", Toast.LENGTH_LONG).show();
 			} else {
