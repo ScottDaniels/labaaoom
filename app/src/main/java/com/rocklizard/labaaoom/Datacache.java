@@ -46,7 +46,8 @@ public class Datacache {
 
 	/*
 		Accepts a prefix, and a name and builds a file name that has all 
-		spaces replaced with underbars (_).
+		spaces replaced with underbars (_). Prefix should NOT contain a trailing
+		underbar.
 	*/
 	private String build_fname( String prefix, String name ) {
 		String fname;
@@ -59,7 +60,7 @@ public class Datacache {
 			fname += "_" + tokens[i];
 		}
 
-		System.out.printf( ">>> filename built (%s)\n", fname );
+		//System.out.printf( ">>> filename built (%s)\n", fname );
 		return fname;
 	}
 
@@ -103,8 +104,9 @@ public class Datacache {
 
 		if( ctx != null ) {				// no ctx, probably testing
 			files = ctx.getFilesDir().listFiles();
+			System.out.printf( ">>>>> datacache: %d files in directory\n", files.length );
 
-			for( i = 0; (null != files) && (i < files.length); i++ ) {
+			for( i = 0; i < files.length; i++ ) {
 				tokens = files[i].getName().split( "_", 2 );	// all interesting map files are xxx_something
 
 				if( tokens.length > 1 ) {						// ignore if not interesting
@@ -122,6 +124,8 @@ public class Datacache {
 					}
 				}
 			}
+		} else {
+			System.out.printf( ">>>> datacache: load maps fails, no context!\n" );
 		}
 	}
 
@@ -248,7 +252,7 @@ public class Datacache {
 		if( s == null ){
 			return false;
 		}
-		sid = stash_in_dc( "student_", s.GenDcEntry() );		// drop the info into the cache
+		sid = stash_in_dc( "student", s.GenDcEntry() );		// drop the info into the cache
 
 		if( sid  == null ){
 			return false;
@@ -266,7 +270,7 @@ public class Datacache {
 			return false;
 		}
 
-		return student_map.containsKey( build_fname( "student_", skey ) );
+		return student_map.containsKey( build_fname( "student", skey ) );
 	}
 
 

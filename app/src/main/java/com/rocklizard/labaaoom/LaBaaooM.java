@@ -34,21 +34,16 @@ public class LaBaaooM extends AppCompatActivity {
         Datacache.Mk_datacache( getApplicationContext() );          // must initialise the datacach with context
     }
 
-    /*
-        This is a dummy class that always pushes to the login activity so that we can make things
-        like the end of an evaluation revert to login.
-    */
     protected void onResume( ) {
-        //Class targetc;          // class which is the target destination as this is a hopping point only
-        //Intent target;         // intent to push the focus to
-
         super.onResume();
+        EditText pw_thing;        // password field thingy to pull entered text from
+        EditText un_thing;        // user name  field thingy to pull entered text from
 
-		/*
-        targetc = Login.class;
-        target = new Intent( this, targetc );
-        startActivity( target );
-        */
+        pw_thing = (EditText) findViewById(R.id.password);
+        un_thing = (EditText) findViewById(R.id.user_name);
+
+        pw_thing.setText( "" );         // don't leak username or password on a restart
+        un_thing.setText( "" );
     }
 
     /*

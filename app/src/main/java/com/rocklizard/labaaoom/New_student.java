@@ -15,11 +15,13 @@ public class New_student extends Activity {
 		setContentView( R.layout.activity_new_student );
 	}
 
+	/*
+		All activities must finish on pause to force restart at the login screen.
+	*/
 	@Override
-	protected void onResume( ) {
-		super.onResume();
-
-
+	protected void onPause( ) {
+		finish();							// ensure that we go back to the log in screen
+		super.onPause();					// must finish before driving super class
 	}
 
 	/*
@@ -56,9 +58,7 @@ public class New_student extends Activity {
 				Toast.makeText(this, "Internal mishap: student add failed.", Toast.LENGTH_LONG).show();
 			}
 
-			targetc = Main_menu.class;
-			target = new Intent( this, targetc );
-			startActivity( target );
+			finish();
 		} else {
 			Toast.makeText(this, "Not added: sudent already exists.", Toast.LENGTH_LONG).show();
 		}
@@ -78,10 +78,7 @@ public class New_student extends Activity {
 
 		name.setText( "" );
 		sect.setText( "" );
-
-		targetc = Main_menu.class;
-		target = new Intent( this, targetc );
-		startActivity( target );
+		finish();
 	}
 
 }

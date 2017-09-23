@@ -27,6 +27,16 @@ public class Main_menu extends Activity {
 		setContentView( R.layout.activity_main_menu );
 	}
 
+	/*
+		All activities must finish on pause to force restart at the login screen.
+	*/
+	@Override
+	protected void onPause( ) {
+		finish();							// ensure that we go back to the log in screen
+		super.onPause();					// must finish before driving super class
+	}
+
+
     /*
         Functions driven when a menu item is selected from the list
     */
