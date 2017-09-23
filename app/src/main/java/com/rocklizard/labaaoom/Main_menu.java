@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.View;
 //import android.widget.CheckedTextView;
 //mport android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class Main_menu extends Activity {
@@ -30,7 +31,13 @@ public class Main_menu extends Activity {
         Functions driven when a menu item is selected from the list
     */
     public void Go_add_student( View v ) {
-        Toast.makeText(this, "Adding Student", Toast.LENGTH_LONG).show();
+		Class targetc;
+		Intent target;
+
+		targetc = New_student.class;
+		target = new Intent( this, targetc );
+		startActivity( target );
+//		Toast.makeText(this, "Add stundent", Toast.LENGTH_LONG).show();
     }
 
     public void Go_evaluate( View v ) {

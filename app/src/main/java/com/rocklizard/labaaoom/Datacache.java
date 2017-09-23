@@ -59,6 +59,7 @@ public class Datacache {
 			fname += "_" + tokens[i];
 		}
 
+		System.out.printf( ">>> filename built (%s)\n", fname );
 		return fname;
 	}
 
@@ -153,7 +154,7 @@ public class Datacache {
 
 		fname = build_fname( prefix, tokens[1] );		// replace spaces with underbars and add prefix
 
-		try {								// the following could be refactored into a common function for both player/crypto
+		try {
 			f =	 ctx.openFileOutput( fname, Context.MODE_PRIVATE );  // cant get context generated in test
 		} catch(  IOException e ) {
 			e.printStackTrace();
@@ -219,13 +220,21 @@ public class Datacache {
 		User application will call this to get a copy of the datacache
 		instance.  The instance is created on the first call.
 	*/
-	public static Datacache Mk_database( Context ctx ) {
+	public static Datacache Mk_datacache( Context ctx ) {
 		if( db == null ) {
 			db = new Datacache( ctx );			// private constructor
 		}
 
 		return db;
 	}
+
+	/*
+		Used to get the database (after creation) when contect isn't available.
+	*/
+	public static Datacache Get_datacache( ) {
+		return db;
+	}
+
 
 	/*
 		Writes student information out. Return of true means things were
@@ -239,7 +248,7 @@ public class Datacache {
 		if( s == null ){
 			return false;
 		}
-		sid = stash_in_dc( "student_", s.GenDcEntry() );
+		sid = stash_in_dc( "student_", s.GenDcEntry() );		// drop the info into the cache
 
 		if( sid  == null ){
 			return false;
@@ -257,7 +266,7 @@ public class Datacache {
 			return false;
 		}
 
-		return student_map.containsKey( skey );
+		return student_map.containsKey( build_fname( "student_", skey ) );
 	}
 
 

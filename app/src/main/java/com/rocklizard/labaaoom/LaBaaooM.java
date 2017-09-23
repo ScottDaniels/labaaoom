@@ -30,6 +30,8 @@ public class LaBaaooM extends AppCompatActivity {
 
         //ActionBar actionBar = getActionBar();
         //actionBar.setBackgroundDrawable(new ColorDrawable( Color.GREEN));
+
+        Datacache.Mk_datacache( getApplicationContext() );          // must initialise the datacach with context
     }
 
     /*

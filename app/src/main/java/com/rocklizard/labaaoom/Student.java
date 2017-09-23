@@ -9,11 +9,13 @@ package com.rocklizard.labaaoom;
 
 public class Student {
 	private String name;
+	private String section;			// section that the kid belongs to (K1 First1 etc)
 	private Eval_set norm_evals;    // list of all normal evaluations that have been done
 	private Eval_set lc_evals;        // list of all low contrast evaluations that have been done
 
-	public Student( String name ) {
+	public Student( String name, String sect ) {
 		this.name = name;
+		this.section = sect;
 		norm_evals = new Eval_set( );
 		lc_evals = new Eval_set( );
 	}
