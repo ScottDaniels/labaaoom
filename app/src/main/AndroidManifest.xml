@@ -16,11 +16,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Main_menu">
+        <activity android:name=".Main_menu"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".New_student">
+        <activity android:name=".New_student"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".Login">
+        <activity android:name=".Login"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".Student_list"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

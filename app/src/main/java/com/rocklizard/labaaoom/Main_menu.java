@@ -32,7 +32,6 @@ public class Main_menu extends Activity {
 	*/
 	@Override
 	protected void onPause( ) {
-		finish();							// ensure that we go back to the log in screen
 		super.onPause();					// must finish before driving super class
 	}
 
@@ -55,17 +54,19 @@ public class Main_menu extends Activity {
     }
 
 	public void Go_view_student( View v ) {
-		Toast.makeText(this, "View Student", Toast.LENGTH_LONG).show();
+		Class targetc;
+		Intent target;
+		Bundle bun;
 
-		/*
-        intentClass = DisplayCryptogramActivity.class;
-		if(intentClass != null) {
-			Intent intent = new Intent(this, intentClass);
-			intent.putExtra( "selection", text );
-			intent.putExtra( "uname", uname );
+		bun = new Bundle();
+		bun.putString( "target_name", "show" );			// pass what the selection is to drive
 
-			startActivity( intent );
-		}
-		*/
+
+		targetc = Student_list.class;
+		target = new Intent( this, targetc );
+		target.putExtras( bun );
+		startActivity( target );
+
+		//Toast.makeText(this, "View Student", Toast.LENGTH_LONG).show();
     }
 }

@@ -107,11 +107,14 @@ public class Datacache {
 			System.out.printf( ">>>>> datacache: %d files in directory\n", files.length );
 
 			for( i = 0; i < files.length; i++ ) {
+				System.out.printf( ">>>>> datacache: loading %d %s\n", i, files[i].toString() );
+
 				tokens = files[i].getName().split( "_", 2 );	// all interesting map files are xxx_something
 
 				if( tokens.length > 1 ) {						// ignore if not interesting
 					switch( tokens[0] ) {
 						case "student":
+							System.out.printf( ">>>>> datacache: adding student to map %d %s\n", i, tokens[1] );
 							student_map.put( tokens[1], true );
 							break;
 
@@ -235,7 +238,7 @@ public class Datacache {
 	/*
 		Used to get the database (after creation) when contect isn't available.
 	*/
-	public static Datacache Get_datacache( ) {
+	public static Datacache GetDatacache( ) {
 		return db;
 	}
 
@@ -264,13 +267,14 @@ public class Datacache {
 
 	/*
 		Returns true if we know about this student.
+		Key passed in assuemd to be "name name".
 	*/
 	public boolean HasStudent(  String skey ) {
 		if( skey == null ) {
 			return false;
 		}
 
-		return student_map.containsKey( build_fname( "student", skey ) );
+		return student_map.containsKey( build_key( skey ) );
 	}
 
 

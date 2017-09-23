@@ -41,7 +41,7 @@ public class New_student extends Activity {
 			return;
 		}
 
-		dc = Datacache.Get_datacache( );
+		dc = Datacache.GetDatacache( );
 		if( dc == null ) {
 			Toast.makeText(this, "Internal mishap: bad datacache", Toast.LENGTH_LONG).show();
 			return;
