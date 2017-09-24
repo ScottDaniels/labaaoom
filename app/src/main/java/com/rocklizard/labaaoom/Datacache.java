@@ -137,29 +137,34 @@ public class Datacache {
 		written as newline terminated records.  The prefix is something like "student_".
 		Data may be in any order, however element 0 is assumed to be the 'key' which is 
 		used to create the flie name:  e.g.  name: Fred Flintstone  would be converted to
-		prefix_Fred_flintsone  as the filename.  Returns the filename where the data was
-		stashed.
+		prefix_Fred_flintsone  as the filename.  Returns the  hash 'key' (student name
+		with blanks removed.
 	*/
 	private String stash_in_dc( String prefix, String[] data ){
 		FileOutputStream f;	// if we have ctx then this writes in a private space
 		String[] tokens;
 		String fname;						// file name
+		String key;							// key to return (name with blanks gone)
 		int i;
 
 		if( data == null || ctx == null ) {
+			System.out.printf( ">>>> datacaache: stash in dc ctx or data was nil\n" );
 			return null;
 		}
 
 		if( data.length < 1 ) {				// must have at least the student name 
+			System.out.printf( ">>>> datacaache: stash in dc length was < 1 \n" );
 			return null;
 		}
 
 		tokens = data[0].split( ":", 2 );		// pull the key and prep the remaining string to convert to filename (remove blanks)
 		if( tokens.length < 2 ) {
+			System.out.printf( ">>>> datacaache: element 0 didn't have two tokens\n" );
 			return null;
 		}
 
 		fname = build_fname( prefix, tokens[1] );		// replace spaces with underbars and add prefix
+		key = build_key( tokens[1] );
 
 		try {
 			f =	 ctx.openFileOutput( fname, Context.MODE_PRIVATE );  // cant get context generated in test
@@ -168,21 +173,23 @@ public class Datacache {
 			return null;
 		}
 
+		System.out.printf( ">>>> datacaache: attempting to write entry\n" );
 		try {
 			Writer writer = new OutputStreamWriter(f);
-			for( i = 1; i < data.length; i++ ) {  	// initial index is 1; key is not saved
+			for( i = 0; i < data.length; i++ ) {
 				if( data[i] != null ) {
 					writer.write( data[i] + "\n" );
 					writer.flush();
 				}
 			}
+			System.out.printf( ">>>> datacaache: write %d items\n", i );
 
 			writer.close(); 				// closes all sub objects too
 		} catch( IOException e ) {
 			return null;
 		}
 
-		return fname;
+		return key;
 	}
 
 	/*
