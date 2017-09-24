@@ -1,9 +1,12 @@
 package com.rocklizard.labaaoom;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Student_info extends AppCompatActivity {
@@ -60,5 +63,28 @@ public class Student_info extends AppCompatActivity {
 			ave_score.setText(  "0 wpm" );
 			last_ev_score.setText(  "0 wpm" );
 		}
+
+		draw_graph( R.id.student_graph_left, s.GetData( Student.NORMAL ) );
+		draw_graph( R.id.student_graph_right, s.GetData( Student.LOWCONTRAST ) );
+	}
+
+	/*
+		Given a linear layout name, and a set of data, draw the graph in the layout
+	*/
+	private void draw_graph( int layout_id, int[] values ) {
+		int gh = 100;
+		int gw = 200;		// defaults if layout is not found
+		Graph gr;
+		LinearLayout ll;
+
+		ll = (LinearLayout) findViewById( layout_id );
+		if( ll == null ) {
+			return;
+		}
+
+		gr = new Graph( gw, gh, 30, 10 );
+		gr.Add_values( values );
+		gr.Set_pt_space( 1 );
+		ll.setBackground( new BitmapDrawable( getResources(), gr.Paint( ) ) );
 	}
 }

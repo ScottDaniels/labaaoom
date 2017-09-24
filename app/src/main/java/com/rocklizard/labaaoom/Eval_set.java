@@ -52,7 +52,34 @@ public class Eval_set {
 		Return the total number of entries.
 	*/
 	public int GetSize() {
-			return idx;
+		return idx;
+	}
+
+	/*
+		Build an array of graphable (integer) data from the evaluations in
+		this set.
+	*/
+	public int[] GetData( ) {
+		int[] values;
+		int i;
+
+		if( idx > 0 ) {
+			values = new int[idx];
+		} else {
+			//values = new int[1];
+			//values[0] = 0;
+			values = new int[100];
+			for( i = 0; i < 100; i++ ) {
+				values[i] = i;
+			}
+			return values;
+		}
+
+		for( i = 0; i < idx; i++ ) {
+			values[i] = (int) evals[i].GetWPM();
+		}
+
+		return values;
 	}
 
 	/*

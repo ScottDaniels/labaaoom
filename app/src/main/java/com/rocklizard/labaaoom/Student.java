@@ -8,6 +8,9 @@ package com.rocklizard.labaaoom;
 */
 
 public class Student {
+	static final boolean NORMAL = true;
+	static final boolean LOWCONTRAST = false;
+
 	private String name;
 	private String section;			// section that the kid belongs to (K1 First1 etc)
 	private Eval_set norm_evals;    // list of all normal evaluations that have been done
@@ -127,6 +130,18 @@ public class Student {
 		}
 
 		return strs;
+	}
+
+	/*
+		Generate a set of graph data for either the normal (true) or low contrast evaluations.
+	*/
+	public int[] GetData( boolean norm ) {
+
+		if( norm ) {
+			return norm_evals.GetData();
+		}
+
+		return lc_evals.GetData();
 	}
 
 	/*

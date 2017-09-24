@@ -15,7 +15,7 @@ public class Evaluation {
 	private String	date;			// date that the evaluation occurred
 	private long	timestamp;		// timestamp cooresponding to date
 	private double	wpm;			// words per minute of the eval
-	private String	eval_set;		// reading set id (e.g. K-1)
+	private String	eval_id;		// reading set id (e.g. K-1)
 	private String	eval_type;		// norm/lc or maybe somthing else
 
 	/*
@@ -27,14 +27,14 @@ public class Evaluation {
 		timestamp = new Date().getTime();
 		this.date = date;				// date will be used as is; timestamp for sorting
 		this.wpm = wpm;
-		eval_set = set;
+		eval_id = set;
 		eval_type = type;
 	}
 
 	/*
 		Constructor from a new evaluation, use current date/time as the date.
 	*/
-	public Evaluation( String set, String type, double wpm ) {
+	public Evaluation( String id, String type, double wpm ) {
 
 		long cur_ts;
 
@@ -42,7 +42,7 @@ public class Evaluation {
 
 		this.date = null;					// date will be formatted when needed
 		this.wpm = wpm;
-		eval_set = set;
+		eval_id = id;
 		eval_type = type;
 	}
 
@@ -61,7 +61,7 @@ public class Evaluation {
 				date = null;
 			}
 
-			eval_set = tokens[ 1 ];
+			eval_id = tokens[ 1 ];
 			eval_type = tokens[ 2 ];
 			wpm = Double.parseDouble( tokens[ 3 ] );
 			timestamp = Long.parseLong( tokens[ 4 ] );
@@ -117,7 +117,7 @@ public class Evaluation {
 			s = date + ",";
 		}
 
-		s += eval_set + "," + eval_type +"," + Double.toString( wpm ) + "," + Long.toString( timestamp );
+		s += eval_id + "," + eval_type +"," + Double.toString( wpm ) + "," + Long.toString( timestamp );
 		return s;
 	}
 }
