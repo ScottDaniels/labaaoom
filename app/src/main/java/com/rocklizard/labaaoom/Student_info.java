@@ -33,6 +33,9 @@ public class Student_info extends AppCompatActivity {
 		dc = Datacache.GetDatacache();
 		it = getIntent();
 		target_name = it.getExtras( ).getString( "student_name" );		// student name from the caller
+		if( target_name == null ) {
+			finish( );                    // likely a return from another application which we don't allow
+		}
 
 		student = (TextView) findViewById( R.id.student_name );
 		student.setText( target_name );
@@ -53,7 +56,7 @@ public class Student_info extends AppCompatActivity {
 			ave_score.setText(  Double.toString( mmai[2] ) );
 			last_ev_score.setText(  Double.toString( last_e.GetWPM() ) );
 		} else {
-			last_ev_date.setText( "no evalusations" );
+			last_ev_date.setText( "xx Sep 2000" );
 			ave_score.setText(  "0 wpm" );
 			last_ev_score.setText(  "0 wpm" );
 		}

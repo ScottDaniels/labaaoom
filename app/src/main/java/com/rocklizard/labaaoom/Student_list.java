@@ -29,12 +29,24 @@ public class Student_list extends AppCompatActivity {
         public void onClick( View v ) {
             CheckedTextView clicked_thing;
             TextView selected;
+            Class targetc;
+            Intent target;
+            Bundle bun;
 
             selected = (TextView) findViewById( v.getId() );
 
             switch( target_name ) {
                 case "show":
-                    Toast.makeText( getApplicationContext(), "name selected for show: " + selected.getText().toString(), Toast.LENGTH_SHORT ).show();
+                    //Toast.makeText( getApplicationContext(), "name selected for show: " + selected.getText().toString(), Toast.LENGTH_SHORT ).show();
+
+                    bun = new Bundle();
+                    bun.putString( "student_name", selected.getText().toString()  );			// name of the student to suss out and display
+
+                    targetc = Student_info.class;
+                    target = new Intent( getApplicationContext(), targetc );
+                    target.putExtras( bun );
+                    startActivity( target );
+
                     break;
 
                 case "eval":

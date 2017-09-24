@@ -28,7 +28,6 @@ public class Student {
 			ne:<normal evaluation set>
 			le:<low contrast evaluation set>
 	*/
-	//public static Student FromDcEntry( String[] dc_entry ) {
 	public Student( String[] dc_entry ) {
 		int i;
 		String[] tokens;        // split input data
@@ -36,12 +35,20 @@ public class Student {
 		norm_evals = new Eval_set( );
 		lc_evals = new Eval_set( );
 
+		if( dc_entry == null ) {			// shouldn't happen but parinoia isn't always bad
+				return;
+		}
+
 		for( i = 0; i < dc_entry.length; i++ ) {
 
 			tokens = dc_entry[ i ].split( ":", 2 );
 			switch( tokens[ 0 ] ) {
 				case "name":
 					add_name( tokens[ 1 ] );
+					break;
+
+				case "sect":
+					add_sect( tokens[1] );
 					break;
 
 				case "ne":
@@ -60,10 +67,14 @@ public class Student {
 
 	// ----------------------------------------------------------------
 	/*
-		Add an entry to one of the lists.
+		Interal setters used to support reading from a datacache entry.
 	*/
 	private void add_name( String name ) {
 		this.name = name;
+	}
+
+	private void add_sect( String sect ) {
+		section = sect;
 	}
 
 	/*
