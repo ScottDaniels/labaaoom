@@ -119,9 +119,67 @@ public class Student {
 	}
 
 	/*
+		Find the last eval and return it or nil if no evals exist.
+	*/
+	public Evaluation GetLastEval() {
+		Evaluation evn = null;		// last normal evaluation
+		Evaluation evl = null;		// last low contrast evaluation
+
+
+		if( norm_evals != null ){
+			evn = norm_evals.GetLast();
+		}
+
+		if( lc_evals != null ) {
+			evl = lc_evals.GetLast();
+		}
+
+		if( evl == null ) {				// if either is nil, just return the other
+			return evn;
+		} else {
+			if( evn == null ) {
+				return evl;
+			}
+		}
+
+		if( evl.GetTimestamp() > evn.GetTimestamp() ) {			// return the larger
+			return evl;
+		}
+
+		return evn;
+	}
+
+	/*
 		Return the stuent name.
 	*/
 	public String GetName() {
 		return name;
+	}
+
+	/*
+		Return the section that the student is in.
+	*/
+	public String GetSection() {
+		return section;
+	}
+
+	/*
+		Return the min/max/ave/instances counts for either the normal (true) eval set
+		or the low contrast (false) eval set.
+	*/
+	public double[] GetMMAI( boolean norm ) {
+		if( norm ) {
+			if( norm_evals != null ) {
+				return norm_evals.GetMMAI();
+			}
+
+			return null;
+		} else {
+			if( lc_evals != null ) {
+				return lc_evals.GetMMAI();
+			}
+
+			return null;
+		}
 	}
 }

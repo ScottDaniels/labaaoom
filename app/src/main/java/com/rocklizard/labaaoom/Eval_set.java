@@ -56,9 +56,32 @@ public class Eval_set {
 	}
 
 	/*
+		Return the evaluation with the most recent timestamp
+	*/
+	public Evaluation GetLast() {
+		long ts = 0;				// current largest timestamp
+		long nts = 0;				// next time stamp examined
+		int	li = -1;				// index of the last one
+		int i;
+
+		for( i = 0; i < idx; i++ ) {
+			if( (nts = evals[i].GetTimestamp()) > ts ) {
+				ts = nts;
+				li = i;
+			}
+		}
+
+		if( li >= 0 ) {
+				return evals[i];
+		}
+
+		return null;
+	}
+
+	/*
 		Return a 4-tuple:  min, max, average and number of instances.
  	*/
-	public double[] Get_mmai( ) {
+	public double[] GetMMAI( ) {
 		double[] rv;
 		int i;
 
