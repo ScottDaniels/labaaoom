@@ -28,6 +28,7 @@ public class Student {
 		Given a datacache entry set (array of strings) build a student object.
 		Strings are of the type:
 			name:<student name tokens>
+			sect:<section name>
 			ne:<normal evaluation set>
 			le:<low contrast evaluation set>
 	*/
@@ -110,8 +111,10 @@ public class Student {
 		}
 
 		strs = new String[i+1];
-		strs[0] = "name:" + name;
-		i = 1;
+		i = 0;
+		strs[i++] = "name:" + name;
+		strs[i++] = "sect:" + section;
+
 		if( norm_evals != null ) {
 			evals = norm_evals.ToStrings();
 			if( evals != null ) {
