@@ -84,7 +84,7 @@ public class Student_info extends AppCompatActivity {
 
 		gr = new Graph( gw, gh, 30, 10 );
 		gr.Add_values( values );
-		gr.Set_pt_space( 1 );
+		gr.Set_pt_space( 4 );
 		ll.setBackground( new BitmapDrawable( getResources(), gr.Paint( ) ) );
 	}
 }
