@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#000000"
+    android:layout_height="match_parent"
+    android:theme="@style/AppTheme.NoActionBar">
+    tools:context="com.rocklizard.labaaoom.Eval_setup">
+
+    <TextView
+        android:id="@+id/app_title"
+        android:layout_width="167dp"
+        android:layout_height="36dp"
+        android:text="@string/app_name"
+        android:textColor="@color/title_colour"
+        android:textSize="30dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintHorizontal_bias="0.502"/>
+
+    <TextView
+        android:id="@+id/add_user_tag"
+        android:layout_width="220dp"
+        android:layout_height="34dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="63dp"
+        android:text="Evaluation Setup"
+        android:textColor="@color/header_colour"
+        android:textSize="28dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="17dp"/>
+
+    <TextView
+        android:id="@+id/name_tag"
+        android:layout_width="93dp"
+        android:layout_height="19dp"
+        android:text="Student:"
+        android:textColor="@color/tag_colour"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="33dp"
+        app:layout_constraintTop_toBottomOf="@+id/app_title"
+        android:layout_marginLeft="26dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/student_name"
+        android:layout_width="331dp"
+        android:layout_height="35dp"
+        android:text="Silly Student"
+        android:textSize="24sp"
+        android:textColor="@color/value"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/name_tag"
+        android:layout_marginLeft="37dp"/>
+
+    <TextView
+        android:id="@+id/font_tag"
+        android:layout_width="93dp"
+        android:layout_height="19dp"
+        android:text="Font Style:"
+        android:textColor="@color/tag_colour"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="11dp"
+        app:layout_constraintTop_toBottomOf="@+id/student_name"
+        android:layout_marginLeft="26dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/background_tag"
+        android:layout_width="93dp"
+        android:layout_height="19dp"
+        android:text="Inversion:"
+        android:textColor="@color/tag_colour"
+        android:layout_marginStart="226dp"
+        tools:layout_editor_absoluteX="26dp"
+        android:layout_marginTop="23dp"
+        app:layout_constraintTop_toBottomOf="@+id/style_rg"/>
+
+    <TextView
+        android:id="@+id/size_tag"
+        android:layout_width="93dp"
+        android:layout_height="19dp"
+        android:text="Font Size:"
+        android:textColor="@color/tag_colour"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="11dp"
+        app:layout_constraintTop_toBottomOf="@+id/student_name"
+        app:layout_constraintLeft_toRightOf="@+id/font_tag"
+        android:layout_marginLeft="27dp"/>
+
+    <RadioGroup
+        android:layout_width="89dp"
+        android:layout_height="67dp"
+        android:layout_marginLeft="37dp"
+        android:layout_marginTop="-9dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/font_tag"
+        android:id="@+id/style_rg">
+
+        <RadioButton
+            android:id="@+id/Sans_font_sans_rb"
+            android:layout_width="75dp"
+            android:layout_height="30dp"
+            android:checked="true"
+            android:text="Sans"
+            app:buttonTint="#808080"
+            android:textColor="@color/tag_colour"/>
+
+        <RadioButton
+            android:id="@+id/font_serif_rb"
+            android:layout_width="73dp"
+            android:layout_height="30dp"
+            android:checked="false"
+            android:text="Serif"
+            android:textColor="@color/tag_colour"
+            android:visibility="visible"
+            app:buttonTint="#808080"/>
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        android:layout_marginLeft="32dp"
+        app:layout_constraintLeft_toRightOf="@+id/style_rg"
+        android:layout_marginTop="0dp"
+        android:id="@+id/size_rg"
+        app:layout_constraintTop_toBottomOf="@+id/size_tag">
+
+        <RadioButton
+            android:id="@+id/Sans_font_smallrb"
+            android:layout_width="75dp"
+            android:layout_height="30dp"
+            android:checked="false"
+            android:text="Small"
+            app:buttonTint="#808080"
+            android:textColor="@color/tag_colour"/>
+
+        <RadioButton
+            android:id="@+id/font_med_rb"
+            android:layout_width="93dp"
+            android:layout_height="30dp"
+            android:checked="true"
+            android:text="Medium"
+            android:textColor="@color/tag_colour"
+            app:buttonTint="#808080"
+            />
+
+        <RadioButton
+            android:id="@+id/font_large_rb"
+            android:layout_width="73dp"
+            android:layout_height="30dp"
+            android:checked="false"
+            android:text="Large"
+            android:textColor="@color/tag_colour"
+            app:buttonTint="#808080"
+            />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/background_rg"
+        android:layout_width="101dp"
+        android:layout_height="66dp"
+        android:layout_marginLeft="37dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/background_tag">
+
+        <RadioButton
+            android:id="@+id/bg_invert_rb"
+            android:layout_width="75dp"
+            android:layout_height="30dp"
+            android:checked="false"
+            android:text="Invert"
+            android:textColor="@color/tag_colour"
+            app:buttonTint="#808080"/>
+
+        <RadioButton
+            android:id="@+id/bg_normal"
+            android:layout_width="94dp"
+            android:layout_height="30dp"
+            android:checked="true"
+            android:text="Normal"
+            android:textColor="@color/tag_colour"
+            android:visibility="visible"
+            app:buttonTint="#808080"/>
+
+    </RadioGroup>
+
+</android.support.constraint.ConstraintLayout>

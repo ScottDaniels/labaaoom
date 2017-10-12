@@ -10,8 +10,6 @@
     tools:layout_editor_absoluteY="89dp"
     tools:layout_editor_absoluteX="0dp">
 
-    G
-
     <TextView
         android:id="@+id/app_title"
         android:layout_width="167dp"
