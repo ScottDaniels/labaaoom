@@ -10,12 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LaBaaooM">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".Eval_setup">
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
         <activity
             android:name=".Main_menu"
             android:theme="@style/AppTheme.NoActionBar">
@@ -32,9 +39,11 @@
             android:name=".Student_list"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".Student_info"
+        <activity
+            android:name=".Student_info"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
     </application>
 
 </manifest>
