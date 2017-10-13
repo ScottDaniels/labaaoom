@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:background="#000000"
     android:layout_height="match_parent"
-    android:theme="@style/AppTheme.NoActionBar">
     tools:context="com.rocklizard.labaaoom.Eval_setup">
 
     <TextView
@@ -42,7 +41,7 @@
         android:text="Student:"
         android:textColor="@color/tag_colour"
         android:layout_marginStart="26dp"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="67dp"
         app:layout_constraintTop_toBottomOf="@+id/app_title"
         android:layout_marginLeft="26dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -67,11 +66,10 @@
         android:text="Font Style:"
         android:textColor="@color/tag_colour"
         android:layout_marginStart="26dp"
-        android:layout_marginTop="11dp"
-        app:layout_constraintTop_toBottomOf="@+id/student_name"
-        android:layout_marginLeft="26dp"
+        android:layout_marginLeft="71dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        />
+        android:layout_marginTop="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/student_name"/>
 
     <TextView
         android:id="@+id/background_tag"
@@ -79,10 +77,10 @@
         android:layout_height="19dp"
         android:text="Inversion:"
         android:textColor="@color/tag_colour"
-        android:layout_marginStart="226dp"
-        tools:layout_editor_absoluteX="26dp"
-        android:layout_marginTop="23dp"
-        app:layout_constraintTop_toBottomOf="@+id/style_rg"/>
+        android:layout_marginTop="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/student_name"
+        app:layout_constraintLeft_toRightOf="@+id/size_tag"
+        android:layout_marginLeft="46dp"/>
 
     <TextView
         android:id="@+id/size_tag"
@@ -91,47 +89,17 @@
         android:text="Font Size:"
         android:textColor="@color/tag_colour"
         android:layout_marginStart="26dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="28dp"
         app:layout_constraintTop_toBottomOf="@+id/student_name"
         app:layout_constraintLeft_toRightOf="@+id/font_tag"
-        android:layout_marginLeft="27dp"/>
-
-    <RadioGroup
-        android:layout_width="89dp"
-        android:layout_height="67dp"
-        android:layout_marginLeft="37dp"
-        android:layout_marginTop="-9dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/font_tag"
-        android:id="@+id/style_rg">
-
-        <RadioButton
-            android:id="@+id/Sans_font_sans_rb"
-            android:layout_width="75dp"
-            android:layout_height="30dp"
-            android:checked="true"
-            android:text="Sans"
-            app:buttonTint="#808080"
-            android:textColor="@color/tag_colour"/>
-
-        <RadioButton
-            android:id="@+id/font_serif_rb"
-            android:layout_width="73dp"
-            android:layout_height="30dp"
-            android:checked="false"
-            android:text="Serif"
-            android:textColor="@color/tag_colour"
-            android:visibility="visible"
-            app:buttonTint="#808080"/>
-
-    </RadioGroup>
+        android:layout_marginLeft="74dp"/>
 
     <RadioGroup
         android:layout_width="110dp"
         android:layout_height="90dp"
         android:layout_marginLeft="32dp"
         app:layout_constraintLeft_toRightOf="@+id/style_rg"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="-1dp"
         android:id="@+id/size_rg"
         app:layout_constraintTop_toBottomOf="@+id/size_tag">
 
@@ -141,7 +109,8 @@
             android:layout_height="30dp"
             android:checked="false"
             android:text="Small"
-            app:buttonTint="#808080"
+            android:onClick="Adjust_size"
+            app:buttonTint="#FFFFFF"
             android:textColor="@color/tag_colour"/>
 
         <RadioButton
@@ -150,6 +119,7 @@
             android:layout_height="30dp"
             android:checked="true"
             android:text="Medium"
+            android:onClick="Adjust_size"
             android:textColor="@color/tag_colour"
             app:buttonTint="#808080"
             />
@@ -160,6 +130,7 @@
             android:layout_height="30dp"
             android:checked="false"
             android:text="Large"
+            android:onClick="Adjust_size"
             android:textColor="@color/tag_colour"
             app:buttonTint="#808080"
             />
@@ -170,10 +141,10 @@
         android:id="@+id/background_rg"
         android:layout_width="101dp"
         android:layout_height="66dp"
-        android:layout_marginLeft="37dp"
         android:layout_marginTop="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/background_tag">
+        app:layout_constraintTop_toBottomOf="@+id/background_tag"
+        app:layout_constraintLeft_toRightOf="@+id/size_rg"
+        android:layout_marginLeft="38dp">
 
         <RadioButton
             android:id="@+id/bg_invert_rb"
@@ -181,6 +152,7 @@
             android:layout_height="30dp"
             android:checked="false"
             android:text="Invert"
+            android:onClick="Adjust_bg"
             android:textColor="@color/tag_colour"
             app:buttonTint="#808080"/>
 
@@ -190,6 +162,76 @@
             android:layout_height="30dp"
             android:checked="true"
             android:text="Normal"
+            android:onClick="Adjust_bg"
+            android:textColor="@color/tag_colour"
+            android:visibility="visible"
+            app:buttonTint="#808080"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/button_tag"
+        android:layout_width="106dp"
+        android:layout_height="19dp"
+        android:text="Start Evaluation"
+        android:textColor="@color/tag_colour"
+        android:layout_marginLeft="247dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="56dp"
+        app:layout_constraintTop_toBottomOf="@+id/size_rg"/>
+
+    <Button
+        android:id="@+id/go_random_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Random"
+        android:layout_marginLeft="180dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="9dp"
+        android:textColor="@color/edit_text_fg"
+        android:background="@color/button_go_colour"
+        android:onClick="Start_rand_eval"
+        app:layout_constraintTop_toBottomOf="@+id/button_tag"/>
+
+    <Button
+        android:id="@+id/go_sentance_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sentence"
+        app:layout_constraintLeft_toRightOf="@+id/go_random_button"
+        android:layout_marginLeft="51dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/edit_text_fg"
+        android:background="@color/button_go_colour"
+        android:onClick="Start_sent_eval"
+        app:layout_constraintTop_toBottomOf="@+id/button_tag"/>
+
+    <RadioGroup
+        android:id="@+id/style_rg"
+        android:layout_width="89dp"
+        android:layout_height="67dp"
+        android:layout_marginLeft="37dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/font_tag">
+
+        <RadioButton
+            android:id="@+id/Sans_font_sans_rb"
+            android:layout_width="75dp"
+            android:layout_height="30dp"
+            android:checked="true"
+            android:text="Sans"
+            android:onClick="Adjust_style"
+            android:textColor="@color/tag_colour"
+            app:buttonTint="#808080"/>
+
+        <RadioButton
+            android:id="@+id/font_serif_rb"
+            android:layout_width="73dp"
+            android:layout_height="30dp"
+            android:checked="false"
+            android:text="Serif"
+            android:onClick="Adjust_style"
             android:textColor="@color/tag_colour"
             android:visibility="visible"
             app:buttonTint="#808080"/>
