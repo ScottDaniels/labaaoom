@@ -76,7 +76,7 @@ public class Eval_set {
 		}
 
 		for( i = 0; i < idx; i++ ) {
-			values[i] = (int) evals[i].GetWPM();
+			values[i] = (int) evals[i].GetWpm();
 		}
 
 		return values;
