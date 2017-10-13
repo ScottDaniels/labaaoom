@@ -46,11 +46,17 @@ public class Student_list extends AppCompatActivity {
                     target = new Intent( getApplicationContext(), targetc );
                     target.putExtras( bun );
                     startActivity( target );
-
                     break;
 
                 case "eval":
                     Toast.makeText( getApplicationContext(), "name selected for eval: " + selected.getText().toString(), Toast.LENGTH_SHORT ).show();
+                    bun = new Bundle();
+                    bun.putString( "student_name", selected.getText().toString()  );			// name of the student for evaluation
+
+                    targetc = Eval_setup.class;
+                    target = new Intent( getApplicationContext(), targetc );
+                    target.putExtras( bun );
+                    startActivity( target );
                     break;
             }
         }
