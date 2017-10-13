@@ -28,6 +28,7 @@ public class Datacache {
 
 	private HashMap<String,Boolean> student_map;
 	private HashMap<String,Boolean> sections_map;		// allow for mutiple sections in the same grade level
+	private HashMap<String,Boolean> sgroups_map;		// map of sentance groups
 	private Context ctx;								// the application's context
 
 	/*
@@ -37,6 +38,7 @@ public class Datacache {
 	private Datacache( Context ctx ) {
 		student_map  = new HashMap<String,Boolean>();
 		sections_map  = new HashMap<String,Boolean>();
+		sgroups_map  = new HashMap<String,Boolean>();
 		this.ctx = ctx;
 
 		load_maps( );				// Populate maps based on what we have on disk
@@ -122,6 +124,10 @@ public class Datacache {
 							sections_map.put( tokens[1], true );
 							break;
 
+						case "sgrp":
+							sgroups_map.put( tokens[1], true );
+							break;
+
 						default:				// ignore the unrecognised/unimportant
 							break;
 					}
@@ -202,7 +208,7 @@ public class Datacache {
 		String stuff;			// stuff read converted to string
 		FileInputStream f;
 
-		rbuf = new byte[4096];				// first cut; one read with a max of 4k (a cyper of more than a few hundred chars  seems insane
+		rbuf = new byte[4096];				// first cut; one read with a max of 4k
 
 		try {
 			f =	 ctx.openFileInput(fname);  // cant get context generated in test
@@ -251,12 +257,24 @@ public class Datacache {
 
 
 	/*
+		Writes the senence group to the datacache. Return value true means all
+		was well, and false not so good.
+	*/
+	public boolean DepositSgroup( Sentence_group sg  ) {
+
+		if( sg == null ) {
+			return false;
+		}
+
+		return stash_in_dc( "sgrp", sg.GenDcEntry() ) == null;
+	}
+
+	/*
 		Writes student information out. Return of true means things were
 		good; false, not so much. (java really needs the concept of error
 		return and multi-value return; 'throwing' an execption is just messy.
 	*/
 	public boolean DepositStudent( Student s ) {
-		String dcname;			// name where entry
 		String sid;
 
 		if( s == null ){
