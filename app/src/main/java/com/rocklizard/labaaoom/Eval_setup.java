@@ -1,8 +1,10 @@
 package com.rocklizard.labaaoom;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Eval_setup extends Activity {
@@ -11,6 +13,24 @@ public class Eval_setup extends Activity {
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 		setContentView( R.layout.activity_eval_setup );
+	}
+
+	@Override
+	protected void onResume( ) {
+		Intent it;
+		String target_name;
+		TextView student;
+
+		super.onResume();
+
+		it = getIntent();
+		target_name = it.getExtras( ).getString( "student_name" );		// student name from the caller
+		if( target_name == null ) {
+			finish( );                    // likely a return from another application which we don't allow
+		}
+
+		student = (TextView) findViewById( R.id.student_name );
+		student.setText( target_name );
 	}
 
 	/*
