@@ -9,7 +9,7 @@ package com.rocklizard.labaaoom;
 
 
 public class Settings {
-	public final int SMALL = 0;
+	public final int SMALL = 0;		// constants returned by get funcitons
 	public final int MED = 1;
 	public final int LARGE = 2;
 
@@ -35,44 +35,117 @@ public class Settings {
 
 	/*
 		Build one from a string. Assumed string generated  by our function
-		so it's bg, style, size, but we'll handle short strings using defaults
-		for missing/unrecognised bits.
+		so it's background:bgvalue,style:stylevalue,size:szvalue, but we'll
+		handle short strings using defaults for missing/unrecognised bits.
 	*/
 	public Settings( String s ) {
-		String[] tokens;
+		String[] tokens;			// overall list of key/values
+		String[] kv;				// single key/value pair
+		int i;
 
 		size = MED;					// defaults if missing something
 		style = SANS;
 		background = NORMAL;
+
 		tokens = s.split( "," );
-		switch( tokens.length ) {
-			case 3:						// bg, style, size
-				if( tokens[2].equals( "small" ) ) {
-					size = SMALL;
-				} else {
-					if( tokens[1].equals( "large" ) ) {
-						size = LARGE;
+		for( i = 0; i < tokens.length; i++ ) {
+			kv = tokens[i].split( ":", 2 );
+			if( kv.length != 2 ) {
+				continue;
+			}
+
+			switch( kv[0] ) {
+				case "background":
+					if( kv[1].equals( "inverted" ) ) {
+						background = INVERTED;
 					}
-				}
-				// fall through
+					break;
 
-			case 2:
-				if( tokens[1].equals( "serif" ) ) {
-					style = SERIF;
-				}
-				// fall through
+				case "size":
+					if( kv[1].equals( "small" ) ) {
+						size = SMALL;
+					} else {
+						if( kv[1].equals( "large" ) ) {
+							size = LARGE;
+						}
+					}
+					break;
 
-			case 1:
-				if( tokens[0].equals( "inverted" ) ) {
-					background = INVERTED;
-				}
+				case "style":
+					if( kv[1].equals( "serif" ) ) {
+						style = SERIF;
+					}
+					break;
+			}
 		}
+	}
+
+	/*
+		Test functions allow the user to test for setting values.
+		The return value is one of our public constats.
+	*/
+	public int GetSize() {
+		return size;
+	}
+
+	public int GetStyle() {
+		return style;
+	}
+
+	public int GetBackground() {
+		return background;
+	}
+
+	/*
+		Is functions allow for simile boolean testing
+		Example usage:  if( settings.IsStyle( settings.SANS ) ) ...
+	*/
+	public boolean IsStyle( int test_type ) {
+		return style == test_type;
+	}
+
+	public boolean IsSize( int test_type ) {
+		return size == test_type;
+	}
+
+	public boolean IsBackground( int test_type ) {
+		return background == test_type;
+	}
+
+
+	/*
+		Various setters allowing changes.
+		Silent failure if out of range.
+	*/
+	public void SetBackground( int value ) {
+		if( value < 0 || value > INVERTED ) {
+			return;
+		}
+
+		background = value;
+	}
+
+	public void SetSize( int value ) {
+		if( value < 0 || value > LARGE ) {
+			return;
+		}
+
+		size = value;
+	}
+
+	public void SetStyle( int value ) {
+		if( value < 0 || value > SERIF ) {
+			return;
+		}
+
+		style = value;
 	}
 
 	/*
 		Return a string that something like student can cache on its own without having to
 		know internal bits, and can give to a constructor. String is a comma sep list of
 
+		CAUTION: if order changes, the test function will report error.
 	*/
 	public String ToString( ) {
 		String rs;
@@ -86,12 +159,14 @@ public class Settings {
 
 	/*
 		This will return an array of strings that can be added to the datacache.
+
+		CAUTION: if order changes, the test function will report error.
 	*/
 	public String[] GenDcEntry( String key ) {
 		String[] entry;
 
 		entry = new String[4];
-		entry[0] =  "settings:" + key;
+		entry[0] = "settings:" + key;
 		entry[1] = "background:" + (background == NORMAL ? "normal" : "inverted");
 		entry[2] = "style:" + (style == SANS ? "sans" : "serif");
 		switch( size ) {
