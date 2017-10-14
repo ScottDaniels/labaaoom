@@ -57,15 +57,15 @@ public class Student_info extends AppCompatActivity {
 			mmai = s.GetMMAI( true );
 			last_ev_date.setText( last_e.GetDate() );
 			ave_score.setText(  Double.toString( mmai[2] ) );
-			last_ev_score.setText(  Double.toString( last_e.GetWPM() ) );
+			last_ev_score.setText(  Double.toString( last_e.GetWpm() ) );
 		} else {
 			last_ev_date.setText( "xx Sep 2000" );
 			ave_score.setText(  "0 wpm" );
 			last_ev_score.setText(  "0 wpm" );
 		}
 
-		draw_graph( R.id.student_graph_left, s.GetData( Student.NORMAL ) );
-		draw_graph( R.id.student_graph_right, s.GetData( Student.LOWCONTRAST ) );
+		draw_graph( R.id.student_graph_left, s.GetData( Student.SENTENCES ) );
+		draw_graph( R.id.student_graph_right, s.GetData( Student.RANDOM ) );
 	}
 
 	/*
@@ -84,6 +84,8 @@ public class Student_info extends AppCompatActivity {
 
 		gr = new Graph( gw, gh, 30, 10 );
 		gr.Add_values( values );
+		gr.AddMarker( 90, "#ff9000" ); 			// TESTING line at 33
+		gr.AddMarker( 33, "#ffff00" ); 			// TESTING line at 33
 		gr.Set_pt_space( 4 );
 		ll.setBackground( new BitmapDrawable( getResources(), gr.Paint( ) ) );
 	}

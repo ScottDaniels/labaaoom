@@ -104,20 +104,20 @@
         app:layout_constraintTop_toBottomOf="@+id/size_tag">
 
         <RadioButton
-            android:id="@+id/Sans_font_smallrb"
+            android:id="@+id/size_small_rb"
             android:layout_width="75dp"
             android:layout_height="30dp"
-            android:checked="false"
+            android:checked="true"
             android:text="Small"
             android:onClick="Adjust_size"
-            app:buttonTint="#FFFFFF"
+            app:buttonTint="#808080"
             android:textColor="@color/tag_colour"/>
 
         <RadioButton
-            android:id="@+id/font_med_rb"
+            android:id="@+id/size_med_rb"
             android:layout_width="93dp"
             android:layout_height="30dp"
-            android:checked="true"
+            android:checked="false"
             android:text="Medium"
             android:onClick="Adjust_size"
             android:textColor="@color/tag_colour"
@@ -125,7 +125,7 @@
             />
 
         <RadioButton
-            android:id="@+id/font_large_rb"
+            android:id="@+id/size_large_rb"
             android:layout_width="73dp"
             android:layout_height="30dp"
             android:checked="false"
@@ -150,17 +150,17 @@
             android:id="@+id/bg_invert_rb"
             android:layout_width="75dp"
             android:layout_height="30dp"
-            android:checked="false"
+            android:checked="true"
             android:text="Invert"
             android:onClick="Adjust_bg"
             android:textColor="@color/tag_colour"
             app:buttonTint="#808080"/>
 
         <RadioButton
-            android:id="@+id/bg_normal"
+            android:id="@+id/bg_normal_rb"
             android:layout_width="94dp"
             android:layout_height="30dp"
-            android:checked="true"
+            android:checked="false"
             android:text="Normal"
             android:onClick="Adjust_bg"
             android:textColor="@color/tag_colour"
@@ -216,7 +216,7 @@
         app:layout_constraintTop_toBottomOf="@+id/font_tag">
 
         <RadioButton
-            android:id="@+id/Sans_font_sans_rb"
+            android:id="@+id/font_sans_rb"
             android:layout_width="75dp"
             android:layout_height="30dp"
             android:checked="true"

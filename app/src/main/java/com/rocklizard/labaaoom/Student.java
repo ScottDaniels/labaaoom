@@ -70,6 +70,7 @@ public class Student {
 					break;
 
 				case "sets":			// pick up settings and build object
+					System.out.printf( ">>>> loading settings from: %s\n", tokens[1] );
 					settings = new Settings( tokens[1] );
 					break;
 
@@ -125,7 +126,7 @@ public class Student {
 			i += rand_evals.GetSize();
 		}
 
-		strs = new String[i+1];
+		strs = new String[i+3];
 		i = 0;
 		strs[i++] = "name:" + name;
 		strs[i++] = "sect:" + section;
@@ -147,6 +148,10 @@ public class Student {
 					strs[ i++ ] = "re:" + evals[ j ];
 				}
 			}
+		}
+
+		for( i = 0; i < strs.length; i++ ) {
+			System.out.printf( ">>> saving student [%d] %s\n", i, strs[i] );
 		}
 
 		return strs;
@@ -227,5 +232,12 @@ public class Student {
 
 			return null;
 		}
+	}
+
+	/*
+		Return the current settings structucture.
+	*/
+	public Settings GetSettings( ) {
+		return settings;
 	}
 }

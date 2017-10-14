@@ -100,16 +100,16 @@ public class Settings {
 		Is functions allow for simile boolean testing
 		Example usage:  if( settings.IsStyle( settings.SANS ) ) ...
 	*/
-	public boolean IsStyle( int test_type ) {
-		return style == test_type;
+	public boolean IsStyle( int test_value ) {
+		return style == test_value;
 	}
 
-	public boolean IsSize( int test_type ) {
-		return size == test_type;
+	public boolean IsSize( int test_value ) {
+		return size == test_value;
 	}
 
-	public boolean IsBackground( int test_type ) {
-		return background == test_type;
+	public boolean IsBackground( int test_value ) {
+		return background == test_value;
 	}
 
 
@@ -130,6 +130,7 @@ public class Settings {
 			return;
 		}
 
+		System.out.printf( ">>> setting size %d\n", value );
 		size = value;
 	}
 
@@ -179,7 +180,7 @@ public class Settings {
 				break;
 
 			case LARGE:
-				entry[3] = "size:larage";
+				entry[3] = "size:large";
 				break;
 		}
 
