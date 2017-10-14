@@ -184,6 +184,7 @@ public class Datacache {
 			Writer writer = new OutputStreamWriter(f);
 			for( i = 0; i < data.length; i++ ) {
 				if( data[i] != null ) {
+					System.out.printf( ">>>> datacaache: writing: %s\n", data[i] );
 					writer.write( data[i] + "\n" );
 					writer.flush();
 				}
@@ -192,9 +193,11 @@ public class Datacache {
 
 			writer.close(); 				// closes all sub objects too
 		} catch( IOException e ) {
+			System.out.printf( ">>>> datacaache: write failure trapped\n" );
 			return null;
 		}
 
+		System.out.printf( ">>>> datacaache: write finishing normally\n" );
 		return key;
 	}
 
@@ -202,28 +205,37 @@ public class Datacache {
 		Open the named file and read all records (new line terminated) into an array
 		and return the array. Nil is returned on error.
 	*/
-	private String[] readFromDc( String fname ) {
+	private String[] read_from_dc( String fname ) {
 		String[] data;			// date read from the file
 		byte[] rbuf;			// read buffer
+		byte[] tbuf;			// trimmed buffer; excluding unfilled characters
 		String stuff;			// stuff read converted to string
 		FileInputStream f;
+		int i;
+		int rlen;
 
 		rbuf = new byte[4096];				// first cut; one read with a max of 4k
 
 		try {
-			f =	 ctx.openFileInput(fname);  // cant get context generated in test
+			f =	 ctx.openFileInput( fname );  // cant get context generated in test
 		} catch(  IOException e ) {
 			e.printStackTrace();
 			return null;
 		}
 
 		try {
-			if ( f.read( rbuf ) < 0 ) {
+			if( (rlen = f.read( rbuf )) < 0 ) {
 				f.close();
+				System.out.printf( ">>>> read from dc fails for %s\n", fname );
 				return null;
 			}
 
-			stuff = new String( rbuf );
+			//System.out.printf( ">>>> read %d bytes from dc\n", rlen );
+			tbuf = Arrays.copyOfRange( rbuf, 0, rlen );
+			stuff = new String( tbuf );
+
+			// bloody java split gives us a bad token when a properly terminated record exists; add a dummy bit to prevent junk
+			stuff += "dummy:junk";
 			data = stuff.split( "\n" );
 
 			f.close();
@@ -231,6 +243,10 @@ public class Datacache {
 			return null;
 		}
 
+		//System.out.printf( ">>>> read from dc has %d things to work with\n", data.length );
+		//for( i = 0; i < data.length; i++ ) {
+			//System.out.printf( ">>>> read from dc returns [%d] %s\n", i, data[i] );
+		//}
 		return data;
 	}
 
@@ -278,11 +294,13 @@ public class Datacache {
 		String sid;
 
 		if( s == null ){
+			System.out.printf( ">>>> datacache deposit student -- student was nil!\n" );
 			return false;
 		}
 		sid = stash_in_dc( "student", s.GenDcEntry() );		// drop the info into the cache
 
 		if( sid  == null ){
+			System.out.printf( ">>>> datacache deposit student -- stash failed\n" );
 			return false;
 		}
 
@@ -312,12 +330,13 @@ public class Datacache {
 	public Student ExtractStudent( String name ) {
 		String fname; 			// flie name to extract info from
 
+		System.out.printf( ">>>> datacache is attempting to extract %s  in dc==%s \n", name, HasStudent( name ) ? "true" : "false" );
 		if( name == null || !HasStudent( name )){
 			return null;
 		}
 
 		fname = build_fname( "student", name );		// replace spaces with underbars and add prefix
-		return new Student( readFromDc( fname ) );
+		return new Student( read_from_dc( fname ) );
 	}
 
 	/*
