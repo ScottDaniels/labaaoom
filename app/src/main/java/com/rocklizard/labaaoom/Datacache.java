@@ -84,6 +84,24 @@ public class Datacache {
 	}
 
 	/*
+		Accepts a key and returns a name (underbars replaced with spaces).
+	*/
+	private String key2fname( String key ) {
+		String fname;
+		int i;
+		String[] tokens;
+
+		tokens = key.split( "_" );
+		fname = tokens[0]; 							// seed first frist token
+		for( i = 1; i < tokens.length; i++ ) {		// add remaining tokens
+			fname += " " + tokens[i];
+		}
+
+		return fname;
+	}
+
+
+	/*
 		Add the student 'key' to the hash.  Name may contain spaces and will be normalised
 		to remove them.
 	*/
@@ -325,7 +343,7 @@ public class Datacache {
 		Given the student name (key) find the student data and build a student object
 		from it.  Returns nil if not found.
 
-		Name may contain spaces which will be replaced with dashes.
+		Name may contain spaces which will be replaced with underbars.
 	*/
 	public Student ExtractStudent( String name ) {
 		String fname; 			// flie name to extract info from
@@ -353,7 +371,11 @@ public class Datacache {
 		sids = raw_keys.toArray( new String[raw_keys.size()] );
 
 		//future:  convert to space separated names and sort
+		for( i = 0; i < sids.length; i++ ) {
+			sids[i] = key2fname( sids[i] );
+		}
 
+		Arrays.sort( sids );
 		return sids;
 	}
 }

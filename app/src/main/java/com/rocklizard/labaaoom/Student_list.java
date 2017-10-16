@@ -49,7 +49,8 @@ public class Student_list extends AppCompatActivity {
                     break;
 
                 case "eval":
-                    Toast.makeText( getApplicationContext(), "name selected for eval: " + selected.getText().toString(), Toast.LENGTH_SHORT ).show();
+                    //Toast.makeText( getApplicationContext(), "name selected for eval: " + selected.getText().toString(), Toast.LENGTH_SHORT ).show();
+
                     bun = new Bundle();
                     bun.putString( "student_name", selected.getText().toString()  );			// name of the student for evaluation
 
@@ -84,6 +85,23 @@ public class Student_list extends AppCompatActivity {
         intent = getIntent();
         target_name = intent.getExtras( ).getString( "target_name" );
 
+
+        TextView sub_title;
+        sub_title = (TextView) findViewById( R.id.sub_title );
+
+        switch( target_name )  {
+            case "show":
+                sub_title.setText( "Select student to show:" );
+				break;
+
+            case "eval":
+                sub_title.setText( "Select student to evaluate:" );
+                break;
+
+            default:
+                sub_title.setText( "Select student to process:" );
+                break;
+        }
 
         list_thing = (LinearLayout) findViewById( R.id.student_list );
         list_thing.removeAllViews();
