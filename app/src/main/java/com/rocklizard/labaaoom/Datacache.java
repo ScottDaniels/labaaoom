@@ -370,12 +370,46 @@ public class Datacache {
 		raw_keys = student_map.keySet();
 		sids = raw_keys.toArray( new String[raw_keys.size()] );
 
-		//future:  convert to space separated names and sort
 		for( i = 0; i < sids.length; i++ ) {
 			sids[i] = key2fname( sids[i] );
 		}
 
 		Arrays.sort( sids );
+		return sids;
+	}
+
+	/*
+		This will return a list of the students in the named section.
+		Right now we don't have an index of sections with a student list so
+		we will have to look at each student.  Future development for
+		performance needed to maintain an index of each section.
+	*/
+	public String[] GetStudentsInSection( String section ) {
+		String[] all_sids;					// entire list
+		String[] sids;						// pruned list;
+		Set<String> raw_keys;
+		Student s;
+		int i;
+		int j = 0;
+
+		if( section.equals( "all" ) ) {
+			return GetStudentList();
+		}
+
+		raw_keys = student_map.keySet();
+		all_sids = raw_keys.toArray( new String[raw_keys.size()] );
+		sids = new String[all_sids.length];
+
+		for( i = 0; i < all_sids.length; i++ ) {
+			s = ExtractStudent( all_sids[i] );					// pull in this student
+			if( s.GetSection().equals( section ) ) {
+				sids[j++] = key2fname( all_sids[i] );
+			}
+		}
+
+		sids = Arrays.copyOfRange( sids, 0, j );				// slice the array down
+		Arrays.sort( sids );
+
 		return sids;
 	}
 }
