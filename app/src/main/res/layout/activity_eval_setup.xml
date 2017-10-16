@@ -110,8 +110,8 @@
             android:checked="true"
             android:text="Small"
             android:onClick="Adjust_size"
-            app:buttonTint="#808080"
-            android:textColor="@color/tag_colour"/>
+            app:buttonTint="@color/value"
+            android:textColor="@color/value"/>
 
         <RadioButton
             android:id="@+id/size_med_rb"
@@ -120,8 +120,8 @@
             android:checked="false"
             android:text="Medium"
             android:onClick="Adjust_size"
-            android:textColor="@color/tag_colour"
-            app:buttonTint="#808080"
+            android:textColor="@color/value"
+            app:buttonTint="@color/value"
             />
 
         <RadioButton
@@ -131,8 +131,8 @@
             android:checked="false"
             android:text="Large"
             android:onClick="Adjust_size"
-            android:textColor="@color/tag_colour"
-            app:buttonTint="#808080"
+            android:textColor="@color/value"
+            app:buttonTint="@color/value"
             />
 
     </RadioGroup>
@@ -153,8 +153,8 @@
             android:checked="true"
             android:text="Invert"
             android:onClick="Adjust_bg"
-            android:textColor="@color/tag_colour"
-            app:buttonTint="#808080"/>
+            android:textColor="@color/value"
+            app:buttonTint="@color/value"/>
 
         <RadioButton
             android:id="@+id/bg_normal_rb"
@@ -163,9 +163,9 @@
             android:checked="false"
             android:text="Normal"
             android:onClick="Adjust_bg"
-            android:textColor="@color/tag_colour"
+            android:textColor="@color/value"
             android:visibility="visible"
-            app:buttonTint="#808080"/>
+            app:buttonTint="@color/value"/>
 
     </RadioGroup>
 
@@ -222,8 +222,8 @@
             android:checked="true"
             android:text="Sans"
             android:onClick="Adjust_style"
-            android:textColor="@color/tag_colour"
-            app:buttonTint="#808080"/>
+            android:textColor="@color/value"
+            app:buttonTint="@color/value"/>
 
         <RadioButton
             android:id="@+id/font_serif_rb"
@@ -232,9 +232,9 @@
             android:checked="false"
             android:text="Serif"
             android:onClick="Adjust_style"
-            android:textColor="@color/tag_colour"
+            android:textColor="@color/value"
             android:visibility="visible"
-            app:buttonTint="#808080"/>
+            app:buttonTint="@color/value"/>
 
     </RadioGroup>
 
