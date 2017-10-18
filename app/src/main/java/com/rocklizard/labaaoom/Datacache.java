@@ -12,6 +12,7 @@
 
 package com.rocklizard.labaaoom;
 import android.content.Context;
+import android.content.res.AssetManager;
 
 //import java.io.FileNotFoundException;
 //import java.io.FileOutputStream;
@@ -29,6 +30,7 @@ public class Datacache {
 	private HashMap<String,Boolean> student_map;
 	private HashMap<String,Boolean> sections_map;		// allow for mutiple sections in the same grade level
 	private HashMap<String,Boolean> sgroups_map;		// map of sentance groups
+	private HashMap<String,Boolean> wgroups_map;		// random word groups
 	private Context ctx;								// the application's context
 
 	/*
@@ -39,6 +41,7 @@ public class Datacache {
 		student_map  = new HashMap<String,Boolean>();
 		sections_map  = new HashMap<String,Boolean>();
 		sgroups_map  = new HashMap<String,Boolean>();
+		wgroups_map  = new HashMap<String,Boolean>();
 		this.ctx = ctx;
 
 		load_maps( );				// Populate maps based on what we have on disk
@@ -116,11 +119,16 @@ public class Datacache {
 	/*
 		Open up the directoy and look for all important, map related, file names.  Mark
 		the corresponding map[key] to serve as our index when needed.
+
+		For sentance and word group lists which are supplied as a default set with the application
+		we must suss files from the assets/groups directory in addition to reading the datacache
+		directory.  To the rest of the application, these appear as one large set.
 	*/
 	private void load_maps( ) {
 		File[] files;
 		String[] tokens;
 		int i;
+		String[] agroups;
 
 		if( ctx != null ) {				// no ctx, probably testing
 			files = ctx.getFilesDir().listFiles();
@@ -142,8 +150,12 @@ public class Datacache {
 							sections_map.put( tokens[1], true );
 							break;
 
-						case "sgrp":
+						case "sgrp":							// these are user created groups
 							sgroups_map.put( tokens[1], true );
+							break;
+
+						case "wgrp":
+							wgroups_map.put( tokens[1], true );
 							break;
 
 						default:				// ignore the unrecognised/unimportant
@@ -153,6 +165,26 @@ public class Datacache {
 			}
 		} else {
 			System.out.printf( ">>>> datacache: load maps fails, no context!\n" );
+		}
+
+		try {		// load the groups provided as an asset by the application
+			agroups = ctx.getAssets().list( "groups" );
+
+			System.err.printf( ">>>>> load maps, found %d groups\n", agroups.length );
+			for( i = 0; i < agroups.length; i++ ) {
+				tokens = agroups[i].split( "_" );
+				switch( tokens[0] ) {
+					case "sgroup":
+						sgroups_map.put( tokens[1], true );
+						break;
+
+					case "wgroup":
+						wgroups_map.put( tokens[1], true );
+						break;
+				}
+			}
+		} catch(  IOException e ) {
+			System.out.printf( "unable to list assessts in groups\n" );
 		}
 	}
 
@@ -268,6 +300,55 @@ public class Datacache {
 		return data;
 	}
 
+	/*
+		Opens and reads all strings from an asset file. These are 'datacache' files
+		which are bundled with the application (e.g. sentence and word groups).
+	*/
+	private String[] read_from_asset( String fname ) {
+		String[] data;			// date read from the file
+		byte[] rbuf;			// read buffer
+		byte[] tbuf;			// trimmed buffer; excluding unfilled characters
+		String stuff;			// stuff read converted to string
+		InputStream f;
+		int i;
+		int rlen;
+
+		rbuf = new byte[4096];				// first cut; one read with a max of 4k
+
+		try {
+			f =	 ctx.getAssets().open( fname  );  // cant get context generated in test
+		} catch(  IOException e ) {
+			e.printStackTrace();
+			return null;
+		}
+
+		try {
+			if( (rlen = f.read( rbuf )) < 0 ) {
+				f.close();
+				System.out.printf( ">>>> read from dc fails for %s\n", fname );
+				return null;
+			}
+
+			//System.out.printf( ">>>> read %d bytes from dc\n", rlen );
+			tbuf = Arrays.copyOfRange( rbuf, 0, rlen );
+			stuff = new String( tbuf );
+
+			// bloody java split gives us a bad token when a properly terminated record exists; add a dummy bit to prevent junk
+			stuff += "dummy:junk";
+			data = stuff.split( "\n" );
+
+			f.close();
+		} catch( IOException e ) {
+			return null;
+		}
+
+		System.out.printf( ">>>> read from asset has %d things to work with\n", data.length );
+		for( i = 0; i < data.length; i++ ) {
+			System.out.printf( ">>>> read from asset returns [%d] %s\n", i, data[i] );
+		}
+		return data;
+	}
+
 	// ------ public things ------------------------------------
 
 	/*
@@ -290,6 +371,8 @@ public class Datacache {
 	}
 
 
+	// ---------------- sentence group things --------------------------------------------------
+
 	/*
 		Writes the senence group to the datacache. Return value true means all
 		was well, and false not so good.
@@ -303,6 +386,76 @@ public class Datacache {
 		return stash_in_dc( "sgrp", sg.GenDcEntry() ) == null;
 	}
 
+	/*
+		Extracts the sentence named group and if all is true extracts the asset group
+		with the same name and adds it to the group in the datacache making it appear
+		that they are a single unit.
+	*/
+	public Sentence_group ExtractSgroup( String name, boolean all ) {
+		String[] arecs = null;		// records from the asset
+		String[] urecs;				// records from the user created list
+		String[] recs;				// concatinated lists
+		int rlen = 0;
+		Sentence_group sg;
+
+		if( ! sgroups_map.containsKey( name ) ) {
+			return null;
+		}
+
+		if( all ) {
+			if( (arecs = read_from_asset( "sgroup_" + name )) !=
+				null ) {        // read the two sets of strings
+				rlen = arecs.length;
+			}
+		}
+
+		if( (urecs = read_from_dc( "sgroup_" + name  )) != null ) {
+			rlen += urecs.length;
+		}
+
+		if( rlen <= 0 ) {				// both null, return null object
+			return null;
+		}
+
+		recs = new String[rlen];		// cat together if we have both
+		rlen = 0;
+		if( arecs != null ) {
+			System.arraycopy( arecs, 0, recs, 0, arecs.length );
+			rlen = arecs.length;
+		}
+
+		if( urecs != null ) {
+			System.arraycopy( urecs, 0, recs, rlen, urecs.length );
+		}
+
+		sg = new Sentence_group( recs );
+		recs = read_from_asset( "sgroup_" + name  );
+
+		return sg;
+	}
+
+	/*
+		Returns an array of sentence group IDs. We pull this list from the map
+		we loaded from the filesystem at start and assume that when new ones
+		are added they are added to the map so we don't need to refresh.
+	*/
+	public String[] GetSgroupList( ) {
+		String[] snames;
+		Set<String> raw_keys;
+		int i;
+
+		raw_keys = sgroups_map.keySet();
+		snames = raw_keys.toArray( new String[raw_keys.size()] );
+
+		for( i = 0; i < snames.length; i++ ) {
+			snames[i] = key2fname( snames[i] );
+		}
+
+		Arrays.sort( snames );
+		return snames;
+	}
+
+	// ---------------- student things ---------------------------------------------------------
 	/*
 		Writes student information out. Return of true means things were
 		good; false, not so much. (java really needs the concept of error
