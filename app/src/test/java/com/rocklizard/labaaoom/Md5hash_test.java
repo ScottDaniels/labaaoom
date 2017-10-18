@@ -1,15 +1,15 @@
 package com.rocklizard.labaaoom;
 
-/**
- * Created by scooter on 9/17/17.
+/*
+	Mnemonic:	md5hash_test
+	Abstract:	Class that provides sanity check of the md5 functions as a unit test.
+	Author:		E. Scott Daniels
+	Date:		17 September 2017
  */
 
 
-//package com.rocklizard.labaaoom;
-
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 import static org.junit.Assert.*;
 import com.rocklizard.labaaoom.M5hash;
 
@@ -28,7 +28,8 @@ import com.rocklizard.labaaoom.M5hash;
 		assertTrue( "generated md5 was not expected when src/salt are empty", result.equals( "d41d8cd98f00b204e9800998ecf8427e" ) );
 
 		result = M5hash.Mk_md5( plain, salt );
-		System.out.printf( ">>> result=%s \n", result );
+		System.out.printf( "md5hash: result=%s \n", result );
         assertTrue( "generated md5 was not expected", result.equals( "18638c83f5032432c7af3f75d732b6bd" ) );
     }
 }
+
