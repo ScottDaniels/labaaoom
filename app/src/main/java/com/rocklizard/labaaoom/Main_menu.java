@@ -49,6 +49,30 @@ public class Main_menu extends Activity {
 //		Toast.makeText(this, "Add stundent", Toast.LENGTH_LONG).show();
     }
 
+    public void Go_mod_student( View v ) {
+		/*
+		Class targetc;
+		Intent target;
+
+		targetc = New_student.class;
+		target = new Intent( this, targetc );
+		startActivity( target );
+		*/
+		Toast.makeText(this, "mod stundent -- not implemented", Toast.LENGTH_LONG).show();
+    }
+
+    public void Go_del_student( View v ) {
+		/*
+		Class targetc;
+		Intent target;
+
+		targetc = New_student.class;
+		target = new Intent( this, targetc );
+		startActivity( target );
+		*/
+		Toast.makeText(this, "delete stundent -- not implemented", Toast.LENGTH_LONG).show();
+    }
+
     public void Go_evaluate( View v ) {
 		Class targetc;
 		Intent target;
