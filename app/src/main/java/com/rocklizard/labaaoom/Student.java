@@ -70,7 +70,6 @@ public class Student {
 					break;
 
 				case "sets":			// pick up settings and build object
-					System.out.printf( ">>>> loading settings from: %s\n", tokens[1] );
 					settings = new Settings( tokens[1] );
 					break;
 
@@ -150,9 +149,11 @@ public class Student {
 			}
 		}
 
+		/*
 		for( i = 0; i < strs.length; i++ ) {
 			System.out.printf( ">>> saving student [%d] %s\n", i, strs[i] );
 		}
+		*/
 
 		return strs;
 	}
