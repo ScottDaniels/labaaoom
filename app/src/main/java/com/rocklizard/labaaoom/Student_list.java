@@ -34,6 +34,7 @@ public class Student_list extends AppCompatActivity {
             Bundle bun;
 
             selected = (TextView) findViewById( v.getId() );
+            selected.setBackgroundColor( Color.parseColor( "#002040" ) );
 
             switch( target_name ) {
                 case "show":
@@ -114,7 +115,7 @@ public class Student_list extends AppCompatActivity {
                 text_thing.setOnClickListener( name_callback );
                 text_thing.setText( slist[i] );
                 text_thing.setTextSize( 30 );
-				text_thing.setTextColor( Color.parseColor( "#00f040" ) );
+				text_thing.setTextColor( Color.parseColor( "#00f040" ) );   // future: pull from values
 
                 list_thing.addView( text_thing );           // stuff it into the list
             }
