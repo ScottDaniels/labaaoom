@@ -78,13 +78,11 @@ public class Sentence_group {
 	*/
 	public String GetNext( ) {
 		if( sel_idx >= sel_stop ) {
-			System.out.printf( ">>>>>>>   stopping iteration sel_idx=%d  sopt=%d\n", sel_idx, sel_stop );
 			sel_idx = 0;
 			sel_stop = 0; 		// prevent accidents
 			return null;
 		}
 
-		System.out.printf( ">>>>>>>   return sentence at %d\n", sel_idx );
 		return data[sel_idx++];
 	}
 
