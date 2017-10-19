@@ -10,12 +10,8 @@ package com.rocklizard.labaaoom;
 
 import android.app.Activity;
 import android.content.Intent;
-//import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-//import android.widget.CheckedTextView;
-//mport android.widget.LinearLayout;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -34,7 +30,6 @@ public class Main_menu extends Activity {
 	protected void onPause( ) {
 		super.onPause();					// must finish before driving super class
 	}
-
 
     /*
         Functions driven when a menu item is selected from the list
