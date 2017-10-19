@@ -89,7 +89,7 @@
         android:id="@+id/login_button"
         android:layout_width="145dp"
         android:layout_height="51dp"
-        android:background="#003000"
+        android:background="@drawable/go_button"
         android:onClick="Attempt_login"
         android:text="Go Forward"
         android:textColor="#ffffff"

@@ -189,7 +189,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="9dp"
         android:textColor="@color/edit_text_fg"
-        android:background="@color/button_go_colour"
+        android:background="@drawable/go_button"
         android:onClick="Start_rand_eval"
         app:layout_constraintTop_toBottomOf="@+id/button_tag"/>
 
@@ -202,7 +202,7 @@
         android:layout_marginLeft="51dp"
         android:layout_marginTop="8dp"
         android:textColor="@color/edit_text_fg"
-        android:background="@color/button_go_colour"
+        android:background="@drawable/go_button"
         android:onClick="Start_sent_eval"
         app:layout_constraintTop_toBottomOf="@+id/button_tag"/>
 

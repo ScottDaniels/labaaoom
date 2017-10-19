@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import static com.rocklizard.labaaoom.M5hash.Mk_md5;
@@ -47,7 +48,7 @@ public class LaBaaooM extends AppCompatActivity {
     }
 
     /*
-        Invoked when user enters login button on the login page
+        Invoked when user enters login go_button on the login page
     */
     public void Attempt_login( View v ) {
         String  master_hash = "6901d625c28ea5fa1a88ad8e8aafe289";    // master, undeletable hash from default uid/pw combination

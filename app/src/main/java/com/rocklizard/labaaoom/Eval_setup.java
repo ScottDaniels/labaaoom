@@ -93,27 +93,27 @@ public class Eval_setup extends Activity {
 	// ----- reaction ------------------------------------------------------------
 
 	/*
-		Called when start random button pressed. Sets up and invokes
+		Called when start random go_button pressed. Sets up and invokes
 		an evaluation on random word groups.
 	*/
 	public void Start_rand_eval( View v ) {
-		Toast.makeText(this, "start random eval button clicked", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "start random eval go_button clicked", Toast.LENGTH_LONG).show();
 
 		stash_if_needed( target );
 	}
 
 	/*
-		Called when start random button pressed. Sets up and invokes
+		Called when start random go_button pressed. Sets up and invokes
 		an evaluation on random word groups.
 	*/
 	public void Start_sent_eval( View v ) {
-		Toast.makeText(this, "start sentence eval button clicked", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "start sentence eval go_button clicked", Toast.LENGTH_LONG).show();
 
 		stash_if_needed( target );
 	}
 
 	/*
-		Invoked when a button in the background adjustment group is clicked
+		Invoked when a go_button in the background adjustment group is clicked
 	*/
 	public void Adjust_bg( View v ) {
 		RadioButton rb1;					// radio buttons to query
@@ -137,11 +137,11 @@ public class Eval_setup extends Activity {
 			}
 		}
 
-		//Toast.makeText(this, "radio button callback driven for bg", Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, "radio go_button callback driven for bg", Toast.LENGTH_LONG).show();
 	}
 
 	/*
-		Invoked when a button in the style adjustment group is clicked
+		Invoked when a go_button in the style adjustment group is clicked
 	*/
 	public void Adjust_style( View v ) {
 		RadioButton rb1;					// radio buttons to query
@@ -165,11 +165,11 @@ public class Eval_setup extends Activity {
 			}
 		}
 
-		//Toast.makeText(this, "radio button callback driven for style", Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, "radio go_button callback driven for style", Toast.LENGTH_LONG).show();
 	}
 
 	/*
-		Invoked when a button in the size adjustment group is clicked
+		Invoked when a go_button in the size adjustment group is clicked
 	*/
 	public void Adjust_size( View v ) {
 		RadioButton rb1;					// radio buttons to query
@@ -197,6 +197,6 @@ public class Eval_setup extends Activity {
 			}
 		}
 
-		//Toast.makeText(this, "radio button callback driven for size", Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, "radio go_button callback driven for size", Toast.LENGTH_LONG).show();
 	}
 }
