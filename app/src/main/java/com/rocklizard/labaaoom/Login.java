@@ -1,6 +1,10 @@
 /*
 	Mnemonic:	Main_menu
 	Abstract:	Class which supports the login interface; the initial activity.
+				CAUTION:  this is NOT the app entry activity!!!
+
+
+
 	Author:		E. Scott Daniels   edaniels7@gatech.edu for CS6460
 	Date:		17 September 2017
 */
@@ -33,15 +37,6 @@ public class Login extends Activity {
 
 	}
 
-
-    private void nap( int ms ) {
-        try {
-            Thread.sleep( ms );
-        } catch( java.lang.InterruptedException e ) {
-			return;
-        }
-    }
-
     /*
         Invoked when user enters login go_button on the login page
     */
@@ -52,13 +47,9 @@ public class Login extends Activity {
         EditText pw_thing;        // password field thingy to pull entered text from
         EditText un_thing;        // user name  field thingy to pull entered text from
         String  result;             // hash result from password
-        //Button  but_thing;
 
         //future:   grab an instance of the datacache and validate the user/password
 
-        //but_thing = (Button) findViewById(R.id.login_button);
-        //but_thing.setBackgroundColor( Color.parseColor( "#009040" ) );
-		//nap( 500 );
         pw_thing = (EditText) findViewById(R.id.password);
         un_thing = (EditText) findViewById(R.id.user_name);
         result = Mk_md5(  un_thing.getText().toString(), pw_thing.getText().toString() );
@@ -76,7 +67,6 @@ public class Login extends Activity {
             t.setGravity( Gravity.TOP | Gravity.START, 250, 100);
             t.show();
         }
-        //but_thing.setBackgroundColor( Color.parseColor( "#003000" ) );
     }
 
 }
