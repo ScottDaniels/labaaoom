@@ -17,12 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".Eval_setup">
+        <activity android:name=".Eval_setup">
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name=".Main_menu"
             android:theme="@style/AppTheme.NoActionBar">
@@ -43,7 +40,8 @@
             android:name=".Student_info"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
+        <activity android:name=".Multi_select_list">
+        </activity>
     </application>
 
 </manifest>
