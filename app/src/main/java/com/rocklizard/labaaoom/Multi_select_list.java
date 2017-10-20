@@ -1,8 +1,8 @@
 package com.rocklizard.labaaoom;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckedTextView;
@@ -19,7 +19,7 @@ import static android.view.View.generateViewId;
     This creates a list of students form the datacache, presents it and when the
     user selects one, the student selected is passed to the target (next) activity.
 */
-public class Multi_select_list extends AppCompatActivity {
+public class Multi_select_list extends Activity {
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
