@@ -57,15 +57,19 @@ public class Main_menu extends Activity {
     }
 
     public void Go_del_student( View v ) {
-		/*
 		Class targetc;
 		Intent target;
+		Bundle bun;
 
-		targetc = New_student.class;
+		bun = new Bundle();
+		bun.putString( "target_name", "delete" );			// what to do when Go is pressed
+
+		targetc = Multi_select_list.class;
 		target = new Intent( this, targetc );
+		target.putExtras( bun );
 		startActivity( target );
-		*/
-		Toast.makeText(this, "delete stundent -- not implemented", Toast.LENGTH_LONG).show();
+
+		//Toast.makeText(this, "delete stundent -- not implemented", Toast.LENGTH_LONG).show();
     }
 
     public void Go_evaluate( View v ) {

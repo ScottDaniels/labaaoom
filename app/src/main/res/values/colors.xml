@@ -8,9 +8,11 @@
     <color name="tag_colour">#e0e0e0</color>
     <color name="title_colour">#ffd000</color>
     <color name="edit_text_fg">#ffffff</color>
+    <color name="button_text_fg">#ffffff</color>
     <color name="edit_text_bg">#404040</color>
     <color name="header_colour">#00a090</color>
     <color name="menu_item">#00f040</color>
+    <color name="menu_item_touched">#00f0f0</color>
     <color name="button_pressed">#909090</color>
     <color name="button_go_colour">#003000</color>
     <color name="button_can_colour">#500000</color>
