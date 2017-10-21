@@ -3,7 +3,6 @@ package com.rocklizard.labaaoom;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +18,7 @@ import static android.view.View.generateViewId;
     user selects one, the student selected is passed to the target (next) activity.
 */
 
-public class Student_list extends AppCompatActivity {
+public class Student_list extends Activity {
     private String target_name;         // name of the activity to pass control to
 
     /*
@@ -41,16 +40,10 @@ public class Student_list extends AppCompatActivity {
             switch( target_name ) {
                 case "show":
                     targetc = Student_info.class;
-                    target = new Intent( getApplicationContext(), targetc );
-                    target.putExtras( bun );
-                    startActivity( target );
                     break;
 
                 case "eval":
                     targetc = Eval_setup.class;
-                    target = new Intent( getApplicationContext(), targetc );
-                    target.putExtras( bun );
-                    startActivity( target );
                     break;
 
                 case "modify_student":
