@@ -25,6 +25,8 @@ import java.util.Set;
 import com.rocklizard.labaaoom.Student;
 
 public class Datacache {
+	public static final int STUDENT = 0;				// kinds for delete
+
 	private	static Datacache db = null;			// singleton
 
 	private HashMap<String,Boolean> student_map;
@@ -252,6 +254,17 @@ public class Datacache {
 	}
 
 	/*
+		Generic remove function; hides underlying storage type
+	*/
+	private void remove_from_dc( String fname ) {
+		if( ! ctx.deleteFile( fname ) ) {
+			System.out.printf( ">>>>> remove from dc failed: %s\n", fname );
+		} else {
+			System.out.printf( ">>>>> remove from dc OK: %s\n", fname );
+		}
+	}
+
+	/*
 		Open the named file and read all records (new line terminated) into an array
 		and return the array. Nil is returned on error.
 	*/
@@ -370,6 +383,20 @@ public class Datacache {
 		return db;
 	}
 
+	// ----------------- generic delete --------------------------------------------------------
+
+	/*
+		Generic delete of a specific kind of something.
+	*/
+	public void Delete( String key, int kind ) {
+			switch( kind ) {
+				case STUDENT:			// delete student
+					if( student_map.containsKey( key ) ) {
+						student_map.put( key, false );
+						remove_from_dc( build_fname( "student", key ) );
+					}
+			}
+	}
 
 	// ---------------- sentence group things --------------------------------------------------
 
