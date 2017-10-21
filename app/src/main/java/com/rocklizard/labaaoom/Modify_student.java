@@ -17,6 +17,8 @@ import android.widget.Toast;
 public class Modify_student extends Activity {
 
 	private Student s;					// referenced student to click functions have access
+	private EditText student;			// spot on screen where student name is updated
+	private EditText section;			// section space to change
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
@@ -29,8 +31,6 @@ public class Modify_student extends Activity {
 		Datacache dc;
 		Intent it;
 		String target_name;			// evaluation target name from the list
-		EditText student;			// spot on screen where student name is updated
-		EditText section;			// section space to change
 		Settings settings;
 		RadioButton rb1;            // generic radio buttons on the screen
 		RadioButton rb2;
@@ -65,10 +65,30 @@ public class Modify_student extends Activity {
 		Look to see if there were changes, and if there were update the student in the dc.
 	*/
 	public void Mod_clicked( View v ) {
+		Datacache dc;
+		String old_name;			// we'll hold this and delte the old entry only after current is saved
+
+		dc = Datacache.GetDatacache();
+
+		old_name = s.GetName();
+		if( ! student.getText().toString().equals( old_name )  ) {
+			s.Rename( student.getText().toString() );
+			if ( dc.DepositStudent( s ) ) {
+				dc.Delete( old_name, Datacache.STUDENT );                // delete the old thing from the dc, rename what we have, then save it
+			} else {
+				System.err.printf( "###ERROR### saving modiied student with new name; old entry not delted\n" );
+			}
+		} else {
+			if( ! section.getText().toString().equals( s.GetSection() ) ) {
+				s.SetSection( section.getText().toString() );
+				dc.DepositStudent( s );
+			}
+		}
+
 		finish( );
 	}
 
-	public void Can_clicked( View v ) {
+	public void Cancel_clicked( View v ) {
 		finish();
 	}
 }

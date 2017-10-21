@@ -12,7 +12,7 @@ public class Student {
 	static final boolean RANDOM = false;
 
 	private String name;
-	private String section;			// section that the kid belongs to (K1 First1 etc)
+	private String section;				// section that the kid belongs to (K1 First1 etc)
 	private Eval_set sentence_evals;    // list of all evaluations using sentences
 	private Eval_set rand_evals;        // list of all evaluations using random words
 	private Settings settings;			// evaluation settings last used
@@ -240,5 +240,19 @@ public class Student {
 	*/
 	public Settings GetSettings( ) {
 		return settings;
+	}
+
+	/*
+		Change the student name associated with this instance.
+	*/
+	public void Rename( String new_name ) {
+		name = new_name;
+	}
+
+	/*
+		Allow owner to reset the section name.
+	*/
+	public void SetSection( String new_sect ) {
+		section = new_sect;
 	}
 }
