@@ -35,12 +35,14 @@
 
     <ScrollView
         android:id="@+id/Student_scroll_list"
-        android:layout_width="480dp"
-        android:layout_height="703dp"
+        android:layout_width="463dp"
+        android:layout_height="641dp"
         android:layout_marginLeft="81dp"
         android:layout_marginTop="30dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sub_title">
+        app:layout_constraintTop_toBottomOf="@+id/sub_title"
+        tools:layout_editor_absoluteY="212dp"
+        tools:layout_editor_absoluteX="98dp">
 
         <LinearLayout
             android:id="@+id/student_list"
