@@ -31,6 +31,24 @@ public class Main_menu extends Activity {
 		super.onPause();					// must finish before driving super class
 	}
 
+	/*
+		Does all of the dirty work of crating a bundle and passing the action string to
+		the underlying select student activity.
+	*/
+	private void drive_slist( String action ) {
+		Class targetc;
+		Intent target;
+		Bundle bun;
+
+		bun = new Bundle();
+		bun.putString( "target_name", action );			// action select will take
+
+		targetc = Student_list.class;
+		target = new Intent( this, targetc );
+		target.putExtras( bun );
+		startActivity( target );
+	}
+
     /*
         Functions driven when a menu item is selected from the list
     */
@@ -43,17 +61,9 @@ public class Main_menu extends Activity {
 		startActivity( target );
     }
 
-    public void Go_mod_student( View v ) {
-		/*
-		Class targetc;
-		Intent target;
-
-		targetc = New_student.class;
-		target = new Intent( this, targetc );
-		startActivity( target );
-		*/
-		Toast.makeText(this, "mod stundent -- not implemented", Toast.LENGTH_LONG).show();
-    }
+	public void Go_mod_student( View v ) {
+		drive_slist( "modify_student" );
+	}
 
     public void Go_del_student( View v ) {
 		Class targetc;
@@ -70,6 +80,9 @@ public class Main_menu extends Activity {
     }
 
     public void Go_evaluate( View v ) {
+		drive_slist( "eval" );
+
+		/*
 		Class targetc;
 		Intent target;
 		Bundle bun;
@@ -81,10 +94,14 @@ public class Main_menu extends Activity {
 		target = new Intent( this, targetc );
 		target.putExtras( bun );
 		startActivity( target );
+		*/
 		//Toast.makeText(this, "Starting Evaluation", Toast.LENGTH_LONG).show();
     }
 
 	public void Go_view_student( View v ) {
+		drive_slist( "show" );
+
+		/*
 		Class targetc;
 		Intent target;
 		Bundle bun;
@@ -97,7 +114,7 @@ public class Main_menu extends Activity {
 		target = new Intent( this, targetc );
 		target.putExtras( bun );
 		startActivity( target );
-
+		*/
 		//Toast.makeText(this, "View Student", Toast.LENGTH_LONG).show();
     }
 }

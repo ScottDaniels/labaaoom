@@ -33,14 +33,18 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Student_list"
+            android:name=".Multi_select_list"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".Student_info"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".Multi_select_list">
+        <activity android:name=".Student_list">
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".Modify_student"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
