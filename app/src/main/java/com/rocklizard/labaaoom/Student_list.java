@@ -29,20 +29,17 @@ public class Student_list extends AppCompatActivity {
         public void onClick( View v ) {
             CheckedTextView clicked_thing;
             TextView selected;
-            Class targetc;
+            Class targetc = null;
             Intent target;
             Bundle bun;
 
             selected = (TextView) findViewById( v.getId() );
-            selected.setBackgroundColor( Color.parseColor( "#002040" ) );
+            selected.setBackgroundColor( Color.parseColor( "#002040" ) );   // quick comfirmation
 
+            bun = new Bundle();
+            bun.putString( "student_name", selected.getText().toString()  );			// name of the student for evaluation
             switch( target_name ) {
                 case "show":
-                    //Toast.makeText( getApplicationContext(), "name selected for show: " + selected.getText().toString(), Toast.LENGTH_SHORT ).show();
-
-                    bun = new Bundle();
-                    bun.putString( "student_name", selected.getText().toString()  );			// name of the student to suss out and display
-
                     targetc = Student_info.class;
                     target = new Intent( getApplicationContext(), targetc );
                     target.putExtras( bun );
@@ -50,17 +47,26 @@ public class Student_list extends AppCompatActivity {
                     break;
 
                 case "eval":
-                    //Toast.makeText( getApplicationContext(), "name selected for eval: " + selected.getText().toString(), Toast.LENGTH_SHORT ).show();
-
-                    bun = new Bundle();
-                    bun.putString( "student_name", selected.getText().toString()  );			// name of the student for evaluation
-
                     targetc = Eval_setup.class;
                     target = new Intent( getApplicationContext(), targetc );
                     target.putExtras( bun );
                     startActivity( target );
                     break;
+
+                case "modify_student":
+                    targetc = Modify_student.class;
+                    break;
+
+                default:
+                    Toast.makeText( getApplicationContext(), "Internal mishap in selecct list; unknown target!", Toast.LENGTH_LONG ).show();
+                    finish();
             }
+
+            if( targetc != null ) {
+				target = new Intent( getApplicationContext( ), targetc );
+				target.putExtras( bun );
+				startActivity( target );
+			}
         }
     } ;
 
@@ -98,6 +104,10 @@ public class Student_list extends AppCompatActivity {
             case "eval":
                 sub_title.setText( "Select student to evaluate:" );
                 break;
+
+			case "modify_student":
+				sub_title.setText( "Select student to modify:" );
+				break;
 
             default:
                 sub_title.setText( "Select student to process:" );
