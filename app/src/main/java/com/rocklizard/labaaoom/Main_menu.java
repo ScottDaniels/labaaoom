@@ -81,40 +81,9 @@ public class Main_menu extends Activity {
 
     public void Go_evaluate( View v ) {
 		drive_slist( "eval" );
-
-		/*
-		Class targetc;
-		Intent target;
-		Bundle bun;
-
-		bun = new Bundle();
-		bun.putString( "target_name", "eval" );			// pass what the selection is to drive
-
-		targetc = Student_list.class;
-		target = new Intent( this, targetc );
-		target.putExtras( bun );
-		startActivity( target );
-		*/
-		//Toast.makeText(this, "Starting Evaluation", Toast.LENGTH_LONG).show();
     }
 
 	public void Go_view_student( View v ) {
 		drive_slist( "show" );
-
-		/*
-		Class targetc;
-		Intent target;
-		Bundle bun;
-
-		bun = new Bundle();
-		bun.putString( "target_name", "show" );			// pass what the selection is to drive
-
-
-		targetc = Student_list.class;
-		target = new Intent( this, targetc );
-		target.putExtras( bun );
-		startActivity( target );
-		*/
-		//Toast.makeText(this, "View Student", Toast.LENGTH_LONG).show();
     }
 }
