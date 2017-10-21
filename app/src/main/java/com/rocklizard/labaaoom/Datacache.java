@@ -388,14 +388,17 @@ public class Datacache {
 	/*
 		Generic delete of a specific kind of something.
 	*/
-	public void Delete( String key, int kind ) {
-			switch( kind ) {
-				case STUDENT:			// delete student
-					if( student_map.containsKey( key ) ) {
-						student_map.put( key, false );
-						remove_from_dc( build_fname( "student", key ) );
-					}
-			}
+	public void Delete( String name, int kind ) {
+		String key;					// must convert name into a hash key (no spaces)
+
+		key = build_key( name );
+		switch( kind ) {
+			case STUDENT:			// delete student
+				if( student_map.containsKey( key ) ) {
+					student_map.remove( key );
+					remove_from_dc( build_fname( "student", key ) );
+				}
+		}
 	}
 
 	// ---------------- sentence group things --------------------------------------------------

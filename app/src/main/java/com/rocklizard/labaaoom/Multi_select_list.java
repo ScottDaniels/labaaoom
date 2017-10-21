@@ -23,8 +23,13 @@ import static android.view.View.generateViewId;
 
 
 /*
-    This creates a list of students form the datacache, presents it and when the
-    user selects one, the student selected is passed to the target (next) activity.
+	Creates a list of students from the datacache, and presents it. It allows mutiple
+	sutdents to be selected and when the go button is pressed at the bottom, the indicated
+	action (e.g. delete) is executed.   The text on the 'go' button is dynamic to reflect
+	the resulting action, as is the title.  For some actions, a confirmation popup is generated
+	and the user must ACK before going forward with the distruction.
+
+	Future: add a select all option.
 */
 public class Multi_select_list extends Activity {
 
@@ -36,7 +41,7 @@ public class Multi_select_list extends Activity {
 		selected = new HashMap<String, Boolean>( );
 	}
 
-	private String target_name;                 // name of the activity to pass control to
+	private String target_action;                 // name of the activity to pass control to
 	private HashMap<String, Boolean> selected;
 
 	/*
@@ -68,7 +73,7 @@ public class Multi_select_list extends Activity {
 
 	@Override
 	protected void onResume() {
-		String[] slist;                 // list of students fetched from the cache
+		String[] slist = null;			// list of things fetched from the cache for user to select from
 		Intent intent;
 		LinearLayout list_thing;        // container holding the list on the screen
 		int i;
@@ -82,26 +87,30 @@ public class Multi_select_list extends Activity {
 		dc = Datacache.GetDatacache( );
 
 		intent = getIntent( );
-		target_name = intent.getExtras( ).getString( "target_name" );
-
+		target_action = intent.getExtras( ).getString( "target_action" );
 
 		TextView sub_title;
 		sub_title = (TextView) findViewById( R.id.sub_title );
 
-		switch( target_name ) {
-			case "delete":
+		switch( target_action ) {
+			case "delete_student":
 				sub_title.setText( "Select student(s) to delete:" );
-				button_text = "Delete!!";
+				slist = dc.GetStudentList( );
+				button_text = "Delete!";
 				break;
+
+			// future: delete section, sentence group etc
 
 			default:
 				sub_title.setText( "Select student to process:" );
 				break;
 		}
 
+		butt_thing = (Button) findViewById( R.id.multi_go_button );
+		butt_thing.setText( button_text );
+
 		list_thing = (LinearLayout) findViewById( R.id.multi_select_list );
 		list_thing.removeAllViews( );
-		slist = dc.GetStudentList( );
 		if( slist != null && slist.length > 0 ) {
 			for( i = 0; i < slist.length; i++ ) {
 				text_thing = new CheckedTextView( this );   // what we will stuff in the list
@@ -115,7 +124,7 @@ public class Multi_select_list extends Activity {
 				list_thing.addView( text_thing );           // stuff it into the list
 			}
 		} else {
-			Toast.makeText( this, "There are no students to display.", Toast.LENGTH_LONG ).show( );
+			Toast.makeText( this, "There is nothing to display.", Toast.LENGTH_LONG ).show( );
 		}
 	}
 
@@ -147,10 +156,8 @@ public class Multi_select_list extends Activity {
 
 						for( i = 0; i < dlist.length; i++ ) {
 							dc.Delete( dlist[i], kind );
-							System.out.printf( ">>>> deleting student: %s\n", dlist[i] );
 						}
 
-						Toast.makeText( getApplicationContext( ), "Deleting!!!!!!!", Toast.LENGTH_SHORT ).show( );
 						finish( );
 					}
 				}
@@ -166,8 +173,9 @@ public class Multi_select_list extends Activity {
 	}
 
 	/*
-		For some target actions (e.g. delete)  we confirm before invoking. If user says Go,
-		then we pass the selected list and lit it rip.
+		React to the 'go' button being pressed.
+		For some actions we invoke the 'act'_on_ok related function which tosses up a confirmation
+		popup and if the user ACKs that, it goes ahead.  Other functions are just done on command.
 	*/
 	public void Go_button_click( View V ) {
 		String[] selected_set;						// set of things from list to act on
@@ -175,6 +183,10 @@ public class Multi_select_list extends Activity {
 		Iterator<Map.Entry<String, Boolean>> looper;
 		Map.Entry<String, Boolean> kv;				// k,v pair
 		int i = 0;
+
+		if( selected.size() == 0 ) {		// there wasn't a list, so cant go forward on it
+			finish();
+		}
 
 		selected_set = new String[selected.size()];		// at most there will be this many
 		looper= selected.entrySet().iterator();
@@ -190,7 +202,7 @@ public class Multi_select_list extends Activity {
 			slice[i] = selected_set[i];
 		}
 
-		switch( target_name ) {
+		switch( target_action ) {
 			case "delete_student":									// build the set of selected and pass for confirmation
 				delete_on_ok( slice, Datacache.STUDENT );			// question authority and delete if ok
 				break;
