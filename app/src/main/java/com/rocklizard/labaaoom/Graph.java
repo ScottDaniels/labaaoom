@@ -26,6 +26,9 @@ public class Graph {
     private boolean value_wrap = false; // true if values have wrapped
     private int nvalues;
     private int line_colour;
+    private int[] marker_colours;       // colours for marker lines
+    private int[] marker_values;
+    private int marker_idx;
     private int grid_colour;
     private int max_value;              // max value in the data set
     private int min_topv = 100;         // minimum top value
@@ -40,7 +43,7 @@ public class Graph {
     private Bitmap bmap;
 
     // ---- internal helper stuff -------
-    private void paint_grid( ) {
+    private void paint_grid() {
         int i;
         int yoffset;        // offset of next grid line
         int yspace;         // space between grid lines
@@ -48,8 +51,8 @@ public class Graph {
         int tv;
 
         painter.setColor( grid_colour );
-        canvas.drawLine(  padx,  cheight-(pady-1),  width+padx,  cheight-pady, painter );       // xaxis
-        canvas.drawLine(  padx,  cheight-(pady-1),  padx,  pady, painter );                  // yaxis
+        canvas.drawLine( padx, cheight - (pady - 1), width + padx, cheight - pady, painter );       // xaxis
+        canvas.drawLine( padx, cheight - (pady - 1), padx, pady, painter );                  // yaxis
 
         tv = max_value > min_topv ? max_value : min_topv;
         delta = tv / 4;
@@ -57,13 +60,13 @@ public class Graph {
         yoffset = 0;
         yspace = height / 4;
         for( i = 0; i < 4; i++ ) {
-            canvas.drawLine(  padx-5,  pady+yoffset,  width+padx+5,  pady+yoffset, painter );
-            canvas.drawText(  Integer.toString( tv ), 0, pady+yoffset+4, painter );
+            canvas.drawLine( padx - 5, pady + yoffset, width + padx + 5, pady + yoffset, painter );
+            canvas.drawText( Integer.toString( tv ), 0, pady + yoffset + 4, painter );
             yoffset += yspace;
 
             tv -= delta;
         }
-        canvas.drawText(  "0", 0, pady+yoffset+5, painter );
+        canvas.drawText( "0", 0, pady + yoffset + 5, painter );
     }
 
     // -----------------------------------------------------------------------------
@@ -77,7 +80,7 @@ public class Graph {
         if( height < 10 ) {
             height = 100;
         }
-        if( width <  10 ) {
+        if( width < 10 ) {
             width = 200;
         }
         if( padx < 0 ) {
@@ -90,17 +93,21 @@ public class Graph {
         this.cwidth = width;
         this.padx = padx;
         this.pady = pady;
+        this.marker_idx = 0;
+
+        this.marker_values = new int[10];
+        this.marker_colours = new int[10];
 
         this.height = cheight - (2 * pady);
         this.width = cwidth - padx;
 
         nvalues = this.width;
-        values = new int[nvalues];
+        values = new int[ nvalues ];
         line_colour = Color.parseColor( "#0090e0" );
         grid_colour = Color.parseColor( "#c0c0c0" );
 
         // set up painter things
-        painter= new Paint();
+        painter = new Paint( );
         bmap = Bitmap.createBitmap( cwidth, cheight, Bitmap.Config.ARGB_8888 );
         canvas = new Canvas( bmap );
     }
@@ -118,6 +125,18 @@ public class Graph {
                 point_sp = n;
             }
         }
+    }
+
+    /*
+        Add a marker and colour to the graph. Colour is a #rrggbb hex string.
+        We silently fail if more than 10 are added.
+    */
+    public void AddMarker( int value, String colour ) {
+       if( marker_idx < marker_values.length )  {
+           marker_values[marker_idx] = value;
+           marker_colours[marker_idx] = Color.parseColor( colour );
+		   marker_idx++;
+       }
     }
 
     /*
@@ -215,6 +234,18 @@ public class Graph {
             if( idx >= nvalues ) {
                 idx = 0;
             }
+        }
+
+        for( i = 0; i < marker_idx; i++ ) {
+		    float y;
+			float v;
+
+            y = height + pady;          // bottom of line will be the value reference, double width is above it
+            v = marker_values[i] * scale;
+            painter.setColor( marker_colours[i] );
+            canvas.drawLine( padx - 5, y - v, width + padx + 5, y - v, painter );
+            y--;
+            canvas.drawLine( padx - 5, y - v, width + padx + 5, y - v, painter );
         }
 
         return bmap;
