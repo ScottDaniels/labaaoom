@@ -1,5 +1,14 @@
 package com.rocklizard.labaaoom;
 
+/*
+	Mnemonic:	Eval_setup.java
+	Abstract:	Supports the new (add) student activity. It must extend the force login activity
+				in order to ensure that login is driven should the user navigate away while
+				this activity is running.
+	Author:		E. Scott Daniels
+	Date:		12 October 2017
+*/
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +17,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Eval_setup extends Activity {
+public class Eval_setup extends Force_login_activity {
 	boolean settings_changed = false;
 	Student target = null;					// student that we're setting up for
 

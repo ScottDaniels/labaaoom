@@ -1,4 +1,10 @@
 package com.rocklizard.labaaoom;
+/*
+	Mnemonic:	Student_info.java
+	Abstract:	Manages the display of a student's evaluation history.
+	Author:		E. Scott Daniels   edaniels7@gatech.edu for CS6460
+	Date:		23 September 2017
+*/
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +16,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class Student_info extends Activity {
+
+/*
+	This must extend the force login activity, and use fork_internal() in order to ensure that
+	return from an 'outside' activity drives the login verification.
+*/
+public class Student_info extends Force_login_activity {
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {

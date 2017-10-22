@@ -1,5 +1,12 @@
 package com.rocklizard.labaaoom;
 
+/*
+	Mnemonic:	New_student.java
+	Abstract:	Supports the new (add) student activity.
+	Author:		E. Scott Daniels
+	Date:		22 September 2017
+*/
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,21 +14,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class New_student extends Activity {
+
+/*
+	Manage the creation of a new student.
+
+	This must extend the force login activity, and use fork_internal() in order to ensure that
+	return from an 'outside' activity drives the login verification.
+*/
+public class New_student extends Force_login_activity {
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 		setContentView( R.layout.activity_new_student );
-	}
-
-	/*
-		All activities must finish on pause to force restart at the login screen.
-	*/
-	@Override
-	protected void onPause( ) {
-		finish();							// ensure that we go back to the log in screen
-		super.onPause();					// must finish before driving super class
 	}
 
 	/*

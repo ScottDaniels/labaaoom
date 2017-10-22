@@ -1,4 +1,11 @@
 package com.rocklizard.labaaoom;
+/*
+	Mnemonic:	Modify_student
+	Abstract:	Class which supports the activity that allows a student's information to be changed
+				in flight.
+	Author:		E. Scott Daniels   edaniels7@gatech.edu for CS6460
+	Date:		21 October 2017
+*/
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,8 +20,11 @@ import android.widget.Toast;
 	Provides the functions that manage things when the modify student activity is active.
 	Allows the user to change certain student information such as correcting spelling of
 	name, and section assignment.
+
+	This must extend the force login activity, and use fork_internal() in order to ensure that
+	return from an 'outside' activity drives the login verification.
 */
-public class Modify_student extends Activity {
+public class Modify_student extends Force_login_activity {
 
 	private Student s;					// referenced student to click functions have access
 	private EditText student;			// spot on screen where student name is updated

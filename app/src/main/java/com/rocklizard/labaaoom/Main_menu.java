@@ -15,7 +15,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class Main_menu extends Activity {
+/*
+	Support the main menu activity.  This must extend the force login activity, and use fork_internal()
+	in order to ensure that return from an 'outside' activity drives the login verification.
+*/
+public class Main_menu extends Force_login_activity {
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
@@ -24,15 +28,7 @@ public class Main_menu extends Activity {
 	}
 
 	/*
-		All activities must finish on pause to force restart at the login screen.
-	*/
-	@Override
-	protected void onPause( ) {
-		super.onPause();					// must finish before driving super class
-	}
-
-	/*
-		Does all of the dirty work of crating a bundle and passing the action string to
+		Does all of the dirty work of creating a bundle and passing the action string to
 		the underlying select student activity.
 	*/
 	private void drive_slist( String action ) {
@@ -46,7 +42,7 @@ public class Main_menu extends Activity {
 		targetc = Student_list.class;
 		target = new Intent( this, targetc );
 		target.putExtras( bun );
-		startActivity( target );
+		Fork_internal( target );
 	}
 
     /*
@@ -58,7 +54,7 @@ public class Main_menu extends Activity {
 
 		targetc = New_student.class;
 		target = new Intent( this, targetc );
-		startActivity( target );
+		Fork_internal( target );
     }
 
 	public void Go_mod_student( View v ) {
@@ -76,7 +72,7 @@ public class Main_menu extends Activity {
 		targetc = Multi_select_list.class;
 		target = new Intent( this, targetc );
 		target.putExtras( bun );
-		startActivity( target );
+		Fork_internal( target );
     }
 
     public void Go_evaluate( View v ) {

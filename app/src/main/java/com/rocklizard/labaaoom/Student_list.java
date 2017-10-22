@@ -1,4 +1,11 @@
 package com.rocklizard.labaaoom;
+/*
+	Mnemonic:	Student_list.java
+	Abstract:	Create and manage a list of students.  The list allows a single student name
+	            to be touched which causes a follow-on activity (e.g. eval_setup) to be launched.
+	Author:		E. Scott Daniels   edaniels7@gatech.edu for CS6460
+	Date:		23 September 2017
+*/
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,7 +25,7 @@ import static android.view.View.generateViewId;
     user selects one, the student selected is passed to the target (next) activity.
 */
 
-public class Student_list extends Activity {
+public class Student_list extends Force_login_activity {
     private String target_name;         // name of the activity to pass control to
 
     /*
@@ -58,7 +65,8 @@ public class Student_list extends Activity {
             if( targetc != null ) {
 				target = new Intent( getApplicationContext( ), targetc );
 				target.putExtras( bun );
-				startActivity( target );
+				//startActivity( target );
+                Fork_internal( target );        // start the activity
 			}
         }
     } ;

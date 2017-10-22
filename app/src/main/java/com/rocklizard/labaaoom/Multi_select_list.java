@@ -1,4 +1,11 @@
 package com.rocklizard.labaaoom;
+/*
+	Mnemonic:	Multi_select_list.java
+	Abstract:	Class which supports creating and managing a list that allows multiple items
+				to be selected and then passed to a follow-on activity.
+	Author:		E. Scott Daniels   edaniels7@gatech.edu for CS6460
+	Date:		19 October 2017
+*/
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,9 +36,12 @@ import static android.view.View.generateViewId;
 	the resulting action, as is the title.  For some actions, a confirmation popup is generated
 	and the user must ACK before going forward with the distruction.
 
+	This must extend the force login activity, and use fork_internal() in order to ensure that
+	return from an 'outside' activity drives the login verification.
+
 	Future: add a select all option.
 */
-public class Multi_select_list extends Activity {
+public class Multi_select_list extends Force_login_activity {
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {

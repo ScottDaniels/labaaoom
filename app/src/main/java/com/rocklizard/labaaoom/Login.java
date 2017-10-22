@@ -1,9 +1,12 @@
 /*
 	Mnemonic:	Main_menu
-	Abstract:	Class which supports the login interface; the initial activity.
+	Abstract:	Class which supports the login interface. It is invoked by the force login activity
+				when we believe that the user started something else and has returned so that
+				we force a login.
+
 				CAUTION:  this is NOT the app entry activity!!!
 
-
+				Future:  need a single set of validataion functions (maybe a part of the datacache)
 
 	Author:		E. Scott Daniels   edaniels7@gatech.edu for CS6460
 	Date:		17 September 2017
@@ -28,22 +31,19 @@ import java.sql.Time;
 import static com.rocklizard.labaaoom.M5hash.Mk_md5;
 import static com.rocklizard.labaaoom.R.id.time;
 
-public class Login extends Activity {
+public class Login extends AppCompatActivity {
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 		setContentView( R.layout.activity_login );
-
 	}
 
     /*
         Invoked when user enters login go_button on the login page
     */
-    public void Attempt_login( View v ) {
+    public void Reattempt_login( View v ) {
         String  master_hash = "6901d625c28ea5fa1a88ad8e8aafe289";    // master, undeletable hash from default uid/pw combination
-        Intent  target;          // target activity
-        Class   targetc;
         EditText pw_thing;        // password field thingy to pull entered text from
         EditText un_thing;        // user name  field thingy to pull entered text from
         String  result;             // hash result from password
@@ -57,9 +57,7 @@ public class Login extends Activity {
         pw_thing.setText( "" );                         // safe to clear the pw field now
 
         if( result.equals( master_hash ) ) {            // future:  check what they might have changed it to as well
-            targetc = Main_menu.class;
-            target = new Intent( this, targetc );
-            startActivity( target );
+			finish();
         } else {
             Toast t;
 

@@ -3,7 +3,7 @@ package com.rocklizard.labaaoom;
 /*
 	Mnemonic:	Settings
 	Abstract:	Manages the per student settings that are used for an evaulation.
-	Date:		17 September 2017
+	Date:		14 October 2017
 	Author:		E. Scott Daniels edaniels7@gatech.edu  cs6460 Fall 2017
 */
 

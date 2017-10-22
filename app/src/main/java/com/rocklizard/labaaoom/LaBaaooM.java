@@ -29,9 +29,6 @@ public class LaBaaooM extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_labaoom );
 
-        //ActionBar actionBar = getActionBar();
-        //actionBar.setBackgroundDrawable(new ColorDrawable( Color.GREEN));
-
         Datacache.Mk_datacache( getApplicationContext() );          // must initialise the datacach with context
     }
 
