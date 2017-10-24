@@ -1,7 +1,12 @@
 /*
 	Mnemonic:	Main_menu
 	Abstract:	Class which supports the main menu allowing the user to
-				select one of several activities.
+				select one of several activities. This class extends the force_login_activity
+				in order to ensure that the login is verified after navigation away from the
+				application happens. There is one twist though, on creation this activity
+				forces the 'external' state to be set in the FLA wrapper which causes the
+				login screen to be displayed when this activity is created (at the time the
+				app is started).
 	Author:		E. Scott Daniels   edaniels7@gatech.edu for CS6460
 	Date:		17 September 2017
 */
@@ -25,6 +30,8 @@ public class Main_menu extends Force_login_activity {
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 		setContentView( R.layout.activity_main_menu );
+
+		Force_external();			// we always assume create comes from outside
 	}
 
 	/*

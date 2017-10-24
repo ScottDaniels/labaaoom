@@ -39,6 +39,12 @@ public class Login extends AppCompatActivity {
 		setContentView( R.layout.activity_login );
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		System.out.printf(">>>> running login class \n");
+	}
+
     /*
         Invoked when user enters login go_button on the login page
     */
@@ -67,4 +73,14 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    /*
+    	It is VERY important that this activity override the function of the back button.
+    	If is isn't overridden, and ignored, pressing back will defet the revalidation
+    	process.
+    */
+	@Override
+	public void onBackPressed() {
+		System.out.printf( "=============== on back pressed =================\n" );
+		Toast.makeText( this, "Enter valid user/password or press home button.", Toast.LENGTH_SHORT ).show( );
+	}
 }

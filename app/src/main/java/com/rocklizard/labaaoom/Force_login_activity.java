@@ -35,6 +35,7 @@ public class Force_login_activity extends Activity {
 		super.onResume( );
 
 		if( ! spawned_internal ) {
+			System.out.printf( ">>>> on resume ext= %s starting login class! \n", spawned_internal ? "true" : "false " );
 			//Toast.makeText( this, "### WARNING ###  return from outside detected.", Toast.LENGTH_LONG ).show( );
 
 			target = new Intent( getApplicationContext( ), Login.class );
@@ -56,5 +57,10 @@ public class Force_login_activity extends Activity {
 		spawned_internal = true;
 
 		startActivity( it );
+	}
+
+	public void Force_external( ) {
+		System.out.printf( ">>>>> set spawned == false\n" );
+		spawned_internal = false;			// for the initial activity to force the login on create
 	}
 }
