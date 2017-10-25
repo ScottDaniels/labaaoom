@@ -485,6 +485,27 @@ public class Datacache {
 		return snames;
 	}
 
+	/*
+		Returns an array of random word group IDs. We pull this list from the map
+		we loaded from the filesystem at start and assume that when new ones
+		are added they are added to the map so we don't need to refresh.
+	*/
+	public String[] GetRgroupList( ) {
+		String[] rnames;
+		Set<String> raw_keys;
+		int i;
+
+		raw_keys = wgroups_map.keySet();
+		rnames = raw_keys.toArray( new String[raw_keys.size()] );
+
+		for( i = 0; i < rnames.length; i++ ) {
+			rnames[i] = key2fname( rnames[i] );
+		}
+
+		Arrays.sort( rnames );
+		return rnames;
+	}
+
 	// ---------------- student things ---------------------------------------------------------
 	/*
 		Writes student information out. Return of true means things were
