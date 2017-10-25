@@ -8,9 +8,27 @@
     android:layout_height="match_parent"
     tools:context="com.rocklizard.labaaoom.Eval_setup">
 
+    <ScrollView
+        android:layout_width="235dp"
+        android:layout_height="158dp"
+        app:layout_constraintLeft_toRightOf="@+id/rand_scroller"
+        android:background="@drawable/border"
+        android:layout_marginLeft="59dp"
+        android:id="@+id/sent_scroller"
+        android:layout_marginTop="-1dp"
+        app:layout_constraintTop_toBottomOf="@+id/sent_list_tag">
+
+        <LinearLayout
+            android:id="@+id/sent_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#000000"
+            android:orientation="vertical"/>
+    </ScrollView>
+
     <TextView
         android:id="@+id/app_title"
-        android:layout_width="167dp"
+        android:layout_width="153dp"
         android:layout_height="36dp"
         android:text="@string/app_name"
         android:textColor="@color/title_colour"
@@ -18,8 +36,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp"
-        app:layout_constraintHorizontal_bias="0.502"/>
+        android:layout_marginTop="15dp"
+        app:layout_constraintHorizontal_bias="0.501"/>
 
     <TextView
         android:id="@+id/add_user_tag"
@@ -32,7 +50,7 @@
         android:textSize="28dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="17dp"/>
+        />
 
     <TextView
         android:id="@+id/name_tag"
@@ -40,12 +58,35 @@
         android:layout_height="19dp"
         android:text="Student:"
         android:textColor="@color/tag_colour"
-        android:layout_marginStart="26dp"
         android:layout_marginTop="67dp"
         app:layout_constraintTop_toBottomOf="@+id/app_title"
         android:layout_marginLeft="26dp"
         app:layout_constraintLeft_toLeftOf="parent"
         />
+
+    <TextView
+        android:id="@+id/sent_list_tag"
+        android:layout_width="134dp"
+        android:layout_height="21dp"
+        android:text="Sentence Groups:"
+        android:textColor="@color/tag_colour"
+        android:layout_marginLeft="320dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="58dp"
+        app:layout_constraintTop_toBottomOf="@+id/background_rg"
+        />
+
+    <TextView
+        android:id="@+id/rand_list_tag"
+        android:layout_width="131dp"
+        android:layout_height="20dp"
+        android:text="Random Groups:"
+        android:textColor="@color/tag_colour"
+        android:layout_marginLeft="26dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="57dp"
+        app:layout_constraintTop_toBottomOf="@+id/style_rg"
+        tools:layout_editor_absoluteY="341dp"/>
 
     <TextView
         android:id="@+id/student_name"
@@ -55,9 +96,9 @@
         android:textSize="24sp"
         android:textColor="@color/value"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="0dp"
         app:layout_constraintTop_toBottomOf="@+id/name_tag"
-        android:layout_marginLeft="37dp"/>
+        android:layout_marginLeft="37dp"
+        />
 
     <TextView
         android:id="@+id/font_tag"
@@ -65,8 +106,7 @@
         android:layout_height="19dp"
         android:text="Font Style:"
         android:textColor="@color/tag_colour"
-        android:layout_marginStart="26dp"
-        android:layout_marginLeft="71dp"
+        android:layout_marginLeft="26dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="28dp"
         app:layout_constraintTop_toBottomOf="@+id/student_name"/>
@@ -80,7 +120,8 @@
         android:layout_marginTop="28dp"
         app:layout_constraintTop_toBottomOf="@+id/student_name"
         app:layout_constraintLeft_toRightOf="@+id/size_tag"
-        android:layout_marginLeft="46dp"/>
+        android:layout_marginLeft="46dp"
+        />
 
     <TextView
         android:id="@+id/size_tag"
@@ -88,20 +129,19 @@
         android:layout_height="19dp"
         android:text="Font Size:"
         android:textColor="@color/tag_colour"
-        android:layout_marginStart="26dp"
         android:layout_marginTop="28dp"
         app:layout_constraintTop_toBottomOf="@+id/student_name"
         app:layout_constraintLeft_toRightOf="@+id/font_tag"
-        android:layout_marginLeft="74dp"/>
+        android:layout_marginLeft="26dp"/>
 
     <RadioGroup
         android:layout_width="110dp"
         android:layout_height="90dp"
         android:layout_marginLeft="32dp"
         app:layout_constraintLeft_toRightOf="@+id/style_rg"
-        android:layout_marginTop="-1dp"
         android:id="@+id/size_rg"
-        app:layout_constraintTop_toBottomOf="@+id/size_tag">
+        app:layout_constraintTop_toBottomOf="@+id/size_tag"
+        >
 
         <RadioButton
             android:id="@+id/size_small_rb"
@@ -141,10 +181,10 @@
         android:id="@+id/background_rg"
         android:layout_width="101dp"
         android:layout_height="66dp"
-        android:layout_marginTop="0dp"
         app:layout_constraintTop_toBottomOf="@+id/background_tag"
         app:layout_constraintLeft_toRightOf="@+id/size_rg"
-        android:layout_marginLeft="38dp">
+        android:layout_marginLeft="38dp"
+        >
 
         <RadioButton
             android:id="@+id/bg_invert_rb"
@@ -169,51 +209,40 @@
 
     </RadioGroup>
 
-    <TextView
-        android:id="@+id/button_tag"
-        android:layout_width="106dp"
-        android:layout_height="19dp"
-        android:text="Start Evaluation"
-        android:textColor="@color/tag_colour"
-        android:layout_marginLeft="247dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="56dp"
-        app:layout_constraintTop_toBottomOf="@+id/size_rg"/>
-
     <Button
         android:id="@+id/go_random_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Random"
-        android:layout_marginLeft="180dp"
+        android:layout_width="234dp"
+        android:layout_height="46dp"
+        android:text="Start Random"
+        android:layout_marginLeft="26dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="9dp"
         android:textColor="@color/edit_text_fg"
         android:background="@drawable/go_button"
         android:onClick="Start_rand_eval"
-        app:layout_constraintTop_toBottomOf="@+id/button_tag"/>
+        android:layout_marginTop="1dp"
+        app:layout_constraintTop_toBottomOf="@+id/rand_scroller"/>
 
     <Button
         android:id="@+id/go_sentance_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sentence"
+        android:layout_width="236dp"
+        android:layout_height="49dp"
+        android:text="Start Sentence"
         app:layout_constraintLeft_toRightOf="@+id/go_random_button"
-        android:layout_marginLeft="51dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="59dp"
         android:textColor="@color/edit_text_fg"
         android:background="@drawable/go_button"
         android:onClick="Start_sent_eval"
-        app:layout_constraintTop_toBottomOf="@+id/button_tag"/>
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/sent_scroller"/>
 
     <RadioGroup
         android:id="@+id/style_rg"
         android:layout_width="89dp"
         android:layout_height="67dp"
         android:layout_marginLeft="37dp"
-        android:layout_marginTop="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/font_tag">
+        app:layout_constraintTop_toBottomOf="@+id/font_tag"
+        >
 
         <RadioButton
             android:id="@+id/font_sans_rb"
@@ -237,5 +266,23 @@
             app:buttonTint="@color/value"/>
 
     </RadioGroup>
+
+    <ScrollView
+        android:id="@+id/rand_scroller"
+        android:layout_width="235dp"
+        android:layout_height="158dp"
+        android:layout_marginRight="340dp"
+        android:background="@drawable/border"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/rand_list_tag">
+
+        <LinearLayout
+            android:id="@+id/random_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
