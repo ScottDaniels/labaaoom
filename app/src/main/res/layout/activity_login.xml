@@ -20,8 +20,8 @@
         android:inputType="textPersonName"
         android:text="LaBaaooM!"
         android:textColor="#ffd000"
-        android:layout_marginTop="14dp"
-        android:layout_marginLeft="187dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="193dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -44,9 +44,9 @@
         android:layout_height="24dp"
         android:text="User Name:"
         android:textColor="#d0d0d0"
-        android:layout_marginLeft="189dp"
+        android:layout_marginLeft="197dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/relogin_cow_icon"/>
 
     <EditText
@@ -78,7 +78,7 @@
         android:layout_width="145dp"
         android:layout_height="134dp"
         android:layout_marginLeft="228dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_title"
         app:srcCompat="@mipmap/labaaoom_icon"/>
@@ -117,16 +117,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="0dp"
         app:layout_constraintTop_toBottomOf="@+id/description"/>
-
-    <TextView
-        android:id="@+id/revalidate_tag"
-        android:layout_width="239dp"
-        android:layout_height="20dp"
-        android:text="You've been away. Please Revalidate"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/relogin_cow_icon"
-        android:layout_marginLeft="181dp"
-        android:textColor="@color/tag_colour"
-        app:layout_constraintLeft_toLeftOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
