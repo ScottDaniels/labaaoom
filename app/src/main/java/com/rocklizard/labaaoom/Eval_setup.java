@@ -11,15 +11,74 @@ package com.rocklizard.labaaoom;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckedTextView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
+
+import static android.view.View.generateViewId;
+import static com.rocklizard.labaaoom.Datacache.GetDatacache;
+
 public class Eval_setup extends Force_login_activity {
+	static final int LT_RAND = 0;				// list types
+	static final int LT_SENT = 1;
+
 	boolean settings_changed = false;
-	Student target = null;					// student that we're setting up for
+	Student target = null;                    // student that we're setting up for
+	TextView selected_rand = null;                    // what is currently selected
+	TextView selected_sent = null;
+
+	/*
+		Callback when an item in the random list is selected. We assume a selction
+		changes what was the default and will cause settings to be saved.
+	*/
+	protected View.OnClickListener rand_touch_cb = new View.OnClickListener( ) {        // listener each item in list refers to
+		public void onClick( View v ) {
+			Settings settings;
+
+			if( selected_rand != null ) {
+				selected_rand.setBackgroundColor( Color.parseColor( "#000000" ) );       // clear the previously selected thing
+			}
+			selected_rand = (TextView) findViewById( v.getId( ) );
+			selected_rand.setBackgroundColor( Color.parseColor( "#002040" ) );
+			if( target != null ) {
+				settings = target.GetSettings( );
+				if( settings != null ) {
+					settings.SetRandGroup( selected_rand.getText().toString() );
+					settings_changed = true;
+				}
+			}
+		}
+	};
+
+	/*
+		Callback when an item in the sentence list is selected. We assume a selction
+		changes what was the default and will cause settings to be saved.
+	*/
+	protected View.OnClickListener sent_touch_cb = new View.OnClickListener( ) {        // listener each item in list refers to
+		public void onClick( View v ) {
+			Settings settings;
+
+			if( selected_sent != null ) {
+				selected_sent.setBackgroundColor( Color.parseColor( "#000000" ) );       // clear the previously selected thing
+			}
+			selected_sent = (TextView) findViewById( v.getId( ) );
+			selected_sent.setBackgroundColor( Color.parseColor( "#002040" ) );
+			if( target != null ) {
+				settings = target.GetSettings( );
+				if( settings != null ) {
+					settings.SetSentGroup( selected_rand.getText().toString() );
+					settings_changed = true;
+				}
+			}
+		}
+	};
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
@@ -27,6 +86,32 @@ public class Eval_setup extends Force_login_activity {
 		setContentView( R.layout.activity_eval_setup );
 
 		settings_changed = false;
+	}
+
+	private void add2list( LinearLayout list_thing, String item, int list_type, Boolean selected ) {
+		CheckedTextView text_thing;					// droid thing to add
+
+		text_thing =new CheckedTextView( this );   // what we will stuff in the list
+
+		text_thing.setId( generateViewId( ) );       // must have an id
+		text_thing.setOnClickListener( rand_touch_cb );
+		text_thing.setText( item );
+		text_thing.setTextSize( 20 );
+		text_thing.setTextColor( Color.parseColor( "#00f040" ) );   // future: pull from values
+		if( selected  ) {
+			text_thing.setBackgroundColor( Color.parseColor( "#002040" ) );
+			switch( list_type ) {
+				case LT_RAND:
+					selected_rand = text_thing;
+					break;
+
+				case LT_SENT:
+					selected_sent = text_thing;
+					break;
+			}
+		}
+
+		list_thing.addView( text_thing );           // stuff it into the list
 	}
 
 	@Override
@@ -40,6 +125,11 @@ public class Eval_setup extends Force_login_activity {
 		RadioButton rb1;			// generic radio buttons on the screen
 		RadioButton rb2;
 		RadioButton rb3;
+		LinearLayout list_thing;
+		CheckedTextView text_thing;
+		String[] slist;				// selection list from the datacace
+		int i;
+		String hold;
 
 		super.onResume();
 
@@ -52,7 +142,7 @@ public class Eval_setup extends Force_login_activity {
 		student = (TextView) findViewById( R.id.student_name );
 		student.setText( target_name );
 
-		dc = Datacache.GetDatacache();
+		dc = GetDatacache();
 		s = dc.ExtractStudent( target_name );
 		if( s == null ) {            // shouldn't happen, but databases suck, so it might
 			Toast.makeText( this, "Internal mishap: student not in data cache: " + target_name, Toast.LENGTH_LONG ).show( );
@@ -64,22 +154,54 @@ public class Eval_setup extends Force_login_activity {
 		settings = s.GetSettings();									// fill out the settings on the screen
 		rb1 = (RadioButton) findViewById( R.id.font_serif_rb );
 		rb2 = (RadioButton) findViewById( R.id.font_sans_rb );
-		rb1.setChecked( settings.IsStyle( settings.SERIF ) );
-		rb2.setChecked( settings.IsStyle( settings.SANS ) );
+		if( settings != null ) {
+			rb1.setChecked( settings.IsStyle( settings.SERIF ) );
+			rb2.setChecked( settings.IsStyle( settings.SANS ) );
+		}
 
 		rb1 = (RadioButton) findViewById( R.id.bg_invert_rb );
 		rb2 = (RadioButton) findViewById( R.id.bg_normal_rb );
-		rb1.setChecked( settings.IsBackground( settings.INVERTED ) );
-		rb2.setChecked( settings.IsBackground( settings.NORMAL ) );
+		if( settings != null ) {
+			rb1.setChecked( settings.IsBackground( settings.INVERTED ) );
+			rb2.setChecked( settings.IsBackground( settings.NORMAL ) );
+		}
 
 		rb1 = (RadioButton) findViewById( R.id.size_small_rb );
 		rb2 = (RadioButton) findViewById( R.id.size_med_rb );
 		rb3 = (RadioButton) findViewById( R.id.size_large_rb );
-		rb1.setChecked( settings.IsSize( settings.SMALL ) );
-		rb2.setChecked( settings.IsSize( settings.MED ) );
-		rb3.setChecked( settings.IsSize( settings.LARGE ) );
-		System.out.printf( ">>> eval setup settings large == %s  %d\n", settings.IsSize( settings.LARGE ) ? "true" : "false", settings.GetSize() );
+		if( settings != null ) {
+			rb1.setChecked( settings.IsSize( settings.SMALL ) );
+			rb2.setChecked( settings.IsSize( settings.MED ) );
+			rb3.setChecked( settings.IsSize( settings.LARGE ) );
+			System.out.printf( ">>> eval setup settings large == %s  %d\n", settings.IsSize( settings.LARGE ) ? "true" : "false", settings.GetSize() );
+		}
 
+		// ------------- populate the selection lists -------------------------------------
+		list_thing = (LinearLayout) findViewById( R.id.random_list_layout );
+		list_thing.removeAllViews( );
+		slist = dc.GetRgroupList();			// get the random group
+
+		add2list( list_thing, settings.GetRandGroup(), LT_RAND, true ) ;
+		if( slist != null && slist.length > 0 ) {
+			for( i = 0; i < slist.length; i++ ) {
+				if( ! slist[i].equals( settings.GetRandGroup() )  ) {
+					add2list( list_thing, slist[i], LT_RAND, false );
+				}
+			}
+		}
+
+		list_thing = (LinearLayout) findViewById( R.id.sent_list_layout );
+		list_thing.removeAllViews( );
+		slist = dc.GetSgroupList();			// get the sentence group list
+
+		if( slist != null && slist.length > 0 ) {
+			add2list( list_thing, settings.GetSentGroup( ), LT_SENT, true );
+			for( i = 0; i < slist.length; i++ ) {
+				if( !slist[ i ].equals( settings.GetRandGroup( ) ) ) {
+					add2list( list_thing, slist[ i ], LT_SENT, false );
+				}
+			}
+		}
 	}
 
 	//  ------------------ support -------------------------------------------
@@ -94,7 +216,7 @@ public class Eval_setup extends Force_login_activity {
 			return;
 		}
 
-		dc = Datacache.GetDatacache();
+		dc = GetDatacache();
 		dc.DepositStudent( s );
 		Toast.makeText(this, "Student setting changes saved", Toast.LENGTH_LONG).show();
 	}

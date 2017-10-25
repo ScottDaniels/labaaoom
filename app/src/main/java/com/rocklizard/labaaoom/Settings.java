@@ -22,6 +22,8 @@ public class Settings {
 	private int background;
 	private int style;
 	private int size;
+	private String rand_group;			// evaluation group of each type last used
+	private String sent_group;
 
 	/*
 		Create with defaults:
@@ -31,6 +33,8 @@ public class Settings {
 		size = MED;
 		style = SANS;
 		background = NORMAL;
+		sent_group = "grade1";
+		rand_group = "grade1";
 	}
 
 	/*
@@ -46,6 +50,8 @@ public class Settings {
 		size = MED;					// defaults if missing something
 		style = SANS;
 		background = NORMAL;
+		sent_group = "grade1";
+		rand_group = "grade1";
 
 		tokens = s.split( "," );
 		for( i = 0; i < tokens.length; i++ ) {
@@ -59,6 +65,15 @@ public class Settings {
 					if( kv[1].equals( "inverted" ) ) {
 						background = INVERTED;
 					}
+					break;
+
+				case "rgroup":
+					rand_group = tokens[2];
+					break;
+
+				case "sgroup":
+					sent_group = tokens[2];
+					System.out.printf( ">>>> setting sgroup %s\n", sent_group );
 					break;
 
 				case "size":
@@ -94,6 +109,18 @@ public class Settings {
 
 	public int GetBackground() {
 		return background;
+	}
+
+	public String GetRandGroup( ) {
+		if( rand_group != null ) {
+			return rand_group;
+		}
+
+		return "";
+	}
+
+	public String GetSentGroup( ) {
+		return sent_group;
 	}
 
 	/*
@@ -142,6 +169,19 @@ public class Settings {
 		style = value;
 	}
 
+	public void SetRandGroup( String group ) {
+		if( group != null ) {
+			rand_group = group;
+		}
+	}
+
+	public void SetSentGroup( String group ) {
+		if( group != null ) {
+			sent_group = group;
+			System.out.printf( ">>>> setting sgroup %s\n", sent_group );
+		}
+	}
+
 	/*
 		Return a string that something like student can cache on its own without having to
 		know internal bits, and can give to a constructor. String is a comma sep list of
@@ -153,7 +193,8 @@ public class Settings {
 		String[] dcentry;
 
 		dcentry = GenDcEntry( "foo" );			// generate a dummy entry, we'll just cat them
-		rs = dcentry[1] + "," + dcentry[2] + "," + dcentry[3];
+		rs = dcentry[1] + "," + dcentry[2] + "," + dcentry[3] + "," + dcentry[4] + "," + dcentry[5];
+		System.out.printf( ">>>> settings to string: %s\n", rs );
 
 		return rs;
 	}
@@ -166,7 +207,7 @@ public class Settings {
 	public String[] GenDcEntry( String key ) {
 		String[] entry;
 
-		entry = new String[4];
+		entry = new String[6];
 		entry[0] = "settings:" + key;
 		entry[1] = "background:" + (background == NORMAL ? "normal" : "inverted");
 		entry[2] = "style:" + (style == SANS ? "sans" : "serif");
@@ -183,6 +224,9 @@ public class Settings {
 				entry[3] = "size:large";
 				break;
 		}
+
+		entry[4] = "sgroup:" + sent_group;
+		entry[5] = "rgroup:" + rand_group;
 
 		return entry;
 	}

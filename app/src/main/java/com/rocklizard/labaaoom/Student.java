@@ -42,10 +42,10 @@ public class Student {
 
 		sentence_evals = new Eval_set( );
 		rand_evals = new Eval_set( );
+		settings = new Settings();
 
 		if( dc_entry == null ) {			// shouldn't happen but parinoia isn't always bad
 				add_name( "information missing" );
-				settings = new Settings();
 				return;
 		}
 
@@ -239,6 +239,10 @@ public class Student {
 		Return the current settings structucture.
 	*/
 	public Settings GetSettings( ) {
+		if( settings == null ) {
+			settings = new Settings();		// shouldn't be the case, but ide thinks it is possible
+		}
+
 		return settings;
 	}
 
