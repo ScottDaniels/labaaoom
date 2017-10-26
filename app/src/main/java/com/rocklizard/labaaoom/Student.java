@@ -240,6 +240,7 @@ public class Student {
 	*/
 	public Settings GetSettings( ) {
 		if( settings == null ) {
+			System.out.printf( ">>>>> settings get setting is building settings!\n" );
 			settings = new Settings();		// shouldn't be the case, but ide thinks it is possible
 		}
 

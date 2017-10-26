@@ -40,7 +40,7 @@ public class Eval_setup extends Force_login_activity {
 	*/
 	protected View.OnClickListener rand_touch_cb = new View.OnClickListener( ) {        // listener each item in list refers to
 		public void onClick( View v ) {
-			Settings settings;
+			Settings settings = null;
 
 			if( selected_rand != null ) {
 				selected_rand.setBackgroundColor( Color.parseColor( "#000000" ) );       // clear the previously selected thing
@@ -63,7 +63,7 @@ public class Eval_setup extends Force_login_activity {
 	*/
 	protected View.OnClickListener sent_touch_cb = new View.OnClickListener( ) {        // listener each item in list refers to
 		public void onClick( View v ) {
-			Settings settings;
+			Settings settings = null;
 
 			if( selected_sent != null ) {
 				selected_sent.setBackgroundColor( Color.parseColor( "#000000" ) );       // clear the previously selected thing
@@ -73,7 +73,7 @@ public class Eval_setup extends Force_login_activity {
 			if( target != null ) {
 				settings = target.GetSettings( );
 				if( settings != null ) {
-					settings.SetSentGroup( selected_rand.getText().toString() );
+					settings.SetSentGroup( selected_sent.getText().toString() );
 					settings_changed = true;
 				}
 			}
@@ -88,13 +88,13 @@ public class Eval_setup extends Force_login_activity {
 		settings_changed = false;
 	}
 
-	private void add2list( LinearLayout list_thing, String item, int list_type, Boolean selected ) {
+	private void add2list( LinearLayout list_thing, String item, int list_type, View.OnClickListener ocl, Boolean selected ) {
 		CheckedTextView text_thing;					// droid thing to add
 
 		text_thing =new CheckedTextView( this );   // what we will stuff in the list
 
 		text_thing.setId( generateViewId( ) );       // must have an id
-		text_thing.setOnClickListener( rand_touch_cb );
+		text_thing.setOnClickListener( ocl );
 		text_thing.setText( item );
 		text_thing.setTextSize( 20 );
 		text_thing.setTextColor( Color.parseColor( "#00f040" ) );   // future: pull from values
@@ -120,14 +120,14 @@ public class Eval_setup extends Force_login_activity {
 		Intent it;
 		String target_name;		// evaluation target name from the list
 		TextView student;		// spot on screen where student name is updated
-		Student s;				// we'll load this from the datacache
+		Student s = null;		// we'll load this from the datacache
 		Settings settings;
-		RadioButton rb1;			// generic radio buttons on the screen
+		RadioButton rb1;		// generic radio buttons on the screen
 		RadioButton rb2;
 		RadioButton rb3;
 		LinearLayout list_thing;
 		CheckedTextView text_thing;
-		String[] slist;				// selection list from the datacace
+		String[] slist;			// selection list from the datacace
 		int i;
 		String hold;
 
@@ -137,6 +137,7 @@ public class Eval_setup extends Force_login_activity {
 		target_name = it.getExtras( ).getString( "student_name" );		// student name from the caller
 		if( target_name == null ) {
 			finish( );                    // likely a return from another application which we don't allow
+			return;
 		}
 
 		student = (TextView) findViewById( R.id.student_name );
@@ -147,6 +148,7 @@ public class Eval_setup extends Force_login_activity {
 		if( s == null ) {            // shouldn't happen, but databases suck, so it might
 			Toast.makeText( this, "Internal mishap: student not in data cache: " + target_name, Toast.LENGTH_LONG ).show( );
 			finish( );
+			return;
 		}
 
 		target = s;				// stash so available for reactionary functions
@@ -154,38 +156,31 @@ public class Eval_setup extends Force_login_activity {
 		settings = s.GetSettings();									// fill out the settings on the screen
 		rb1 = (RadioButton) findViewById( R.id.font_serif_rb );
 		rb2 = (RadioButton) findViewById( R.id.font_sans_rb );
-		if( settings != null ) {
-			rb1.setChecked( settings.IsStyle( settings.SERIF ) );
-			rb2.setChecked( settings.IsStyle( settings.SANS ) );
-		}
+		rb1.setChecked( settings.IsStyle( settings.SERIF ) );
+		rb2.setChecked( settings.IsStyle( settings.SANS ) );
 
 		rb1 = (RadioButton) findViewById( R.id.bg_invert_rb );
 		rb2 = (RadioButton) findViewById( R.id.bg_normal_rb );
-		if( settings != null ) {
-			rb1.setChecked( settings.IsBackground( settings.INVERTED ) );
-			rb2.setChecked( settings.IsBackground( settings.NORMAL ) );
-		}
+		rb1.setChecked( settings.IsBackground( settings.INVERTED ) );
+		rb2.setChecked( settings.IsBackground( settings.NORMAL ) );
 
 		rb1 = (RadioButton) findViewById( R.id.size_small_rb );
 		rb2 = (RadioButton) findViewById( R.id.size_med_rb );
 		rb3 = (RadioButton) findViewById( R.id.size_large_rb );
-		if( settings != null ) {
-			rb1.setChecked( settings.IsSize( settings.SMALL ) );
-			rb2.setChecked( settings.IsSize( settings.MED ) );
-			rb3.setChecked( settings.IsSize( settings.LARGE ) );
-			System.out.printf( ">>> eval setup settings large == %s  %d\n", settings.IsSize( settings.LARGE ) ? "true" : "false", settings.GetSize() );
-		}
+		rb1.setChecked( settings.IsSize( settings.SMALL ) );
+		rb2.setChecked( settings.IsSize( settings.MED ) );
+		rb3.setChecked( settings.IsSize( settings.LARGE ) );
 
 		// ------------- populate the selection lists -------------------------------------
 		list_thing = (LinearLayout) findViewById( R.id.random_list_layout );
 		list_thing.removeAllViews( );
 		slist = dc.GetRgroupList();			// get the random group
 
-		add2list( list_thing, settings.GetRandGroup(), LT_RAND, true ) ;
+		add2list( list_thing, settings.GetRandGroup(), LT_RAND, rand_touch_cb, true ) ;
 		if( slist != null && slist.length > 0 ) {
 			for( i = 0; i < slist.length; i++ ) {
 				if( ! slist[i].equals( settings.GetRandGroup() )  ) {
-					add2list( list_thing, slist[i], LT_RAND, false );
+					add2list( list_thing, slist[i], LT_RAND, rand_touch_cb, false );
 				}
 			}
 		}
@@ -194,11 +189,11 @@ public class Eval_setup extends Force_login_activity {
 		list_thing.removeAllViews( );
 		slist = dc.GetSgroupList();			// get the sentence group list
 
+		add2list( list_thing, settings.GetSentGroup( ), LT_SENT, sent_touch_cb, true );
 		if( slist != null && slist.length > 0 ) {
-			add2list( list_thing, settings.GetSentGroup( ), LT_SENT, true );
 			for( i = 0; i < slist.length; i++ ) {
-				if( !slist[ i ].equals( settings.GetRandGroup( ) ) ) {
-					add2list( list_thing, slist[ i ], LT_SENT, false );
+				if( !slist[ i ].equals( settings.GetSentGroup( ) ) ) {
+					add2list( list_thing, slist[ i ], LT_SENT, sent_touch_cb, false );
 				}
 			}
 		}

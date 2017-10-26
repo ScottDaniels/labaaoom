@@ -28,7 +28,7 @@ public class Settings_test {
 		settings = new Settings( "background:normal,size:medium,style:sans" ); 		// order should not matter
 		ss = settings.ToString( );
 
-		System.out.printf( ">>>> got: (%s) \n", ss );
+		//System.out.printf( ">>>> got: (%s) \n", ss );
 		assertTrue( "settings create from string failed tostring check",  ss.equals( "background:normal,style:sans,size:medium,sgroup:grade1,rgroup:grade1" ) );
     }
 

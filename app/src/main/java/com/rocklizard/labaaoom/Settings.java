@@ -54,6 +54,7 @@ public class Settings {
 		rand_group = "grade1";
 
 		tokens = s.split( "," );
+		System.out.printf( ">>>> building settings from a string: %s\n", s );
 		for( i = 0; i < tokens.length; i++ ) {
 			kv = tokens[i].split( ":", 2 );
 			if( kv.length != 2 ) {
@@ -68,11 +69,12 @@ public class Settings {
 					break;
 
 				case "rgroup":
-					rand_group = tokens[2];
+					rand_group = kv[1];
+					System.out.printf( ">>>> setting rgroup %s\n", rand_group );
 					break;
 
 				case "sgroup":
-					sent_group = tokens[2];
+					sent_group = kv[1];
 					System.out.printf( ">>>> setting sgroup %s\n", sent_group );
 					break;
 
@@ -96,8 +98,7 @@ public class Settings {
 	}
 
 	/*
-		Test functions allow the user to test for setting values.
-		The return value is one of our public constats.
+		Obvious getter functions
 	*/
 	public int GetSize() {
 		return size;
