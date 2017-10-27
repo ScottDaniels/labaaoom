@@ -146,7 +146,7 @@ public class Settings {
 		Silent failure if out of range.
 	*/
 	public void SetBackground( int value ) {
-		if( value < 0 || value > INVERTED ) {
+		if( value < 0 || value > NORMAL ) {
 			return;
 		}
 

@@ -233,9 +233,23 @@ public class Eval_setup extends Force_login_activity {
 		an evaluation on random word groups.
 	*/
 	public void Start_sent_eval( View v ) {
+		Class targetc;
+		Intent it;
+		Bundle bun;
+
 		Toast.makeText(this, "start sentence eval go_button clicked", Toast.LENGTH_LONG).show();
 
 		stash_if_needed( target );
+
+		bun = new Bundle();
+		bun.putString( "eval_kind", "sent" );					// send along the settings
+		bun.putString( "eval_set", target.GetSettings().GetSentGroup() );
+		bun.putString( "student_name", target.GetName() );
+
+		targetc = Run_eval.class;
+		it = new Intent( this, targetc );
+		it.putExtras( bun );
+		startActivity( it );					// MUST use startActivity() so that when it finishes we hit the login
 	}
 
 	/*
@@ -256,13 +270,14 @@ public class Eval_setup extends Force_login_activity {
 
 		settings = target.GetSettings( );
 		if( rb1.isChecked() ) {
+			System.out.printf( ">>>> adjusting bg invert checked\n" );
 			settings.SetBackground( settings.INVERTED );
 		} else {
-			if( rb2. isChecked( ) ) {
-				settings.SetBackground( settings.NORMAL );
-			}
+			System.out.printf( ">>>> adjusting bg normal checked\n" );
+			settings.SetBackground( settings.NORMAL );
 		}
 
+		System.out.printf( ">>>> adjusting bg settings-bg=%s\n", settings.GetBackground() );
 		//Toast.makeText(this, "radio go_button callback driven for bg", Toast.LENGTH_LONG).show();
 	}
 

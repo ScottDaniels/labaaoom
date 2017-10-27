@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="xcolorPrimary">#3F51B5</color>
     <color name="colorPrimary">#004060</color>
     <color name="colorPrimaryDark">#002035</color>
     <color name="colorAccent">#0ccbf2</color>
@@ -12,7 +11,6 @@
     <color name="edit_text_bg">#404040</color>
     <color name="header_colour">#00a090</color>
     <color name="menu_item">#00f040</color>
-    <color name="menu_item_touched">#00f0f0</color>
     <color name="button_pressed">#909090</color>
     <color name="button_go_colour">#003000</color>
     <color name="button_can_colour">#500000</color>
