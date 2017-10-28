@@ -174,6 +174,7 @@ public class Datacache {
 
 			System.err.printf( ">>>>> load maps, found %d groups\n", agroups.length );
 			for( i = 0; i < agroups.length; i++ ) {
+				System.err.printf( ">>>>> load maps, group %s\n", agroups[i] );
 				tokens = agroups[i].split( "_" );
 				switch( tokens[0] ) {
 					case "sgroup":
@@ -282,7 +283,8 @@ public class Datacache {
 		try {
 			f =	 ctx.openFileInput( fname );  // cant get context generated in test
 		} catch(  IOException e ) {
-			e.printStackTrace();
+			System.out.printf( ">>>> unable to open dc file: %s\n", fname );
+			//e.printStackTrace();
 			return null;
 		}
 
@@ -317,7 +319,7 @@ public class Datacache {
 		Opens and reads all strings from an asset file. These are 'datacache' files
 		which are bundled with the application (e.g. sentence and word groups).
 	*/
-	private String[] read_from_asset( String fname ) {
+	private String[] read_from_asset( String type, String fname ) {
 		String[] data;			// date read from the file
 		byte[] rbuf;			// read buffer
 		byte[] tbuf;			// trimmed buffer; excluding unfilled characters
@@ -329,16 +331,17 @@ public class Datacache {
 		rbuf = new byte[4096];				// first cut; one read with a max of 4k
 
 		try {
-			f =	 ctx.getAssets().open( fname  );  // cant get context generated in test
+			f =	 ctx.getAssets().open( type + "/" + fname  );
 		} catch(  IOException e ) {
-			e.printStackTrace();
+			System.out.printf( ">>>> failed to read from asset: %s\n", type + "/" + fname );
+			//e.printStackTrace();
 			return null;
 		}
 
 		try {
 			if( (rlen = f.read( rbuf )) < 0 ) {
 				f.close();
-				System.out.printf( ">>>> read from dc fails for %s\n", fname );
+				System.out.printf( ">>>> read from dc fails for %s\n", type + "/" + fname );
 				return null;
 			}
 
@@ -355,10 +358,10 @@ public class Datacache {
 			return null;
 		}
 
-		System.out.printf( ">>>> read from asset has %d things to work with\n", data.length );
-		for( i = 0; i < data.length; i++ ) {
-			System.out.printf( ">>>> read from asset returns [%d] %s\n", i, data[i] );
-		}
+		//System.out.printf( ">>>> read from asset has %d things to work with\n", data.length );
+		//for( i = 0; i < data.length; i++ ) {
+			//System.out.printf( ">>>> read from asset returns [%d] %s\n", i, data[i] );
+		//}
 		return data;
 	}
 
@@ -433,11 +436,12 @@ public class Datacache {
 		}
 
 		if( all ) {
-			if( (arecs = read_from_asset( "sgroup_" + name )) !=
-				null ) {        // read the two sets of strings
+			if( (arecs = read_from_asset( "groups", "sgroup_" + name )) != null ) {        // read the two sets of strings
 				rlen = arecs.length;
 			}
 		}
+
+		//System.out.printf( ">>>> extract sgroup has %d tings after asset read\n", rlen );
 
 		if( (urecs = read_from_dc( "sgroup_" + name  )) != null ) {
 			rlen += urecs.length;
@@ -459,7 +463,7 @@ public class Datacache {
 		}
 
 		sg = new Sentence_group( recs );
-		recs = read_from_asset( "sgroup_" + name  );
+		recs = read_from_asset( "groups", "sgroup_" + name  );
 
 		return sg;
 	}
