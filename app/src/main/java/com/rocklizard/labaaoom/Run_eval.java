@@ -1,7 +1,10 @@
 package com.rocklizard.labaaoom;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,8 +21,11 @@ public class Run_eval extends AppCompatActivity {
 	private Eval_set set;			// set of things we're displaying for this evaluation
 	private long start_ts;			// timestamp of the time the first click was registered
 	private	Sentence_group sg;		// the group of setences from which we will display a few
-	Student student;
-	TextView text_thing;			// the spot where we write text on the screen
+	private Student student;		// the student being evaluated
+	private TextView text_thing;	// the spot where we write text on the screen
+	private int		words;			// number of words that appeared in the evaluation
+	private String ekind;			// kind of evaluation (sentence/random)
+	private String eset;			// name of the evaluation set selected
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
@@ -37,8 +43,6 @@ public class Run_eval extends AppCompatActivity {
 		Settings settings;
 		Intent it;
 		String target_name;			// name of the 'target' (student)
-		String ekind;				// kind of evaluation (sentence/random)
-		String eset;				// name of the evaluation set selected
 		int i;
 		int ce;						// completed evals
 
@@ -46,6 +50,7 @@ public class Run_eval extends AppCompatActivity {
 
 		dc = Datacache.GetDatacache( );
 		start_ts = 0;				// indicate not initialised
+		words = 0;
 
 		text_thing = (TextView) findViewById( R.id.eval_text );
 		text_thing.setText( "" );		// clear it
@@ -124,28 +129,39 @@ public class Run_eval extends AppCompatActivity {
 	*/
 	public void Next_group( View v ) {
 		String out_str;
+		long elapsed;						// elapsed time
+		String[] tokens;					// we'll split and count
+		double wpm;
+		Evaluation eval;					// eval we will stash as pending in the student object
+		Datacache dc;
 
 		if( start_ts == 0 ) {                // first click
 			start_ts = new Date( ).getTime( );        // current timestamp
 		}
 
 		if( sg == null ) {
-			System.out.printf( ">>>> in click function sg is null????\n" );
+			System.out.printf( ">>>> internal mishap: sg is null in run eval click function?\n" );
 			finish();
 			return;
 		}
 
-		System.out.printf( ">>>> getting next in click function \n" );
-		if( (out_str = sg.GetNext() ) == null ) {        // we reached the end
-			//future: crate the evaluaion and save it as a pending eval for the stuedn
+		if( (out_str = sg.GetNext() ) == null ) {        // eval is done; capture data, save the student with the pending info and return
+			dc = Datacache.GetDatacache( );
+			elapsed = (new Date( ).getTime( ) - start_ts)/1000;        	// amount of time passed (seconds)
+			System.out.printf( ">>> elapsed=%d words=%d\n", elapsed, words );
+			wpm  = ((double) words / (double) elapsed) * 60.0;
 			text_thing.setText( "" );
-			System.out.printf( ">>>> got null in click funciton \n" );
-			finish( );
+			eval = new Evaluation( String.format( "%s,%s,%.2f,%d", eset, ekind, wpm, start_ts ) );
+			student.AddPendingEval( eval );
+			dc.DepositStudent( student ); 		// must stash now to preserve the pending information
+
+			finish( );							// all done; go home
 			return;
 		}
 
-		System.out.printf( ">>>> normal end set text string: %s\n", out_str );
-		text_thing.setText( out_str );		// show next string
+		text_thing.setText( out_str );			// show next string
+		tokens = out_str.split( " " );
+		words += tokens.length;
 	}
 
 	/*

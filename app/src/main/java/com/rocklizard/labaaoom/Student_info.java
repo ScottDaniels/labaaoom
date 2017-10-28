@@ -71,7 +71,7 @@ public class Student_info extends Force_login_activity {
 			ave_score.setText(  Double.toString( mmai[2] ) );
 			last_ev_score.setText(  Double.toString( last_e.GetWpm() ) );
 		} else {
-			last_ev_date.setText( "xx Sep 2000" );
+			last_ev_date.setText( "No Evaluations" );
 			ave_score.setText(  "0 wpm" );
 			last_ev_score.setText(  "0 wpm" );
 		}

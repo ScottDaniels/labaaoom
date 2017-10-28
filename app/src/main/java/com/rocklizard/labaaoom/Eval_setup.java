@@ -10,9 +10,12 @@ package com.rocklizard.labaaoom;
 */
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
@@ -197,6 +200,12 @@ public class Eval_setup extends Force_login_activity {
 				}
 			}
 		}
+
+
+		// Finally, check for a pending eval and ask to accept/reject it
+		if( target.HasPendingEval() ) {
+			accept_pending();				// drive the pop up which takes action based on response
+		}
 	}
 
 	//  ------------------ support -------------------------------------------
@@ -213,7 +222,66 @@ public class Eval_setup extends Force_login_activity {
 
 		dc = GetDatacache();
 		dc.DepositStudent( s );
-		Toast.makeText(this, "Student setting changes saved", Toast.LENGTH_LONG).show();
+	}
+
+
+	// --------- popup stuff --------------------------------------------------------
+	/*
+		Toss up a specialised dialogue box and if the response is 'ok', then accept the pending eval
+		else reject it.
+	*/
+	private void accept_pending(  ) {
+		AlertDialog notice;
+		Evaluation eval;
+		final String student_name;
+
+		eval = target.GetPendingEval();
+
+		if( eval == null ) {			// no pending, no prompt
+			return;
+		}
+
+		student_name = target.GetName();					// get name as we need to look up object in closure
+
+		notice =new AlertDialog.Builder( this ).create();
+		notice.setTitle( "Pending Evaluation Exists" );
+		notice.setMessage( "Name: " + student_name + "\n" + eval.PrettyPrint() );
+		notice.setCancelable( false );
+		notice.setButton( Dialog.BUTTON_POSITIVE, "Accept", new DialogInterface.OnClickListener() {
+				public void onClick (DialogInterface dialog,int which){
+					Datacache dc;
+					Student	s;
+
+					dc = Datacache.GetDatacache();
+					s = dc.ExtractStudent( student_name );
+					if( s != null ) {
+						s.AcceptPendingEval();				// accept it
+						dc.DepositStudent( s );				// and tuck it away again
+					}
+
+					finish();
+				}
+			}
+		);
+
+		notice.setButton( Dialog.BUTTON_NEGATIVE, "Reject", new DialogInterface.OnClickListener() {
+				public void onClick ( DialogInterface dialog, int which){
+					Datacache dc;
+					Student	s;
+
+					dc = Datacache.GetDatacache();
+					s = dc.ExtractStudent( student_name );
+					if( s != null ) {
+						s.RejectPendingEval();				// drop it
+						dc.DepositStudent( s );				// and tuck it away again
+					}
+
+					finish();
+				}
+			}
+		);
+
+		notice.show();
 	}
 
 	// ----- reaction ------------------------------------------------------------
@@ -223,7 +291,7 @@ public class Eval_setup extends Force_login_activity {
 		an evaluation on random word groups.
 	*/
 	public void Start_rand_eval( View v ) {
-		Toast.makeText(this, "start random eval go_button clicked", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "start random eval go_button clicked (not implemented)", Toast.LENGTH_LONG).show();
 
 		stash_if_needed( target );
 	}
@@ -236,8 +304,6 @@ public class Eval_setup extends Force_login_activity {
 		Class targetc;
 		Intent it;
 		Bundle bun;
-
-		Toast.makeText(this, "start sentence eval go_button clicked", Toast.LENGTH_LONG).show();
 
 		stash_if_needed( target );
 
@@ -276,9 +342,6 @@ public class Eval_setup extends Force_login_activity {
 			System.out.printf( ">>>> adjusting bg normal checked\n" );
 			settings.SetBackground( settings.NORMAL );
 		}
-
-		System.out.printf( ">>>> adjusting bg settings-bg=%s\n", settings.GetBackground() );
-		//Toast.makeText(this, "radio go_button callback driven for bg", Toast.LENGTH_LONG).show();
 	}
 
 	/*
@@ -305,8 +368,6 @@ public class Eval_setup extends Force_login_activity {
 				settings.SetStyle( settings.SANS );
 			}
 		}
-
-		//Toast.makeText(this, "radio go_button callback driven for style", Toast.LENGTH_LONG).show();
 	}
 
 	/*
@@ -337,7 +398,5 @@ public class Eval_setup extends Force_login_activity {
 				settings.SetSize( settings.LARGE );
 			}
 		}
-
-		//Toast.makeText(this, "radio go_button callback driven for size", Toast.LENGTH_LONG).show();
 	}
 }

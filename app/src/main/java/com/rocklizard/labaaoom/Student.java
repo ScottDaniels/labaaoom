@@ -15,6 +15,7 @@ public class Student {
 	private String section;				// section that the kid belongs to (K1 First1 etc)
 	private Eval_set sentence_evals;    // list of all evaluations using sentences
 	private Eval_set rand_evals;        // list of all evaluations using random words
+	private Evaluation pending;			// a pending evaluation that hasn't been accepted
 	private Settings settings;			// evaluation settings last used
 
 	public Student( String name, String sect ) {
@@ -50,6 +51,7 @@ public class Student {
 		}
 
 		for( i = 0; i < dc_entry.length; i++ ) {
+			System.out.printf( ">>>> student info: %s\n", dc_entry[i] );
 
 			tokens = dc_entry[ i ].split( ":", 2 );
 			switch( tokens[ 0 ] ) {
@@ -69,6 +71,14 @@ public class Student {
 					Add_evaluation( tokens[ 1 ], false );
 					break;
 
+				case "pending":
+					if( tokens[1].equals( "null" ) ) {
+						pending = null;
+					} else {
+						pending = new Evaluation( tokens[ 1 ] );
+					}
+					break;
+
 				case "sets":			// pick up settings and build object
 					settings = new Settings( tokens[1] );
 					break;
@@ -83,7 +93,18 @@ public class Student {
 		}
 	}
 
-	// ----------------------------------------------------------------
+	// ---- private functions -----------------------------------------
+	/*
+		Stick an evaluation on one of the lists.
+	*/
+	private void shove_eval( Evaluation eval, Boolean to_sentence ) {
+		if( to_sentence ) {
+			sentence_evals.Add_entry( eval.ToString() );            // add the entry
+		} else {
+			rand_evals.Add_entry( eval.ToString() );
+		}
+	}
+
 	/*
 		Interal setters used to support reading from a datacache entry.
 	*/
@@ -109,6 +130,30 @@ public class Student {
 	}
 
 	/*
+		Captures a pending evaluation and hangs on to it.
+	*/
+	public void AddPendingEval( Evaluation eval ) {
+		pending = eval;
+	}
+
+	/*
+		Accept the pending eval by moving it to the proper list.
+	*/
+	public void AcceptPendingEval( ) {
+		if( pending == null ) {
+			return;
+		}
+
+		if( pending.GetType().equals( "random" ) ) {
+			shove_eval( pending, true );			// add on random list
+		} else {
+			shove_eval( pending, true );			// add on sentence list
+		}
+
+		pending = null;
+	}
+
+	/*
 		Generate a datacache entry from this instance. The datacache entry is an array
 		of strings with name, sentence  and random word evaluation information.
 	*/
@@ -125,11 +170,16 @@ public class Student {
 			i += rand_evals.GetSize();
 		}
 
-		strs = new String[i+3];
+		strs = new String[i+4];
 		i = 0;
 		strs[i++] = "name:" + name;
 		strs[i++] = "sect:" + section;
 		strs[i++] = "sets:" + settings.ToString();
+		if( pending != null ) {
+			strs[ i++ ] = "pending:" + pending.ToString( );
+		} else {
+			strs[ i++ ] = "pending:null";
+		}
 
 		if( sentence_evals != null ) {
 			evals = sentence_evals.ToStrings();
@@ -209,6 +259,17 @@ public class Student {
 	}
 
 	/*
+		Return the number of evals of the type indicated
+	*/
+	public int GetNEvals( Boolean gtype ) {
+		if( gtype ) {
+			return sentence_evals.GetSize();
+		} else {
+			return rand_evals.GetSize();
+		}
+	}
+
+	/*
 		Return the section that the student is in.
 	*/
 	public String GetSection() {
@@ -236,6 +297,13 @@ public class Student {
 	}
 
 	/*
+		Return the pending evaluation.
+	*/
+	public Evaluation GetPendingEval( ) {
+		return pending;
+	}
+
+	/*
 		Return the current settings structucture.
 	*/
 	public Settings GetSettings( ) {
@@ -245,6 +313,20 @@ public class Student {
 		}
 
 		return settings;
+	}
+
+	/*
+		Returns true if there is a pending eval.
+	*/
+	public Boolean HasPendingEval() {
+		return pending != null;
+	}
+
+	/*
+		Will delete the pending evaluation without saving it.
+	*/
+	public void RejectPendingEval() {
+		pending = null;
 	}
 
 	/*
