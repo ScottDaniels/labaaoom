@@ -66,12 +66,8 @@ public class Eval_set {
 		if( idx > 0 ) {
 			values = new int[idx];
 		} else {
-			//values = new int[1];
-			//values[0] = 0;
-			values = new int[100];
-			for( i = 0; i < 100; i++ ) {
-				values[i] = i;
-			}
+			values = new int[1];
+			values[0] = 0;
 			return values;
 		}
 
