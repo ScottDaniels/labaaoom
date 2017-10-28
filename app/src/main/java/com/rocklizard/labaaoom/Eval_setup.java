@@ -242,7 +242,7 @@ public class Eval_setup extends Force_login_activity {
 		stash_if_needed( target );
 
 		bun = new Bundle();
-		bun.putString( "eval_kind", "sent" );					// send along the settings
+		bun.putString( "eval_kind", "sentence" );					// send along the settings
 		bun.putString( "eval_set", target.GetSettings().GetSentGroup() );
 		bun.putString( "student_name", target.GetName() );
 

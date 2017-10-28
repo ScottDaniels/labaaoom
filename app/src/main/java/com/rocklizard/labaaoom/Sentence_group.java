@@ -35,7 +35,7 @@ public class Sentence_group {
 					break;
 
 				case "sentence":
-					data[j] = tokens[1];
+					data[j++] = tokens[1];
 					break;
 			}
 		}
@@ -78,12 +78,25 @@ public class Sentence_group {
 	*/
 	public String GetNext( ) {
 		if( sel_idx >= sel_stop ) {
+			System.out.printf( ">>>> get next finishing: %d >= %d", sel_idx, sel_stop );
 			sel_idx = 0;
 			sel_stop = 0; 		// prevent accidents
 			return null;
 		}
 
+		System.out.printf( ">>>> get next selecting at %d\n", sel_idx );
 		return data[sel_idx++];
+	}
+
+	/*
+		Given a group size, returns the number of sets that the group contains.
+	*/
+	public int GetSize( int set_size ) {
+		if( set_size <= 0 ) {
+			return 0;
+		}
+
+		return iidx / set_size;
 	}
 
 	/*
