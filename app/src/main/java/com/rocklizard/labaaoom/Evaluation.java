@@ -107,7 +107,7 @@ public class Evaluation {
 	public String GetDate() {
 		SimpleDateFormat sdf;
 
-		sdf = new SimpleDateFormat( "MM dd yyyy" );
+		sdf = new SimpleDateFormat( "dd MMM yyyy" );
 		return sdf.format( timestamp );
 	}
 

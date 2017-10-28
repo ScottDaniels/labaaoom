@@ -79,7 +79,8 @@ public class Eval_set {
 	}
 
 	/*
-		Return the evaluation with the most recent timestamp
+		Return the evaluation with the most recent timestamp. While they should be in
+		order, we don't trust the underlying dc not to change, so we search.
 	*/
 	public Evaluation GetLast() {
 		long ts = 0;				// current largest timestamp
@@ -95,7 +96,7 @@ public class Eval_set {
 		}
 
 		if( li >= 0 ) {
-				return evals[i];
+			return evals[li];
 		}
 
 		return null;
