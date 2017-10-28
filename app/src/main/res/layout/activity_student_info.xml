@@ -101,15 +101,16 @@
 
     <TextView
         android:id="@+id/ave_tag"
-        android:layout_width="63dp"
-        android:layout_height="13dp"
+        android:layout_width="102dp"
+        android:layout_height="12dp"
         android:text="Average Score:"
         android:textColor="@color/tag_colour"
         android:textSize="12sp"
-        android:layout_marginLeft="245dp"
+        android:layout_marginLeft="246dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="11dp"
-        app:layout_constraintTop_toBottomOf="@+id/last_eval_score"/>
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/last_eval_score"
+        tools:layout_editor_absoluteY="176dp"/>
 
     <TextView
         android:id="@+id/last_score_tag"
@@ -151,7 +152,7 @@
         android:id="@+id/left_graph_tag"
         android:layout_width="190dp"
         android:layout_height="17dp"
-        android:text="Normal Evaluation Scores:"
+        android:text="Sentence Evaluation Scores:"
         android:textColor="@color/tag_colour"
         android:textSize="12sp"
         android:layout_marginLeft="32dp"
@@ -175,7 +176,7 @@
         android:id="@+id/right_graph_tag"
         android:layout_width="250dp"
         android:layout_height="17dp"
-        android:text="Low Contrast Evaluation Scores:"
+        android:text="Random Word Evaluation Scores:"
         android:textColor="@color/tag_colour"
         android:textSize="12sp"
         android:layout_marginLeft="318dp"
