@@ -78,13 +78,11 @@ public class Sentence_group {
 	*/
 	public String GetNext( ) {
 		if( sel_idx >= sel_stop ) {
-			System.out.printf( ">>>> get next finishing: %d >= %d", sel_idx, sel_stop );
 			sel_idx = 0;
 			sel_stop = 0; 		// prevent accidents
 			return null;
 		}
 
-		System.out.printf( ">>>> get next selecting at %d\n", sel_idx );
 		return data[sel_idx++];
 	}
 
@@ -110,11 +108,9 @@ public class Sentence_group {
 			return false;
 		}
 
-		System.out.printf( ">>>>>>>   group size valid: group=%d size=%d len=%d\n", group, group_size + (group_size * group), iidx  );
 		sel_idx = group_size * group;
 		sel_stop = sel_idx + group_size;
 
-		System.out.printf( ">>>>>>>   return: staart=%d stop=%d\n", sel_idx, sel_stop );
 		return true;
 	}
 }
