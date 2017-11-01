@@ -42,6 +42,15 @@ public class Student_info extends Force_login_activity {
 		Datacache dc;
 		Evaluation last_e;
 		double[] mmai;
+		String rgroup;				// group names from the last evaluation
+		String sgroup;				// used to get average lines
+		Settings settings;
+		int	student_rave = -1;		// student's random and sentence average score
+		int student_save = -1;
+		Averages rave;				// average information  (overall and section)
+		Averages save;
+		int	raval;					// random and sentence average -- actual values
+		int saval;
 
 		super.onResume();
 
@@ -66,24 +75,37 @@ public class Student_info extends Force_login_activity {
 		last_ev_date = (TextView) findViewById( R.id.last_eval_date );
 
 		if( last_e != null ) {
-			mmai = s.GetMMAI( true );
+			mmai = s.GetMMAI( Student.SENTENCES );
+			student_save = (int) mmai[2];
 			last_ev_date.setText( last_e.GetDate() );
 			ave_score.setText(  Double.toString( mmai[2] ) );
 			last_ev_score.setText(  Double.toString( last_e.GetWpm() ) );
+
+			mmai = s.GetMMAI( Student.RANDOM );			// get stats for random tests
+			student_rave = (int) mmai[2];
 		} else {
 			last_ev_date.setText( "None" );
 			ave_score.setText(  "0 wpm" );
 			last_ev_score.setText(  "0 wpm" );
 		}
 
-		draw_graph( R.id.student_graph_left, s.GetData( Student.SENTENCES ) );
-		draw_graph( R.id.student_graph_right, s.GetData( Student.RANDOM ) );
+		settings = s.GetSettings( );			// get settings so we can get last eval group used
+		rgroup = settings.GetRandGroup( );
+		sgroup = settings.GetSentGroup( );
+		rave = new Averages( s.GetSection(), rgroup, Averages.ET_RAND );	// get averages for each type
+		save = new Averages( s.GetSection(), sgroup, Averages.ET_SENT );
+
+		raval = (int) rave.GetAve( false );
+		saval = (int) rave.GetAve( false );
+
+		draw_graph( R.id.student_graph_left, s.GetData( Student.SENTENCES ), saval, student_save );
+		draw_graph( R.id.student_graph_right, s.GetData( Student.RANDOM ), raval, student_rave );
 	}
 
 	/*
 		Given a linear layout name, and a set of data, draw the graph in the layout
 	*/
-	private void draw_graph( int layout_id, int[] values ) {
+	private void draw_graph( int layout_id, int[] values, int student_ave,  int sect_ave ) {
 		int gh = 100;
 		int gw = 200;		// defaults if layout is not found
 		Graph gr;
