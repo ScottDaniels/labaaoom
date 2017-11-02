@@ -9,6 +9,7 @@ package com.rocklizard.labaaoom;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,12 +46,13 @@ public class Student_info extends Force_login_activity {
 		String rgroup;				// group names from the last evaluation
 		String sgroup;				// used to get average lines
 		Settings settings;
-		int	student_rave = -1;		// student's random and sentence average score
-		int student_save = -1;
+		int	student_rave = 0;		// student's random and sentence average score
+		int student_save = 0;
 		Averages rave;				// average information  (overall and section)
 		Averages save;
 		int	raval;					// random and sentence average -- actual values
 		int saval;
+		int	min_top = 100;			// min top value so graphs are equalised
 
 		super.onResume();
 
@@ -78,8 +80,9 @@ public class Student_info extends Force_login_activity {
 			mmai = s.GetMMAI( Student.SENTENCES );
 			student_save = (int) mmai[2];
 			last_ev_date.setText( last_e.GetDate() );
-			ave_score.setText(  Double.toString( mmai[2] ) );
-			last_ev_score.setText(  Double.toString( last_e.GetWpm() ) );
+			ave_score.setText(  String.format( "%.0f wpm",  mmai[2] ) );
+			last_ev_score.setText(  String.format( "%.0f wpm", last_e.GetWpm() ) );
+			ave_score.setTextColor(  Color.parseColor( "#ffff00" ) );
 
 			mmai = s.GetMMAI( Student.RANDOM );			// get stats for random tests
 			student_rave = (int) mmai[2];
@@ -95,18 +98,24 @@ public class Student_info extends Force_login_activity {
 		rave = new Averages( s.GetSection(), rgroup, Averages.ET_RAND );	// get averages for each type
 		save = new Averages( s.GetSection(), sgroup, Averages.ET_SENT );
 
-		raval = (int) rave.GetAve( false );		// false == get just section averages
+		raval = (int) rave.GetAve( false );				// false == get just section averages
 		saval = (int) save.GetAve( false );
 
-		System.out.printf( "averages: rval=%d sval=%d  stud-save=%d stu_rave=%d\n", raval, saval, student_save, student_rave );
-		draw_graph( R.id.student_graph_left, s.GetData( Student.SENTENCES ), saval, student_save );
-		draw_graph( R.id.student_graph_right, s.GetData( Student.RANDOM ), raval, student_rave );
+		min_top = raval > 100 ? (raval > saval ? raval : saval) : (saval > 100 ? saval : 100);
+		min_top = student_save > min_top ? (student_rave > student_save ? student_rave : student_save) : (student_rave > min_top ? student_rave : min_top );
+		if( min_top % 10 != 0 ) {
+			min_top += 10 - (min_top % 10);                // rand to even mult of 10
+		}
+
+		System.out.printf( ">>>  averages: rval=%d sval=%d  stud-save=%d stu_rave=%d mint=%d\n", raval, saval, student_save, student_rave, min_top );
+		draw_graph( R.id.student_graph_left, s.GetData( Student.SENTENCES ), saval, student_save, min_top );
+		draw_graph( R.id.student_graph_right, s.GetData( Student.RANDOM ), raval, student_rave, min_top );
 	}
 
 	/*
 		Given a linear layout name, and a set of data, draw the graph in the layout
 	*/
-	private void draw_graph( int layout_id, int[] values, int sect_ave,  int student_ave ) {
+	private void draw_graph( int layout_id, int[] values, int sect_ave,  int student_ave, int min_top ) {
 		int gh = 100;
 		int gw = 200;		// defaults if layout is not found
 		Graph gr;
@@ -118,6 +127,7 @@ public class Student_info extends Force_login_activity {
 		}
 
 		gr = new Graph( gw, gh, 30, 10 );
+		gr.SetMinTop( min_top );					// set before data load as data load could be larger
 		gr.Add_values( values );
 		gr.AddMarker( sect_ave, "#ff9000" );		// section ave is orange
 		gr.AddMarker( student_ave, "#ffff00" ); 	// student ave drawn on top is yellow
