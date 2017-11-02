@@ -312,9 +312,21 @@ public class Eval_setup extends Force_login_activity {
 		an evaluation on random word groups.
 	*/
 	public void Start_rand_eval( View v ) {
-		Toast.makeText(this, "start random eval go_button clicked (not implemented)", Toast.LENGTH_LONG).show();
+		Class targetc;
+		Intent it;
+		Bundle bun;
 
 		stash_if_needed( target );
+
+		bun = new Bundle();
+		bun.putString( "eval_kind", "rand" );					// send along the settings
+		bun.putString( "eval_set", target.GetSettings().GetRandGroup() );
+		bun.putString( "student_name", target.GetName() );
+
+		targetc = Run_eval.class;
+		it = new Intent( this, targetc );
+		it.putExtras( bun );
+		startActivity( it );					// MUST use startActivity() so that when it finishes we hit the login
 	}
 
 	/*

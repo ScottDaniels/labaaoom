@@ -372,6 +372,75 @@ public class Datacache {
 		return data;
 	}
 
+	/*
+		Reads either a group of random words into a sentence group, or a group of sentences.
+		The underlying sentence group can handle either, and the only difference between the
+		two is the name prefix so that we can have random_grade1 and sent_grade1 such that
+		'grade1' is all that is displayed on the selection screen for clarity. Gtype is either
+		"sent" or "rand".
+	*/
+	public Sentence_group read_group( String name, boolean all, String gtype ) {
+		String[] arecs = null;		// records from the asset
+		String[] urecs;				// records from the user created list
+		String[] recs;				// concatinated lists
+		int rlen = 0;
+		Sentence_group sg;
+		String prefix;
+
+
+		switch( gtype ) {
+			case "sent":
+				prefix = "sgroup_";
+				if( ! sgroups_map.containsKey( name ) ) {
+					return null;
+				}
+				break;
+
+			case "rand":
+				prefix = "wgroup_";
+				if( ! wgroups_map.containsKey( name ) ) {
+					return null;
+				}
+				break;
+
+			default:
+				return null;
+		}
+
+		System.out.printf( ">>>> extract group prefix=%s name=%s\n", prefix, name );
+		if( all ) {
+			if( (arecs = read_from_asset( "groups", prefix + name )) != null ) {        // read the two sets of strings
+				rlen = arecs.length;
+			}
+		}
+
+		System.out.printf( ">>>> extract group prefix=%s has %d tings after asset read\n", prefix, rlen );
+
+		if( (urecs = read_from_dc( prefix + name  )) != null ) {
+			rlen += urecs.length;
+		}
+
+		if( rlen <= 0 ) {				// both null, return null object
+			return null;
+		}
+
+		recs = new String[rlen];		// cat together if we have both
+		rlen = 0;
+		if( arecs != null ) {
+			System.arraycopy( arecs, 0, recs, 0, arecs.length );
+			rlen = arecs.length;
+		}
+
+		if( urecs != null ) {
+			System.arraycopy( urecs, 0, recs, rlen, urecs.length );
+		}
+
+		sg = new Sentence_group( recs );
+		recs = read_from_asset( "groups", prefix + name  );
+
+		return sg;
+	}
+
 	// ------ public things ------------------------------------
 
 	/*
@@ -430,49 +499,21 @@ public class Datacache {
 		Extracts the sentence named group and if all is true extracts the asset group
 		with the same name and adds it to the group in the datacache making it appear
 		that they are a single unit.
+
+		Wrapper to the real work horse function that can do either random or sentecnes.
 	*/
 	public Sentence_group ExtractSgroup( String name, boolean all ) {
-		String[] arecs = null;		// records from the asset
-		String[] urecs;				// records from the user created list
-		String[] recs;				// concatinated lists
-		int rlen = 0;
-		Sentence_group sg;
+		return read_group( name, all, "sent" );
+	}
 
-		if( ! sgroups_map.containsKey( name ) ) {
-			return null;
-		}
+	/*
+		Extract the random words group as a group of sentences and returns the sentence
+		group.
 
-		if( all ) {
-			if( (arecs = read_from_asset( "groups", "sgroup_" + name )) != null ) {        // read the two sets of strings
-				rlen = arecs.length;
-			}
-		}
-
-		//System.out.printf( ">>>> extract sgroup has %d tings after asset read\n", rlen );
-
-		if( (urecs = read_from_dc( "sgroup_" + name  )) != null ) {
-			rlen += urecs.length;
-		}
-
-		if( rlen <= 0 ) {				// both null, return null object
-			return null;
-		}
-
-		recs = new String[rlen];		// cat together if we have both
-		rlen = 0;
-		if( arecs != null ) {
-			System.arraycopy( arecs, 0, recs, 0, arecs.length );
-			rlen = arecs.length;
-		}
-
-		if( urecs != null ) {
-			System.arraycopy( urecs, 0, recs, rlen, urecs.length );
-		}
-
-		sg = new Sentence_group( recs );
-		recs = read_from_asset( "groups", "sgroup_" + name  );
-
-		return sg;
+		Wrapper to the real work horse that handles both sentence and word files.
+	*/
+	public Sentence_group ExtractWgroup( String name, boolean all ) {
+		return read_group( name, all, "rand" );
 	}
 
 	/*

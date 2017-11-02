@@ -112,15 +112,14 @@ public class Run_eval extends AppCompatActivity {
 
 		// future: set text style
 
+		System.out.printf( ">>> running eval type: %s\n", ekind );
 		if( ekind.equals( "sent" )  ) {
 			sg = dc.ExtractSgroup( eset, true ) ;			// extract all of the sentences from dc
 			ce = student.GetNEvals( Student.SENTENCES );
 		} else {
-			// future -- change this to ExtractRgroup and add that function to dc
-			System.out.printf( ">>> returning; not a sentence evaluation: %s\n", ekind );
-			sg = dc.ExtractSgroup( eset, true ) ;			// extract all of the words from dc
+			System.out.printf( ">>> extracting random word group: %s\n", eset );
+			sg = dc.ExtractWgroup( eset, true ) ;			// extract all of the words from dc
 			ce = student.GetNEvals( Student.RANDOM );
-			finish();
 		}
 
 		if( sg == null ) {
