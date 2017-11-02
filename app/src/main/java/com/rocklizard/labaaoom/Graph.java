@@ -263,7 +263,7 @@ public class Graph {
     /*
         Allow user to set the minimum top value.
     */
-    public void Set_min_topv( int mt ) {
+    public void SetMinTop( int mt ) {
         if( mt > 0 ) {
             min_topv = mt;
         }
