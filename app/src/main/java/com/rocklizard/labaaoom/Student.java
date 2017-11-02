@@ -79,7 +79,8 @@ public class Student {
 					}
 					break;
 
-				case "sets":			// pick up settings and build object
+				case "sets":			// deprecated
+				case "setngs":			// pick up settings and build object
 					settings = new Settings( tokens[1] );
 					break;
 
@@ -174,7 +175,7 @@ public class Student {
 		i = 0;
 		strs[i++] = "name:" + name;
 		strs[i++] = "sect:" + section;
-		strs[i++] = "sets:" + settings.ToString();
+		strs[i++] = "setngs:" + settings.ToString();
 		if( pending != null ) {
 			strs[ i++ ] = "pending:" + pending.ToString( );
 		} else {

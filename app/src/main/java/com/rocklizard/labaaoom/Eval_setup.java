@@ -36,6 +36,7 @@ public class Eval_setup extends Force_login_activity {
 	Student target = null;                    // student that we're setting up for
 	TextView selected_rand = null;                    // what is currently selected
 	TextView selected_sent = null;
+	AlertDialog notice;
 
 	/*
 		Callback when an item in the random list is selected. We assume a selction
@@ -89,6 +90,7 @@ public class Eval_setup extends Force_login_activity {
 		setContentView( R.layout.activity_eval_setup );
 
 		settings_changed = false;
+		notice = null;
 	}
 
 	private void add2list( LinearLayout list_thing, String item, int list_type, View.OnClickListener ocl, Boolean selected ) {
@@ -118,6 +120,15 @@ public class Eval_setup extends Force_login_activity {
 	}
 
 	@Override
+	protected void onPause( ) {
+		if( notice != null ) {
+			notice.dismiss();
+		}
+
+		super.onPause();
+	}
+
+	@Override
 	protected void onResume( ) {
 		Datacache dc;
 		Intent it;
@@ -139,6 +150,7 @@ public class Eval_setup extends Force_login_activity {
 		it = getIntent();
 		target_name = it.getExtras( ).getString( "student_name" );		// student name from the caller
 		if( target_name == null ) {
+			System.out.printf( ">>>> internal mishap:  eval setup called and no target name\n" );
 			finish( );                    // likely a return from another application which we don't allow
 			return;
 		}
@@ -149,6 +161,7 @@ public class Eval_setup extends Force_login_activity {
 		dc = GetDatacache();
 		s = dc.ExtractStudent( target_name );
 		if( s == null ) {            // shouldn't happen, but databases suck, so it might
+			System.out.printf( ">>>> internal mishap:  eval setup: student not in dc\n" );
 			Toast.makeText( this, "Internal mishap: student not in data cache: " + target_name, Toast.LENGTH_LONG ).show( );
 			finish( );
 			return;
@@ -203,8 +216,8 @@ public class Eval_setup extends Force_login_activity {
 
 
 		// Finally, check for a pending eval and ask to accept/reject it
-		if( target.HasPendingEval() ) {
-			accept_pending();				// drive the pop up which takes action based on response
+		if( target.HasPendingEval( ) ) {
+			accept_pending( );                // drive the pop up which takes action based on response
 		}
 	}
 
@@ -231,19 +244,25 @@ public class Eval_setup extends Force_login_activity {
 		else reject it.
 	*/
 	private void accept_pending(  ) {
-		AlertDialog notice;
 		Evaluation eval;
-		final String student_name;
 
+		final String student_name;			// final vals for closuers
+		final double wpm;
+		final String etype;
+		final String elist;
+
+		notice = null;
 		eval = target.GetPendingEval();
-
 		if( eval == null ) {			// no pending, no prompt
 			return;
 		}
+		wpm = eval.GetWpm();
+		elist= eval.GetID();
+		etype = eval.GetType();
 
 		student_name = target.GetName();					// get name as we need to look up object in closure
 
-		notice =new AlertDialog.Builder( this ).create();
+		notice = new AlertDialog.Builder( this ).create();
 		notice.setTitle( "Pending Evaluation Exists" );
 		notice.setMessage( "Name: " + student_name + "\n" + eval.PrettyPrint() );
 		notice.setCancelable( false );
@@ -251,15 +270,19 @@ public class Eval_setup extends Force_login_activity {
 				public void onClick (DialogInterface dialog,int which){
 					Datacache dc;
 					Student	s;
+					Averages aves;			// update averages when accepted
 
 					dc = Datacache.GetDatacache();
 					s = dc.ExtractStudent( student_name );
 					if( s != null ) {
+						System.out.printf( ">>>> accepting the evaluation saving pending eval\n" );
 						s.AcceptPendingEval();				// accept it
 						dc.DepositStudent( s );				// and tuck it away again
-					}
 
-					finish();
+						System.out.printf( ">>>> accepting the evaluation getting averages\n" );
+						aves = new Averages( s.GetSection(), elist, etype );
+						aves.AddVal( wpm );
+					}
 				}
 			}
 		);
@@ -275,8 +298,6 @@ public class Eval_setup extends Force_login_activity {
 						s.RejectPendingEval();				// drop it
 						dc.DepositStudent( s );				// and tuck it away again
 					}
-
-					finish();
 				}
 			}
 		);
@@ -308,7 +329,7 @@ public class Eval_setup extends Force_login_activity {
 		stash_if_needed( target );
 
 		bun = new Bundle();
-		bun.putString( "eval_kind", "sentence" );					// send along the settings
+		bun.putString( "eval_kind", "sent" );					// send along the settings
 		bun.putString( "eval_set", target.GetSettings().GetSentGroup() );
 		bun.putString( "student_name", target.GetName() );
 

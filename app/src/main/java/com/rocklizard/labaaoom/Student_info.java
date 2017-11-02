@@ -95,9 +95,10 @@ public class Student_info extends Force_login_activity {
 		rave = new Averages( s.GetSection(), rgroup, Averages.ET_RAND );	// get averages for each type
 		save = new Averages( s.GetSection(), sgroup, Averages.ET_SENT );
 
-		raval = (int) rave.GetAve( false );
-		saval = (int) rave.GetAve( false );
+		raval = (int) rave.GetAve( false );		// false == get just section averages
+		saval = (int) save.GetAve( false );
 
+		System.out.printf( "averages: rval=%d sval=%d  stud-save=%d stu_rave=%d\n", raval, saval, student_save, student_rave );
 		draw_graph( R.id.student_graph_left, s.GetData( Student.SENTENCES ), saval, student_save );
 		draw_graph( R.id.student_graph_right, s.GetData( Student.RANDOM ), raval, student_rave );
 	}
@@ -105,7 +106,7 @@ public class Student_info extends Force_login_activity {
 	/*
 		Given a linear layout name, and a set of data, draw the graph in the layout
 	*/
-	private void draw_graph( int layout_id, int[] values, int student_ave,  int sect_ave ) {
+	private void draw_graph( int layout_id, int[] values, int sect_ave,  int student_ave ) {
 		int gh = 100;
 		int gw = 200;		// defaults if layout is not found
 		Graph gr;
@@ -118,8 +119,8 @@ public class Student_info extends Force_login_activity {
 
 		gr = new Graph( gw, gh, 30, 10 );
 		gr.Add_values( values );
-		gr.AddMarker( 90, "#ff9000" ); 			// TESTING line at 33
-		gr.AddMarker( 33, "#ffff00" ); 			// TESTING line at 33
+		gr.AddMarker( sect_ave, "#ff9000" );		// section ave is orange
+		gr.AddMarker( student_ave, "#ffff00" ); 	// student ave drawn on top is yellow
 		gr.Set_pt_space( 4 );
 		ll.setBackground( new BitmapDrawable( getResources(), gr.Paint( ) ) );
 	}

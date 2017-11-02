@@ -6,6 +6,12 @@
 				a 'new' call, but a call to the Mk_dtacache() static function
 				that returns the object creating it if needed.
 
+				File prefixes are:
+					student_
+					ave_
+					sgroup_
+					rgroup_
+
 	Date:		17 September 2017
 	Author:		E. Scott Daniels edaniels7@gatech for CS6460 Fall 2017
 */
@@ -232,7 +238,7 @@ public class Datacache {
 			return null;
 		}
 
-		System.out.printf( ">>>> datacaache: attempting to write entry\n" );
+		System.out.printf( ">>>> datacaache: attempting to write entry: %s\n", fname );
 		try {
 			Writer writer = new OutputStreamWriter(f);
 			for( i = 0; i < data.length; i++ ) {
@@ -330,6 +336,7 @@ public class Datacache {
 
 		rbuf = new byte[4096];				// first cut; one read with a max of 4k
 
+		System.out.printf( ">>>> attempting to read asset %s/%s\n", type, fname );
 		try {
 			f =	 ctx.getAssets().open( type + "/" + fname  );
 		} catch(  IOException e ) {
@@ -345,7 +352,7 @@ public class Datacache {
 				return null;
 			}
 
-			//System.out.printf( ">>>> read %d bytes from dc\n", rlen );
+			System.out.printf( ">>>> read %d bytes from asset %s\n", rlen, fname );
 			tbuf = Arrays.copyOfRange( rbuf, 0, rlen );
 			stuff = new String( tbuf );
 
@@ -508,6 +515,51 @@ public class Datacache {
 
 		Arrays.sort( rnames );
 		return rnames;
+	}
+
+	// ---------------- averages things ---------------------------------------------------------
+
+	/*
+		Stash the average data into the cache.
+	*/
+	public boolean DepositAveData( Ave_data ad ) {
+		String aid;
+
+		if( ad == null ){
+			System.out.printf( ">>>> datacache deposit average data -- ad was nil!\n" );
+			return false;
+		}
+		aid = stash_in_dc( "ave", ad.GenDcEntry() );		// drop the info into the cache
+
+		if( aid  == null ){
+			System.out.printf( ">>>> datacache deposit average data -- stash failed\n" );
+			return false;
+		}
+
+		return true;
+	}
+
+	/*
+		Given the student name (key) find the student data and build a student object
+		from it.  Returns nil if not found.
+
+		Name may contain spaces which will be replaced with underbars.
+	*/
+	public Ave_data ExtractAveData( String sect, String list, String etype  ) {
+		String fname; 			// flie name to extract info from
+		String[] dclist;
+		Ave_data adata;
+
+		fname = "ave_" + sect + "_" + list + "_" + etype;
+		System.out.printf( ">>>> datacache is attempting to extract %s\n", fname );
+
+		dclist = read_from_dc( fname );		// it is possible that we don't have any data yet
+		adata = new Ave_data( dclist );		// will create an empty, but with bad id
+		if( dclist == null ) {				// so if it wasn't there, we need to name it
+			adata.AddID( sect, list, etype );
+		}
+
+		return adata;
 	}
 
 	// ---------------- student things ---------------------------------------------------------

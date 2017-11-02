@@ -1,3 +1,11 @@
+/*
+	Mnemonic:	Run_eval.java
+	Abstract:	This is the class which provides functions to the run-eval sctivity.
+				It manages an evaluation from start to finish.
+	Author:		E. Scott Daniels   edaniels7@gatech.edu for CS6460
+	Date:		24 October 2017
+*/
+
 package com.rocklizard.labaaoom;
 
 import android.app.Dialog;
@@ -77,6 +85,7 @@ public class Run_eval extends AppCompatActivity {
 		dc = Datacache.GetDatacache();									// point us at the thing
 		student = dc.ExtractStudent( target_name );
 		if( student == null ) {
+			System.out.printf( ">>> internal mishap run eval: student was null\n" );
 			finish();
 			Toast.makeText( this, "Internal mishap: unable to find student in datacache.", Toast.LENGTH_SHORT ).show( );
 			return;
@@ -103,11 +112,12 @@ public class Run_eval extends AppCompatActivity {
 
 		// future: set text style
 
-		if( ekind.equals( "sentence" )  ) {
+		if( ekind.equals( "sent" )  ) {
 			sg = dc.ExtractSgroup( eset, true ) ;			// extract all of the sentences from dc
 			ce = student.GetNEvals( Student.SENTENCES );
 		} else {
 			// future -- change this to ExtractRgroup and add that function to dc
+			System.out.printf( ">>> returning; not a sentence evaluation: %s\n", ekind );
 			sg = dc.ExtractSgroup( eset, true ) ;			// extract all of the words from dc
 			ce = student.GetNEvals( Student.RANDOM );
 			finish();
