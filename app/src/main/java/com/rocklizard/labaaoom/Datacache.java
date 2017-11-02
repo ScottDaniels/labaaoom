@@ -377,7 +377,7 @@ public class Datacache {
 		The underlying sentence group can handle either, and the only difference between the
 		two is the name prefix so that we can have random_grade1 and sent_grade1 such that
 		'grade1' is all that is displayed on the selection screen for clarity. Gtype is either
-		"sent" or "rand".
+		ET_SENTENCE or ET_RANDOM.
 	*/
 	public Sentence_group read_group( String name, boolean all, String gtype ) {
 		String[] arecs = null;		// records from the asset
@@ -389,14 +389,14 @@ public class Datacache {
 
 
 		switch( gtype ) {
-			case "sent":
+			case Evaluation.ET_SENTENCE:
 				prefix = "sgroup_";
 				if( ! sgroups_map.containsKey( name ) ) {
 					return null;
 				}
 				break;
 
-			case "rand":
+			case Evaluation.ET_RANDOM:
 				prefix = "wgroup_";
 				if( ! wgroups_map.containsKey( name ) ) {
 					return null;
@@ -503,7 +503,7 @@ public class Datacache {
 		Wrapper to the real work horse function that can do either random or sentecnes.
 	*/
 	public Sentence_group ExtractSgroup( String name, boolean all ) {
-		return read_group( name, all, "sent" );
+		return read_group( name, all, Evaluation.ET_SENTENCE );
 	}
 
 	/*
@@ -513,7 +513,7 @@ public class Datacache {
 		Wrapper to the real work horse that handles both sentence and word files.
 	*/
 	public Sentence_group ExtractWgroup( String name, boolean all ) {
-		return read_group( name, all, "rand" );
+		return read_group( name, all, Evaluation.ET_RANDOM );
 	}
 
 	/*

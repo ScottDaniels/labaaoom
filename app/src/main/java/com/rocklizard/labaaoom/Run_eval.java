@@ -78,7 +78,7 @@ public class Run_eval extends AppCompatActivity {
 
 		ekind = it.getExtras( ).getString( "eval_kind" );
 		if( ekind == null ) {
-			ekind = "sent";
+			ekind = Evaluation.ET_SENTENCE;
 		}
 		eset = it.getExtras( ).getString( "eval_set" );
 
@@ -113,7 +113,7 @@ public class Run_eval extends AppCompatActivity {
 		// future: set text style
 
 		System.out.printf( ">>> running eval type: %s\n", ekind );
-		if( ekind.equals( "sent" )  ) {
+		if( ekind.equals( Evaluation.ET_SENTENCE )  ) {
 			sg = dc.ExtractSgroup( eset, true ) ;			// extract all of the sentences from dc
 			ce = student.GetNEvals( Student.SENTENCES );
 		} else {

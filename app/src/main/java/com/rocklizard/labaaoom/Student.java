@@ -145,7 +145,7 @@ public class Student {
 			return;
 		}
 
-		if( pending.GetType().equals( "random" ) ) {
+		if( pending.GetType().equals( Evaluation.ET_RANDOM ) ) {
 			shove_eval( pending, true );			// add on random list
 		} else {
 			shove_eval( pending, true );			// add on sentence list

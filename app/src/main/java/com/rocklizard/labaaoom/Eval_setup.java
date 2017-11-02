@@ -319,7 +319,7 @@ public class Eval_setup extends Force_login_activity {
 		stash_if_needed( target );
 
 		bun = new Bundle();
-		bun.putString( "eval_kind", "rand" );					// send along the settings
+		bun.putString( "eval_kind", Evaluation.ET_RANDOM );					// send along the settings
 		bun.putString( "eval_set", target.GetSettings().GetRandGroup() );
 		bun.putString( "student_name", target.GetName() );
 
@@ -341,7 +341,7 @@ public class Eval_setup extends Force_login_activity {
 		stash_if_needed( target );
 
 		bun = new Bundle();
-		bun.putString( "eval_kind", "sent" );					// send along the settings
+		bun.putString( "eval_kind", Evaluation.ET_SENTENCE );					// send along the settings
 		bun.putString( "eval_set", target.GetSettings().GetSentGroup() );
 		bun.putString( "student_name", target.GetName() );
 

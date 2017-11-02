@@ -14,6 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Evaluation {
+	public static final String ET_RANDOM = "rand";
+	public static final String ET_SENTENCE = "sentence";
+
 	private long	timestamp;		// timestamp cooresponding to date
 	private double	wpm;			// words per minute of the eval
 	private String	eval_id;		// reading set id (e.g. K-1)

@@ -12,8 +12,8 @@ package com.rocklizard.labaaoom;
 import static com.rocklizard.labaaoom.Datacache.GetDatacache;
 
 public class Averages {
-	public final static String ET_RAND = "rand";	// eval types for constant use
-	public final static String ET_SENT = "sent";
+	public final static String ET_RAND = Evaluation.ET_RANDOM;	// eval types for constant use
+	public final static String ET_SENT = Evaluation.ET_SENTENCE;
 
 	private Ave_data slt_aves;				// average data for the specific section/list/type
 	private Ave_data all_aves;				// all for list-type
