@@ -10,20 +10,36 @@ package com.rocklizard.labaaoom;
 */
 
 
-public class Sentence_group {
-	String[] data;
-	String name;
-	int	iidx;				// we allocate with more so we can insert new ones
-	int sel_idx;			// selection index for GetNext()
-	int sel_stop;			// selection stop point
+import java.util.Arrays;
 
+public class Sentence_group {
+	private String[] data;
+	private String name;
+	private int	iidx;				// we allocate with more so we can insert new ones
+	private int sel_idx;			// selection index for GetNext()
+	private int sel_stop;			// selection stop point
+	private boolean from_words;		// if we end up extending the list and saving we want to know to split it
+
+	/*
+		Build a group from a set of strings read from the datacache. There are two
+		types of data cache files: sentence files and word files. The word files
+		can be read into 'sentences' by this function as well. When reading word lists
+		this function will collect 10 words per 'sentence' and save the sentences for
+		presentation.
+
+		CAUTION: this does OK witl mixed sentences and words, but if it is ever saved, a mixed list
+				will be saved out as words and when pulled back in it could be different.
+	*/
 	public Sentence_group( String[] dc_entry ) {
 		int i;
 		int j;
 		String tokens[];
+		String	partial = "";	// partial sentence
+		int wcount = 0;			// number of words stuffed into partial
 
+		from_words = false;
 		iidx = dc_entry.length;
-		data = new String[iidx + 50];
+		data = new String[iidx + 50];	// allow user to add 50 sentences before expansion is needed
 		sel_idx = 0;
 		sel_stop = 0;
 
@@ -37,7 +53,27 @@ public class Sentence_group {
 				case "sentence":
 					data[j++] = tokens[1];
 					break;
+
+				case "word":
+					from_words = true;
+					partial += " " + tokens[1];
+					wcount++;
+					if( wcount > 10 ) {
+						data[j++] = partial;
+						partial = "";
+						wcount = 0;
+					}
 			}
+		}
+
+		if( from_words ) {				// we need to trim the array since allocation was based on records, and we reduced that by 10x
+			String tdata[];
+
+			data[j] = partial;							// capture partial
+			iidx = j +1;								// insertion point
+			tdata = new String[iidx + 50];				// reasonable amount
+			System.arraycopy( data, 0, tdata, 0, j );
+			data = tdata;								// retain the smaller
 		}
 	}
 
