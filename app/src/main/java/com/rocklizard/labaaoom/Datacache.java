@@ -289,8 +289,7 @@ public class Datacache {
 		try {
 			f =	 ctx.openFileInput( fname );  // cant get context generated in test
 		} catch(  IOException e ) {
-			System.out.printf( ">>>> unable to open dc file: %s\n", fname );
-			//e.printStackTrace();
+			System.out.printf( ">>>> unable to open dc file: %s: %s\n", fname, e.toString() );
 			return null;
 		}
 
@@ -301,7 +300,7 @@ public class Datacache {
 				return null;
 			}
 
-			//System.out.printf( ">>>> read %d bytes from dc\n", rlen );
+			System.out.printf( ">>>> read %d bytes from dc\n", rlen );
 			tbuf = Arrays.copyOfRange( rbuf, 0, rlen );
 			stuff = new String( tbuf );
 
@@ -311,13 +310,103 @@ public class Datacache {
 
 			f.close();
 		} catch( IOException e ) {
+			System.out.printf( ">>> error trying to read: %s: %s \n", fname, e.toString() );
 			return null;
 		}
 
-		//System.out.printf( ">>>> read from dc has %d things to work with\n", data.length );
-		//for( i = 0; i < data.length; i++ ) {
-			//System.out.printf( ">>>> read from dc returns [%d] %s\n", i, data[i] );
-		//}
+		System.out.printf( ">>>> read from dc has %d things to work with\n", data.length );
+		/*
+		for( i = 0; i < data.length; i++ ) {
+			System.out.printf( ">>>> read from dc returns [%d] %s\n", i, data[i] );
+		}
+		*/
+		return data;
+	}
+
+	/*
+		Read an unlimited amount (well within reason) and return the new line separated
+		records as an array of strings.
+	*/
+	private String[] big_read_from_dc( String fname ) {
+		String[] data;			// data read from the file
+		byte[] rbuf;			// read buffer
+		byte[] tbuf;			// trimmed buffer; excluding unfilled characters
+		String stuff;			// stuff read converted to string
+		FileInputStream f;
+		int i;
+		int rlen;
+		boolean done = false;
+		String partial = null;
+		HashMap<String,String>  raw_data;		// raw data of variable size
+		int	rcount = 0;							// number of records read
+
+		rbuf = new byte[4096];				// first cut; one read with a max of 4k
+		raw_data = new HashMap<String,String>();
+
+		try {
+			f =	 ctx.openFileInput( fname );  // cant get context generated in test
+		} catch(  IOException e ) {
+			System.out.printf( ">>>> unable to open dc file: %s: %s\n", fname, e.toString() );
+			return null;
+		}
+
+		while( ! done ) {
+			try {
+				if( (rlen = f.read( rbuf )) < 0 ) {
+					f.close( );
+					System.out.printf( ">>>> read from dc fails for %s\n", fname );
+					return null;
+				}
+
+				done =  rlen < 4096;			// short buffer we don't expect more
+				System.out.printf( ">>>> big read fetched %d bytes from dc\n", rlen );
+
+				if( ! done ) {									// convert to string
+					stuff = new String( rbuf );
+				} else {
+					tbuf = Arrays.copyOfRange( rbuf, 0, rlen );
+					stuff = new String( tbuf );
+				}
+
+				data = stuff.split( "\n" );						// break into records
+				if( partial != null ) {
+					data[0] = partial + data[0];				// join partial with start of next buffer
+				}
+
+				rlen = data.length;
+				if( data[rlen-1] == null ||  data[rlen-1].equals( "" ) ) {		// if last token was newline, we get an empty/null token
+					partial = null;												// thus nothing to save
+				} else {
+					if( ! done ) {
+						partial = data[rlen - 1];		// last is not empty assume it's partial if not done, else assume badly formed file
+						rlen--;
+					}
+				}
+
+				for(  i = 0; i < rlen; i++ ) {
+					raw_data.put(  String.format( "%05d", rcount++ ), data[i] );	// save each record
+				}
+			} catch( IOException e ) {
+				System.out.printf( ">>> error trying to read: %s: %s \n", fname, e.toString( ) );
+				return null;
+			}
+
+			try {
+				f.close( );
+			} catch( IOException e ) {
+				System.out.printf( ">>> warning close failed: %s: %s \n", fname, e.toString( ) );
+			}
+		}
+
+		data = new String[rcount];
+		for( i = 0; i < rcount; i++ ) {				// pull each from the hash and put into array
+			data[i] = raw_data.get( String.format( "%05d", i ) );
+		}
+
+		System.out.printf( ">>>> big read from dc has %d things to work with\n", data.length );
+		for( i = 0; i < data.length; i++ ) {
+			System.out.printf( ">>>> read from dc returns [%d] %s\n", i, data[i] );
+		}
 		return data;
 	}
 
@@ -655,7 +744,7 @@ public class Datacache {
 		}
 
 		fname = build_fname( "student", name );		// replace spaces with underbars and add prefix
-		return new Student( read_from_dc( fname ) );
+		return new Student( big_read_from_dc( fname ) );
 	}
 
 	/*
