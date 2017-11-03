@@ -98,11 +98,15 @@ public class Student {
 	/*
 		Stick an evaluation on one of the lists.
 	*/
-	private void shove_eval( Evaluation eval, Boolean to_sentence ) {
-		if( to_sentence ) {
-			sentence_evals.Add_entry( eval.ToString() );            // add the entry
-		} else {
-			rand_evals.Add_entry( eval.ToString() );
+	private void shove_eval( Evaluation eval, String etype ) {
+		switch( etype ) {
+			case Evaluation.ET_SENTENCE:
+				sentence_evals.Add_entry( eval.ToString() );            // add the entry
+				break;
+
+			case Evaluation.ET_RANDOM:
+				rand_evals.Add_entry( eval.ToString() );
+				break;
 		}
 	}
 
@@ -145,12 +149,7 @@ public class Student {
 			return;
 		}
 
-		if( pending.GetType().equals( Evaluation.ET_RANDOM ) ) {
-			shove_eval( pending, true );			// add on random list
-		} else {
-			shove_eval( pending, true );			// add on sentence list
-		}
-
+		shove_eval( pending, pending.GetType() );			// add to the correct list
 		pending = null;
 	}
 
