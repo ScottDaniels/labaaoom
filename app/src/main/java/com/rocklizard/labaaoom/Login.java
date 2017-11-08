@@ -42,7 +42,6 @@ public class Login extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		System.out.printf(">>>> running login class \n");
 	}
 
     /*
@@ -67,11 +66,11 @@ public class Login extends AppCompatActivity {
 			return;
 		}
 
-		if( dc.HasElement( "passwd" ) ) {				// there is a passwd entry in the dc; suss out hash
-			if( dc.ValidateInstructor( un_thing.getText().toString(), result ) ) {
+		if( dc.HasElement( "passwd" ) ) {				// user has defined at least one instructor id/passwd
+			if( dc.ValidateInstructor( un_thing.getText().toString(), result ) ) {			// ok to finish if what was entered is defined and matches
 				finish();
 			}
-			// return;			// future -- when we turn off the use of default creds
+			// return;			// must return here to prevent the system default creds being accepted when a password element exists
 		}
 
 		// future -- this will execute only if there is no user defined instructor in the password file.

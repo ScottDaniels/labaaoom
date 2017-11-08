@@ -607,6 +607,24 @@ public class Datacache {
     	return true;
 	}
 
+	/*
+		Delete the element (file) given by ename.
+	*/
+	public void DeleteElement( String ename ) {
+		File f;
+
+		if( ctx == null ) {
+			return;
+		}
+
+		f = ctx.getFileStreamPath( ename );
+		if( f != null  && f.exists()  ) {
+			if( ! f.delete() ) {
+				System.err.printf( "Unable to delete dC element: %s", ename );
+			}
+		}
+	}
+
 	// ----------------- generic delete --------------------------------------------------------
 
 	/*
@@ -873,14 +891,15 @@ public class Datacache {
 
 		ilist = read_from_dc( "passwd" );
 		if( ilist == null || ilist.length < 1 ) {
-			System.out.printf( ">>> no passwd file, or mepty file\n" );
+			System.err.printf( "###ERR### no passwd file, or mepty file\n" );
 			return instructors;
 		}
 
-		System.out.printf( ">>> %d entries in the passwd\n", ilist.length );
-		for( i = 1; i < ilist.length; i++ ) {			// don't put the key into the map
+		for( i = 1; i < ilist.length; i++ ) {						// don't put the key into the map
 			tokens = ilist[i].split( ":" );
-			instructors.put( tokens[0], tokens[1] );
+			if( ! tokens[0].equals( "dummy" ) ) {					// drop the dummy token as well
+				instructors.put( tokens[ 0 ], tokens[ 1 ] );
+			}
 		}
 
 		return instructors;
@@ -928,18 +947,17 @@ public class Datacache {
 			if(  instructors.get( name ).equals( md5 ) ) {
 				instructors.remove( name );
 			} else {
-				System.out.printf( ">>> ###WARN### deleting instructor got a mismatched md5\n" );
-				instructors.remove( name );				// future: remove when enforcing match
-				//return false;
+				System.err.printf( ">>> ###WARN### deleting instructor got a mismatched md5\n" );
+				return false;
 			}
 
-			if( instructors.size() <= 2 ) {
-				System.out.printf( ">>>>> password list is empty\n" );
-				instructors.remove( "dummy" );				// remove the two non-instructor entries
-				instructors.remove( "key" );
+			if( instructors.size() < 1 ) {				// last entry, delete the file
+				System.err.printf( ">>> ###WARN### last instructor deleted, passwd element to be deleted\n" );
+				DeleteElement( "passwd" );
+			} else {
+				write_instructors( instructors );
 			}
 
-			write_instructors( instructors );
 		}
 
 		return true;

@@ -12,7 +12,8 @@ import java.security.MessageDigest;
 public class M5hash {
 
     /*
-        Given a string and salt, generate an MD5 sum.
+        Given a string and salt, generate an MD5 sum. On failure an empty string
+        is returned.
     */
     public static String Mk_md5( String src, String salt ) {
         byte[] bsrc;                        // full src in bytes
@@ -24,7 +25,7 @@ public class M5hash {
         try {
             md = MessageDigest.getInstance( "MD5" );
         } catch( Exception e ) {
-            return null;
+            return "";
         }
 
         bsrc = (src + salt).getBytes();
