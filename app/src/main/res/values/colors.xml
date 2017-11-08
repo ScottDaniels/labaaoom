@@ -14,5 +14,7 @@
     <color name="button_pressed">#909090</color>
     <color name="button_go_colour">#003000</color>
     <color name="button_can_colour">#500000</color>
+    <color name="button_del_bg">#ff8f00</color>
+    <color name="button_del_fg">#000000</color>
     <color name="value">#00ff90</color>
 </resources>

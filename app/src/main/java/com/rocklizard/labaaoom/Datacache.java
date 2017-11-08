@@ -58,6 +58,34 @@ public class Datacache {
 	// ------------------ private things ---------------------------------------------------
 
 	/*
+		Given a map of <string,string> build an array of key:value strings. If
+		key is not nil, then it is placed as the first entry using the form
+		"key:<string>".
+	*/
+	private String[] sshash_to_array(  HashMap<String,String> map, String key ) {
+		Set<String> raw_keys;
+		String[] result;
+		String[] keys;
+		int i;					// insert index
+		int j;					// index into source
+
+		raw_keys = map.keySet();
+		i = key == null ? 0 : 1;
+		keys = raw_keys.toArray( new String[raw_keys.size()] );
+
+		result = new String[keys.length+i];
+		if( i > 0 ) {							// key given, add it in
+			result[0] = "key:" + key;
+		}
+
+		for( j = 0; j < keys.length; j++ ) {
+			result[i++] = keys[j] + ":" + map.get( keys[j] );
+		}
+
+		return result;
+	}
+
+	/*
 		Accepts a prefix, and a name and builds a file name that has all 
 		spaces replaced with underbars (_). Prefix should NOT contain a trailing
 		underbar.
@@ -204,6 +232,8 @@ public class Datacache {
 		used to create the flie name:  e.g.  name: Fred Flintstone  would be converted to
 		prefix_Fred_flintsone  as the filename.  Returns the  hash 'key' (student name
 		with blanks removed.
+
+		If prefix is empty, then it is ignored, and just the key is used (e.g. for password).
 	*/
 	private String stash_in_dc( String prefix, String[] data ){
 		FileOutputStream f;	// if we have ctx then this writes in a private space
@@ -228,7 +258,12 @@ public class Datacache {
 			return null;
 		}
 
-		fname = build_fname( prefix, tokens[1] );		// replace spaces with underbars and add prefix
+		if( ! prefix.equals( "" ) ) {
+			fname = build_fname( prefix, tokens[1] );        // replace spaces with underbars and add prefix
+		} else {
+			fname = tokens[1];
+		}
+
 		key = build_key( tokens[1] );
 
 		try {
@@ -468,7 +503,7 @@ public class Datacache {
 		'grade1' is all that is displayed on the selection screen for clarity. Gtype is either
 		ET_SENTENCE or ET_RANDOM.
 	*/
-	public Sentence_group read_group( String name, boolean all, String gtype ) {
+	private Sentence_group read_group( String name, boolean all, String gtype ) {
 		String[] arecs = null;		// records from the asset
 		String[] urecs;				// records from the user created list
 		String[] recs;				// concatinated lists
@@ -538,17 +573,38 @@ public class Datacache {
 	*/
 	public static Datacache Mk_datacache( Context ctx ) {
 		if( db == null ) {
-			db = new Datacache( ctx );			// private constructor
+			if( ctx != null ) {
+				db = new Datacache( ctx );			// private constructor
+			}
 		}
 
 		return db;
 	}
 
 	/*
-		Used to get the database (after creation) when contect isn't available.
+		Used to get the database (after creation) when context isn't available.
 	*/
 	public static Datacache GetDatacache( ) {
 		return db;
+	}
+
+	/*
+		Check to see if the 'element' exists in the dc and is not empty. An element is something like
+		the password file of which there is only one (unlike student and groups).
+	*/
+	public boolean HasElement( String ename ) {
+		File f;
+
+		if( ctx == null ) {
+			return false;
+		}
+
+		f = ctx.getFileStreamPath( ename );
+		if( f == null || ! f.exists() || f.length() <= 0 ) {
+			return false;
+		}
+
+    	return true;
 	}
 
 	// ----------------- generic delete --------------------------------------------------------
@@ -802,4 +858,111 @@ public class Datacache {
 
 		return sids;
 	}
+
+	// ------------------ password management things --------------------------------------------
+	/*
+		Read the passwd file from the datacache and bulid a hash with name as the key
+	*/
+	private HashMap<String,String>  read_instructors( ) {
+		HashMap<String,String>	instructors;
+		String[] ilist;				// list from the datacache
+		int i;
+		String[] tokens;
+
+		instructors = new HashMap<String,String>();
+
+		ilist = read_from_dc( "passwd" );
+		if( ilist == null || ilist.length < 1 ) {
+			System.out.printf( ">>> no passwd file, or mepty file\n" );
+			return instructors;
+		}
+
+		System.out.printf( ">>> %d entries in the passwd\n", ilist.length );
+		for( i = 1; i < ilist.length; i++ ) {			// don't put the key into the map
+			tokens = ilist[i].split( ":" );
+			instructors.put( tokens[0], tokens[1] );
+		}
+
+		return instructors;
+	}
+
+	/*
+		Smash the hash into an array and then write it out to the passwd file.
+	*/
+	private void write_instructors( HashMap<String,String> instructors ) {
+		String[] data;
+
+		data = sshash_to_array( instructors, "passwd" ); 			// create an array with passwd as the key
+		stash_in_dc(  "", data );
+	}
+
+	/*
+		Look up the name and add the name/md5 combo if NOT there. Return true if the name was
+		accepted and saved, false if not.
+	*/
+	public boolean AddInstructor( String name, String md5 ) {
+		boolean rval = false;
+		HashMap<String,String>	instructors;
+
+		instructors = read_instructors();
+		if( ! instructors.containsKey( name ) ) {			// not there, safe to add
+			instructors.put( name, md5 );					// not there, add and then save
+			write_instructors( instructors );
+
+			rval = true;
+		}
+
+		return rval;
+	}
+
+	/*
+		Delete an instructor from the passwd file.
+		Eventually this will delete the instructor only if their md5 matches, but for now we will
+		blindly delete.
+	*/
+	public boolean DelInstructor( String name, String md5 ) {
+		HashMap<String,String>	instructors;
+
+		instructors = read_instructors();
+		if( instructors.containsKey( name ) ) {			// if there, then delete and write
+			if(  instructors.get( name ).equals( md5 ) ) {
+				instructors.remove( name );
+			} else {
+				System.out.printf( ">>> ###WARN### deleting instructor got a mismatched md5\n" );
+				instructors.remove( name );				// future: remove when enforcing match
+				//return false;
+			}
+
+			if( instructors.size() <= 2 ) {
+				System.out.printf( ">>>>> password list is empty\n" );
+				instructors.remove( "dummy" );				// remove the two non-instructor entries
+				instructors.remove( "key" );
+			}
+
+			write_instructors( instructors );
+		}
+
+		return true;
+	}
+
+	/*
+		Return true if the hash passed in matches the instructor hash in the datacache password
+		element.
+	*/
+	public boolean ValidateInstructor( String name, String md5 ) {
+		HashMap<String,String>	instructors;
+
+		instructors = read_instructors();
+		if( instructors.containsKey( name ) ) {			// if there, check strings
+			if(  instructors.get( name ).equals( md5 ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
+
+
 }

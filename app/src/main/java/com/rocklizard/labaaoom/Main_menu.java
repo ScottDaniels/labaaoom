@@ -52,9 +52,13 @@ public class Main_menu extends Force_login_activity {
 		Fork_internal( target );
 	}
 
+
+
     /*
         Functions driven when a menu item is selected from the list
     */
+
+    // ---------- student related -----------------------------------
     public void Go_add_student( View v ) {
 		Class targetc;
 		Intent target;
@@ -82,6 +86,17 @@ public class Main_menu extends Force_login_activity {
 		Fork_internal( target );
     }
 
+    // --------- administration callbacks --------------------------
+    public void Go_add_instructor( View v ) {
+		Class targetc;
+		Intent target;
+
+		targetc = Add_creds.class;
+		target = new Intent( this, targetc );
+		Fork_internal( target );
+    }
+
+    // ----------- evaluation related -------------------------------
     public void Go_evaluate( View v ) {
 		drive_slist( "eval" );
     }

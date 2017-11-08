@@ -47,8 +47,13 @@
             android:name=".Modify_student"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".Run_eval"
+        <activity
+            android:name=".Run_eval"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".Add_creds"
+                  android:theme="@style/AppTheme.NoActionBar">
+        >
         </activity>
     </application>
 

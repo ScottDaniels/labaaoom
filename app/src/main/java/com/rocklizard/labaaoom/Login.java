@@ -50,18 +50,31 @@ public class Login extends AppCompatActivity {
     */
     public void Reattempt_login( View v ) {
         String  master_hash = "6901d625c28ea5fa1a88ad8e8aafe289";    // master, undeletable hash from default uid/pw combination
-        EditText pw_thing;        // password field thingy to pull entered text from
-        EditText un_thing;        // user name  field thingy to pull entered text from
-        String  result;             // hash result from password
-
-        //future:   grab an instance of the datacache and validate the user/password
+        EditText pw_thing;        			// password field thingy to pull entered text from
+        EditText un_thing;        			// user name  field thingy to pull entered text from
+        String  result;            			// hash result from password
+		Datacache dc;
 
         pw_thing = (EditText) findViewById(R.id.password);
         un_thing = (EditText) findViewById(R.id.user_name);
         result = Mk_md5(  un_thing.getText().toString(), pw_thing.getText().toString() );
-
         pw_thing.setText( "" );                         // safe to clear the pw field now
 
+		dc = Datacache.Mk_datacache( getApplicationContext() );
+		if( dc == null ) {                        // shouldn't happen but parinoia prevents a crash without messages
+			System.out.printf( ">>> ###ERROR## no datacache pointer\n" );
+			Toast.makeText( this, "###ERR### internal mishap: no datacache!", Toast.LENGTH_LONG ).show( );
+			return;
+		}
+
+		if( dc.HasElement( "passwd" ) ) {				// there is a passwd entry in the dc; suss out hash
+			if( dc.ValidateInstructor( un_thing.getText().toString(), result ) ) {
+				finish();
+			}
+			// return;			// future -- when we turn off the use of default creds
+		}
+
+		// future -- this will execute only if there is no user defined instructor in the password file.
         if( result.equals( master_hash ) ) {            // future:  check what they might have changed it to as well
 			finish();
         } else {
@@ -80,7 +93,6 @@ public class Login extends AppCompatActivity {
     */
 	@Override
 	public void onBackPressed() {
-		System.out.printf( "=============== on back pressed =================\n" );
 		Toast.makeText( this, "Enter valid user/password or press home button.", Toast.LENGTH_SHORT ).show( );
 	}
 }

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context="com.rocklizard.labaaoom.Add_creds"
+    tools:layout_editor_absoluteY="89dp"
+    tools:layout_editor_absoluteX="0dp">
+
+    <TextView
+        android:id="@+id/main_title"
+        android:textSize="40sp"
+        android:layout_width="215dp"
+        android:layout_height="52dp"
+        android:background="#000000"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:freezesText="false"
+        android:text="LaBaaooM!"
+        android:textColor="#ffd000"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/activity_title"
+        android:layout_width="408dp"
+        android:layout_height="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Add/Delete Instructor:"
+        android:textColor="@color/header_colour"
+        android:textSize="30sp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="84dp"
+        android:layout_marginLeft="86dp"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/username_tag"
+        android:layout_width="163dp"
+        android:layout_height="18dp"
+        android:text="Instructor Name:"
+        android:textColor="#d0d0d0"
+        android:layout_marginTop="78dp"
+        app:layout_constraintTop_toBottomOf="@+id/main_title"
+        android:layout_marginLeft="113dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:layout_editor_absoluteY="145dp"/>
+
+    <EditText
+        android:id="@+id/add_user_name"
+        android:layout_width="219dp"
+        android:layout_height="25dp"
+        android:background="#303030"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textColor="#ffffff"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/username_tag"
+        android:layout_marginLeft="113dp"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/passwd_tag1"
+        android:layout_width="99dp"
+        android:layout_height="19dp"
+        android:text="Password:"
+        android:textColor="#d0d0d0"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/add_user_name"
+        android:layout_marginLeft="113dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:layout_editor_absoluteY="225dp"/>
+
+    <EditText
+        android:id="@+id/add_passwd"
+        android:layout_width="219dp"
+        android:layout_height="25dp"
+        android:ems="10"
+        android:background="#303030"
+        android:inputType="textPassword"
+        android:textColor="#ffffff"
+        android:layout_marginTop="-7dp"
+        app:layout_constraintTop_toBottomOf="@+id/passwd_tag1"
+        android:layout_marginLeft="113dp"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <EditText
+        android:id="@+id/add_vpasswd"
+        android:layout_width="219dp"
+        android:layout_height="25dp"
+        android:background="#303030"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:textColor="#ffffff"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/passwd_tag2"
+        android:layout_marginLeft="113dp"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/passwd_tag2"
+        android:layout_width="162dp"
+        android:layout_height="19dp"
+        android:text="Verify Password:"
+        android:textColor="#d0d0d0"
+        android:layout_marginTop="17dp"
+        app:layout_constraintTop_toBottomOf="@+id/add_passwd"
+        android:layout_marginLeft="113dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:layout_editor_absoluteY="288dp"/>
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="145dp"
+        android:layout_height="51dp"
+        android:background="@color/button_go_colour"
+        android:onClick="Add_cb"
+        android:text="Add"
+        android:textColor="#ffffff"
+        android:layout_marginTop="93dp"
+        app:layout_constraintTop_toBottomOf="@+id/add_vpasswd"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <Button
+        android:id="@+id/del_button"
+        android:layout_width="145dp"
+        android:layout_height="51dp"
+        android:background="@color/button_del_bg"
+        android:onClick="Delete_cb"
+        android:text="Delete!"
+        android:textColor="@color/button_del_fg"
+        android:layout_marginTop="93dp"
+        app:layout_constraintTop_toBottomOf="@+id/add_vpasswd"
+        app:layout_constraintLeft_toRightOf="@+id/can_button"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintRight_toLeftOf="@+id/add_button"
+        android:layout_marginRight="8dp"
+        app:layout_constraintHorizontal_bias="0.506"/>
+
+    <Button
+        android:id="@+id/can_button"
+        android:layout_width="145dp"
+        android:layout_height="51dp"
+        android:background="@color/button_can_colour"
+        android:onClick="Cancel_cb"
+        android:text="Cancel"
+        android:textColor="#ffffff"
+        android:layout_marginTop="93dp"
+        app:layout_constraintTop_toBottomOf="@+id/add_vpasswd"
+        android:layout_marginLeft="55dp"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
