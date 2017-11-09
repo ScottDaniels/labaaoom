@@ -67,7 +67,7 @@ public class Login extends AppCompatActivity {
 			return;
 		}
 
-		if( dc.HasElement( "passwd" ) ) {				// user has defined at least one instructor id/passwd
+		if( dc.HasElement( "passwd" ) ) {													// user has defined at least one instructor id/passwd
 			if( dc.ValidateInstructor( un_thing.getText().toString(), result ) ) {			// ok to finish if what was entered is defined and matches
 				finish();
 				return;
@@ -79,7 +79,6 @@ public class Login extends AppCompatActivity {
 			}
 		}
 
-		// future -- this will execute only if there is no user defined instructor in the password file.
         if( result.equals( master_hash ) ) {            // future:  check what they might have changed it to as well
 			finish();
         } else {
