@@ -89,7 +89,7 @@
         android:layout_height="51dp"
         android:layout_marginLeft="228dp"
         android:layout_marginTop="23dp"
-        android:background="@color/button_go_colour"
+        android:background="@drawable/go_button"
         android:onClick="Reattempt_login"
         android:text="Move Ahead!"
         android:textColor="#ffffff"
