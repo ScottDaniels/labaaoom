@@ -18,6 +18,15 @@
         <item name="android:textColorSecondaryInverse">@color/colorPrimaryDark</item>
     </style>
 
+    <style name="PopUp" parent="@android:style/Theme.Dialog">
+        <item name="android:colorBackground">@color/popup_bg</item>
+        <item name="android:colorForeground">@color/popup_fg</item>
+        <item name="android:textColorPrimary">@color/title_colour</item>
+        <item name="android:textColorSecondary">@color/button_pressed</item>
+        <item name="android:textColorSecondaryInverse">@color/colorPrimaryDark</item>
+    </style>
+
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark"/>

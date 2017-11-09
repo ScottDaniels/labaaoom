@@ -16,5 +16,7 @@
     <color name="button_can_colour">#500000</color>
     <color name="button_del_bg">#ff8f00</color>
     <color name="button_del_fg">#000000</color>
+    <color name="popup_fg">#ffffff</color>
+    <color name="popup_bg">#202020</color>
     <color name="value">#00ff90</color>
 </resources>

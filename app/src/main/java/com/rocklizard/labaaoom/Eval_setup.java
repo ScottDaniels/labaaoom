@@ -262,7 +262,7 @@ public class Eval_setup extends Force_login_activity {
 
 		student_name = target.GetName();					// get name as we need to look up object in closure
 
-		notice = new AlertDialog.Builder( this ).create();
+		notice =new AlertDialog.Builder( this, R.style.PopUp ).create();
 		notice.setTitle( "Pending Evaluation Exists" );
 		notice.setMessage( "Name: " + student_name + "\n" + eval.PrettyPrint() );
 		notice.setCancelable( false );

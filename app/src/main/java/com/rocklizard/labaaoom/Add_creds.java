@@ -21,8 +21,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import static com.rocklizard.labaaoom.M5hash.Mk_md5;
+import static com.rocklizard.labaaoom.R.style.AppTheme;
 
-public class Add_creds extends AppCompatActivity {
+public class Add_creds extends Force_login_activity {
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
@@ -86,9 +87,7 @@ public class Add_creds extends AppCompatActivity {
 	private void delete_on_ok( final String instructor, final String md5 ) {
 		AlertDialog notice;
 
-		notice =new AlertDialog.Builder( this ).
-
-		create();
+		notice =new AlertDialog.Builder( this, R.style.PopUp ).create();
 			notice.setTitle( "Delete instructor: " + instructor );
 			notice.setMessage( "Press 'Delete!' to confirm." );
    			notice.setCancelable( false );
