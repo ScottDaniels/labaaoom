@@ -11,6 +11,9 @@
 
 package com.rocklizard.labaaoom;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -49,6 +52,11 @@ public class Add_creds extends AppCompatActivity {
 		vpasswd = vpasswd_thing.getText().toString();
 		name = name_thing.getText().toString();
 
+		if( name.equals( "" ) || passwd.equals( "" ) ) {
+			Toast.makeText( this, "Instructor and password must not be empty", Toast.LENGTH_LONG ).show( );
+			return;
+		}
+
 		passwd_thing.setText( "" );										// safe to clear
 		vpasswd_thing.setText( "" );
 
@@ -70,6 +78,40 @@ public class Add_creds extends AppCompatActivity {
 		} else {
 			Toast.makeText( this, "Passwords do not match", Toast.LENGTH_LONG ).show( );
 		}
+	}
+
+	/*
+		Toss up a specialised dialogue box and if the response is 'ok', then delete the instructor.
+	*/
+	private void delete_on_ok( final String instructor, final String md5 ) {
+		AlertDialog notice;
+
+		notice =new AlertDialog.Builder( this ).
+
+		create();
+			notice.setTitle( "Delete instructor: " + instructor );
+			notice.setMessage( "Press 'Delete!' to confirm." );
+   			notice.setCancelable( false );
+			notice.setButton( Dialog.BUTTON_POSITIVE, "Delete!", new DialogInterface.OnClickListener() {
+					public void onClick (DialogInterface dialog,int which){
+						int i;
+						Datacache dc;
+
+						dc = Datacache.GetDatacache();
+						dc.DelInstructor( instructor, md5 );
+
+						finish( );
+					}
+				}
+			);
+
+			notice.setButton( Dialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+					public void onClick ( DialogInterface dialog, int which){
+					}
+				}
+			);
+
+			notice.show();
 	}
 
 	/*
@@ -95,19 +137,15 @@ public class Add_creds extends AppCompatActivity {
 
 		dc = Datacache.GetDatacache();
 		if( dc != null ) {
-			// future -- generate pop-up to confirm
 			result = Mk_md5(  name_thing.getText().toString(), passwd );
-			if( dc.DelInstructor( name, result ) ) {            			// delete if password matches what was there
-				Toast.makeText( this, name + " deleted", Toast.LENGTH_SHORT ).show( );
+			if( dc.ValidateInstructor( name_thing.getText().toString(), result ) ) {		// if password was right
+				delete_on_ok( name_thing.getText().toString(), result );					// confirm with pop-up then delete
 			} else {
 				Toast.makeText( this, "Badd user or password: not deleted.", Toast.LENGTH_LONG ).show( );
-				return;
 			}
 		} else {
 			Toast.makeText( this, "Internal error, no datacache", Toast.LENGTH_LONG ).show( );
 		}
-
-		finish();
 	}
 
 	/*

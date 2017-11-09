@@ -53,6 +53,7 @@ public class Login extends AppCompatActivity {
         EditText un_thing;        			// user name  field thingy to pull entered text from
         String  result;            			// hash result from password
 		Datacache dc;
+		Toast t;
 
         pw_thing = (EditText) findViewById(R.id.password);
         un_thing = (EditText) findViewById(R.id.user_name);
@@ -69,16 +70,19 @@ public class Login extends AppCompatActivity {
 		if( dc.HasElement( "passwd" ) ) {				// user has defined at least one instructor id/passwd
 			if( dc.ValidateInstructor( un_thing.getText().toString(), result ) ) {			// ok to finish if what was entered is defined and matches
 				finish();
+				return;
+			} else {
+				t = Toast.makeText( this, "Please use valid credentials.", Toast.LENGTH_LONG );
+				t.setGravity( Gravity.TOP | Gravity.START, 250, 100 );
+				t.show( );
+				return;			// must return here to prevent the system default creds being accepted when a password element exists
 			}
-			// return;			// must return here to prevent the system default creds being accepted when a password element exists
 		}
 
 		// future -- this will execute only if there is no user defined instructor in the password file.
         if( result.equals( master_hash ) ) {            // future:  check what they might have changed it to as well
 			finish();
         } else {
-            Toast t;
-
             t = Toast.makeText(this, "Invalid credentials entered", Toast.LENGTH_LONG);
             t.setGravity( Gravity.TOP | Gravity.START, 250, 100);
             t.show();

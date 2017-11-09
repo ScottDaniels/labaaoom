@@ -79,7 +79,9 @@ public class Datacache {
 		}
 
 		for( j = 0; j < keys.length; j++ ) {
-			result[i++] = keys[j] + ":" + map.get( keys[j] );
+			if( ! keys[j].equals( "" ) ) {									// don't save an empty key
+				result[ i++ ] = keys[ j ] + ":" + map.get( keys[ j ] );
+			}
 		}
 
 		return result;
@@ -943,7 +945,7 @@ public class Datacache {
 		HashMap<String,String>	instructors;
 
 		instructors = read_instructors();
-		if( instructors.containsKey( name ) ) {			// if there, then delete and write
+		if( instructors.containsKey( name ) ) {						// if there, then delete and write
 			if(  instructors.get( name ).equals( md5 ) ) {
 				instructors.remove( name );
 			} else {
@@ -951,7 +953,7 @@ public class Datacache {
 				return false;
 			}
 
-			if( instructors.size() < 1 ) {				// last entry, delete the file
+			if( instructors.size() < 1 ) {							// last entry, delete the file
 				System.err.printf( ">>> ###WARN### last instructor deleted, passwd element to be deleted\n" );
 				DeleteElement( "passwd" );
 			} else {
