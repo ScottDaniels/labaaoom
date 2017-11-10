@@ -134,7 +134,8 @@ public class Multi_select_list extends Force_login_activity {
 				list_thing.addView( text_thing );           // stuff it into the list
 			}
 		} else {
-			Toast.makeText( this, "There is nothing to display.", Toast.LENGTH_LONG ).show( );
+			//Toast.makeText( this, "There is nothing to display.", Toast.LENGTH_LONG ).show( );
+			Tools.PopOk( this, "There is nothing to display." );
 		}
 	}
 

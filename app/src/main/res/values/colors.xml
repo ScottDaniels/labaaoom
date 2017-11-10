@@ -18,5 +18,7 @@
     <color name="button_del_fg">#000000</color>
     <color name="popup_fg">#ffffff</color>
     <color name="popup_bg">#202020</color>
+    <color name="ok">#008000</color>
+    <color name="error">#a00000</color>
     <color name="value">#00ff90</color>
 </resources>

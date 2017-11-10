@@ -58,7 +58,8 @@ public class Student_list extends Force_login_activity {
                     break;
 
                 default:
-                    Toast.makeText( getApplicationContext(), "Internal mishap in selecct list; unknown target!", Toast.LENGTH_LONG ).show();
+                    //Toast.makeText( getApplicationContext(), "Internal mishap in selecct list; unknown target!", Toast.LENGTH_LONG ).show();
+					Tools.PopError( getApplicationContext(), "Internal mishap in selecct list; unknown target!" );
                     finish();
             }
 
@@ -131,7 +132,8 @@ public class Student_list extends Force_login_activity {
                 list_thing.addView( text_thing );           // stuff it into the list
             }
         } else {
-            Toast.makeText(this, "There are no students to display.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "There are no students to display.", Toast.LENGTH_LONG).show();
+			Tools.PopOk( this, "There are no students to display." );
         }
     }
 }

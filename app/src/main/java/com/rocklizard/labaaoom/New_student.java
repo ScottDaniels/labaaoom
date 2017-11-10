@@ -42,13 +42,15 @@ public class New_student extends Force_login_activity {
 		sect = findViewById( R.id.section_id );
 
 		if( name.getText().toString().equals( "" ) || sect.getText().toString().equals( "" ) ) {
-			Toast.makeText(this, "Invalid name or section", Toast.LENGTH_LONG).show();
+			//Toast.makeText(this, "Invalid name or section", Toast.LENGTH_LONG).show();
+			Tools.PopError( this, "Invalid name or section" );
 			return;
 		}
 
 		dc = Datacache.GetDatacache( );
 		if( dc == null ) {
-			Toast.makeText(this, "Internal mishap: bad datacache", Toast.LENGTH_LONG).show();
+			//Toast.makeText(this, "Internal mishap: bad datacache", Toast.LENGTH_LONG).show();
+			Tools.PopError( this, "Internal mishap: bad datacache" );
 			return;
 		}
 
@@ -58,14 +60,17 @@ public class New_student extends Force_login_activity {
 
 			st = new Student( name.getText().toString(), sect.getText().toString() );	// mk and add to dc
 			if( dc.DepositStudent( st ) ) {
-				Toast.makeText(this, "student added.", Toast.LENGTH_LONG).show();
+				//Toast.makeText(this, "student added.", Toast.LENGTH_LONG).show();
+				Tools.PopOk( this, "student added." );
 			} else {
-				Toast.makeText(this, "Internal mishap: student add failed.", Toast.LENGTH_LONG).show();
+				//Toast.makeText(this, "Internal mishap: student add failed.", Toast.LENGTH_LONG).show();
+				Tools.PopError( this, "Internal mishap: student add failed." );
 			}
 
 			finish();
 		} else {
-			Toast.makeText(this, "Not added: sudent already exists.", Toast.LENGTH_LONG).show();
+			//Toast.makeText(this, "Not added: sudent already exists.", Toast.LENGTH_LONG).show();
+			Tools.PopError( this, "Not added: sudent already exists." );
 		}
 	}
 

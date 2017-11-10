@@ -87,7 +87,8 @@ public class Run_eval extends AppCompatActivity {
 		if( student == null ) {
 			System.out.printf( ">>> internal mishap run eval: student was null\n" );
 			finish();
-			Toast.makeText( this, "Internal mishap: unable to find student in datacache.", Toast.LENGTH_SHORT ).show( );
+			//Toast.makeText( this, "Internal mishap: unable to find student in datacache.", Toast.LENGTH_SHORT ).show( );
+			Tools.PopError( this, "Internal mishap: unable to find student in datacache." );
 			return;
 		}
 

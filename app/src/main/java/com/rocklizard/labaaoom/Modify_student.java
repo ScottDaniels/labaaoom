@@ -58,7 +58,8 @@ public class Modify_student extends Force_login_activity {
 		s = dc.ExtractStudent( target_name );
 
 		if( s == null ) {            // shouldn't happen, but databases suck, so it might
-			Toast.makeText( this, "Internal mishap: student not in data cache: " + target_name, Toast.LENGTH_LONG ).show( );
+			//Toast.makeText( this, "Internal mishap: student not in data cache: " + target_name, Toast.LENGTH_LONG ).show( );
+			Tools.PopError( this, "Internal mishap: student not in data cache: " + target_name );
 			finish( );
 		}
 

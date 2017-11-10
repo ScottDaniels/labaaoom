@@ -54,7 +54,8 @@ public class Add_creds extends Force_login_activity {
 		name = name_thing.getText().toString();
 
 		if( name.equals( "" ) || passwd.equals( "" ) ) {
-			Toast.makeText( this, "Instructor and password must not be empty", Toast.LENGTH_LONG ).show( );
+			//Toast.makeText( this, "Instructor and password must not be empty", Toast.LENGTH_LONG ).show( );
+			Tools.PopError( this, "Instructor and password must not be empty" );
 			return;
 		}
 
@@ -67,17 +68,21 @@ public class Add_creds extends Force_login_activity {
 			dc = Datacache.GetDatacache();
 			if( dc != null ) {
 				if( dc.AddInstructor( name, result ) ) {            // add if not there
-					Toast.makeText( this, name + " added", Toast.LENGTH_SHORT ).show( );
+					//Toast.makeText( this, name + " added", Toast.LENGTH_SHORT ).show( );
+					Tools.PopOk( this, name + " added" );
 				} else {
-					Toast.makeText( this, "User already defined; delete first.", Toast.LENGTH_LONG ).show( );
+					//Toast.makeText( this, "User already defined; delete first.", Toast.LENGTH_LONG ).show( );
+					Tools.PopError( this, "User already defined; delete first." );
 				}
 			} else {
-				Toast.makeText( this, "Internal error, no datacache", Toast.LENGTH_LONG ).show( );
+				//Toast.makeText( this, "Internal error, no datacache", Toast.LENGTH_LONG ).show( );
+				Tools.PopError( this, "Internal error, no datacache" );
 			}
 
 			finish();
 		} else {
-			Toast.makeText( this, "Passwords do not match", Toast.LENGTH_LONG ).show( );
+			//Toast.makeText( this, "Passwords do not match", Toast.LENGTH_LONG ).show( );
+			Tools.PopError( this, "Passwords do not match" );
 		}
 	}
 
@@ -140,10 +145,12 @@ public class Add_creds extends Force_login_activity {
 			if( dc.ValidateInstructor( name_thing.getText().toString(), result ) ) {		// if password was right
 				delete_on_ok( name_thing.getText().toString(), result );					// confirm with pop-up then delete
 			} else {
-				Toast.makeText( this, "Badd user or password: not deleted.", Toast.LENGTH_LONG ).show( );
+				//Toast.makeText( this, "Bad user or password: not deleted.", Toast.LENGTH_LONG ).show( );
+				Tools.PopError( this, "Bad user or password: not deleted." );
 			}
 		} else {
-			Toast.makeText( this, "Internal error, no datacache", Toast.LENGTH_LONG ).show( );
+			//Toast.makeText( this, "Internal error, no datacache", Toast.LENGTH_LONG ).show( );
+			Tools.PopError( this, "Internal error, no datacache" );
 		}
 	}
 
