@@ -29,13 +29,10 @@ public class Tools {
 		Toast t;
 
 		t = Toast.makeText( caller, "   " + msg + "    ", Toast.LENGTH_LONG );
-		//t.setGravity( Gravity.TOP | Gravity.START, 250, 100 );
 		view = t.getView( );
 		text = (TextView) view.findViewById( android.R.id.message );
 		if( text != null ) {
 			text.setTextSize( 18 );
-			//text.setBackgroundColor( bg );
-			//text.setShadowLayer( 0, 0, 0, 0 );
 			if( view != null ) {
 				if( good_msg ) {
 					view.setBackgroundResource( R.drawable.popup_good );
