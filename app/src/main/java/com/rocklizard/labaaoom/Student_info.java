@@ -50,6 +50,7 @@ public class Student_info extends Force_login_activity {
 		int student_save = 0;
 		int student_rlast = 0;		// last scores
 		int student_slast = 0;
+		int	student_max = 0;		// student's max score for min top on graph
 		Averages rave;				// average information  (overall and section)
 		Averages save;
 		int	raval;					// random and sentence average -- actual values
@@ -88,10 +89,10 @@ public class Student_info extends Force_login_activity {
 		if( last_e != null ) {
 			mmai = s.GetMMAI( Student.SENTENCES );
 			student_save = (int) mmai[2];										// save for graphing marker
+			student_max = (int) mmai[1];
 
 			ave_score.setText(  String.format( "%.0f wpm",  mmai[2] ) );
 			last_ev_score.setText(  String.format( "%.0f wpm", last_e.GetWpm() ) );
-			//ave_score.setTextColor(  Color.parseColor( "#ffff00" ) );
 		} else {
 			ave_score.setText(  "-- wpm" );
 			last_ev_score.setText(  "-- wpm" );
@@ -105,10 +106,12 @@ public class Student_info extends Force_login_activity {
 		if( last_e != null ) {
 			mmai = s.GetMMAI( Student.RANDOM );									// get the random stats
 			student_rave = (int) mmai[2];										// save for graphing marker
+			if( student_max < mmai[1] ) {
+				student_max = (int) mmai[1];
+			}
 
 			ave_score.setText(  String.format( "%.0f wpm",  mmai[2] ) );
 			last_ev_score.setText(  String.format( "%.0f wpm", last_e.GetWpm() ) );
-			//ave_score.setTextColor(  Color.parseColor( "#ffff00" ) );
 		} else {
 			ave_score.setText(  "-- wpm" );
 			last_ev_score.setText(  "-- wpm" );
@@ -124,13 +127,12 @@ public class Student_info extends Force_login_activity {
 		raval = (int) rave.GetAve( false );				// false == get just section averages
 		saval = (int) save.GetAve( false );
 
-		min_top = raval > 100 ? (raval > saval ? raval : saval) : (saval > 100 ? saval : 100);
-		min_top = student_save > min_top ? (student_rave > student_save ? student_rave : student_save) : (student_rave > min_top ? student_rave : min_top );
+		min_top = raval > 100 ? (raval > saval ? raval : saval) : (saval > 100 ? saval : 100);		// set min top based on class/section averages
+		min_top = student_max > min_top ? student_max : min_top;			// if sutdent max is over the average, this is the min top for the graph
 		if( min_top % 10 != 0 ) {
-			min_top += 10 - (min_top % 10);                // rand to even mult of 10
+			min_top += 10 - (min_top % 10);                // round to even mult of 10
 		}
 
-		System.out.printf( ">>>  averages: rval=%d sval=%d  stud-save=%d stu_rave=%d mint=%d\n", raval, saval, student_save, student_rave, min_top );
 		draw_graph( R.id.student_graph_left, s.GetData( Student.SENTENCES ), saval, student_save, min_top );
 		draw_graph( R.id.student_graph_right, s.GetData( Student.RANDOM ), raval, student_rave, min_top );
 	}
