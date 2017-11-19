@@ -8,24 +8,6 @@
     android:layout_height="match_parent"
     tools:context="com.rocklizard.labaaoom.Eval_setup">
 
-    <ScrollView
-        android:layout_width="235dp"
-        android:layout_height="158dp"
-        app:layout_constraintLeft_toRightOf="@+id/rand_scroller"
-        android:background="@drawable/border"
-        android:layout_marginLeft="59dp"
-        android:id="@+id/sent_scroller"
-        android:layout_marginTop="-1dp"
-        app:layout_constraintTop_toBottomOf="@+id/sent_list_tag">
-
-        <LinearLayout
-            android:id="@+id/sent_list_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#000000"
-            android:orientation="vertical"/>
-    </ScrollView>
-
     <TextView
         android:id="@+id/app_title"
         android:layout_width="153dp"
@@ -70,9 +52,9 @@
         android:layout_height="21dp"
         android:text="Sentence Groups:"
         android:textColor="@color/tag_colour"
-        android:layout_marginLeft="320dp"
+        android:layout_marginLeft="37dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="58dp"
+        android:layout_marginTop="65dp"
         app:layout_constraintTop_toBottomOf="@+id/background_rg"
         />
 
@@ -82,11 +64,11 @@
         android:layout_height="20dp"
         android:text="Random Groups:"
         android:textColor="@color/tag_colour"
-        android:layout_marginLeft="26dp"
+        android:layout_marginLeft="306dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="57dp"
+        android:layout_marginTop="64dp"
         app:layout_constraintTop_toBottomOf="@+id/style_rg"
-        tools:layout_editor_absoluteY="341dp"/>
+        />
 
     <TextView
         android:id="@+id/student_name"
@@ -150,7 +132,7 @@
             android:checked="true"
             android:text="Small"
             android:onClick="Adjust_size"
-            app:buttonTint="@color/value"
+            android:buttonTint="@color/value"
             android:textColor="@color/value"/>
 
         <RadioButton
@@ -161,7 +143,7 @@
             android:text="Medium"
             android:onClick="Adjust_size"
             android:textColor="@color/value"
-            app:buttonTint="@color/value"
+            android:buttonTint="@color/value"
             />
 
         <RadioButton
@@ -172,7 +154,7 @@
             android:text="Large"
             android:onClick="Adjust_size"
             android:textColor="@color/value"
-            app:buttonTint="@color/value"
+            android:buttonTint="@color/value"
             />
 
     </RadioGroup>
@@ -194,7 +176,7 @@
             android:text="Invert"
             android:onClick="Adjust_bg"
             android:textColor="@color/value"
-            app:buttonTint="@color/value"/>
+            android:buttonTint="@color/value"/>
 
         <RadioButton
             android:id="@+id/bg_normal_rb"
@@ -205,7 +187,7 @@
             android:onClick="Adjust_bg"
             android:textColor="@color/value"
             android:visibility="visible"
-            app:buttonTint="@color/value"/>
+            android:buttonTint="@color/value"/>
 
     </RadioGroup>
 
@@ -214,12 +196,12 @@
         android:layout_width="234dp"
         android:layout_height="46dp"
         android:text="Start Random"
-        android:layout_marginLeft="26dp"
+        android:layout_marginLeft="306dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:textColor="@color/edit_text_fg"
         android:background="@drawable/go_button"
         android:onClick="Start_rand_eval"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintTop_toBottomOf="@+id/rand_scroller"/>
 
     <Button
@@ -227,13 +209,13 @@
         android:layout_width="236dp"
         android:layout_height="49dp"
         android:text="Start Sentence"
-        app:layout_constraintLeft_toRightOf="@+id/go_random_button"
-        android:layout_marginLeft="59dp"
         android:textColor="@color/edit_text_fg"
         android:background="@drawable/go_button"
         android:onClick="Start_sent_eval"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/sent_scroller"/>
+        android:layout_marginTop="-5dp"
+        app:layout_constraintTop_toBottomOf="@+id/sent_scroller"
+        android:layout_marginLeft="37dp"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <RadioGroup
         android:id="@+id/style_rg"
@@ -252,7 +234,7 @@
             android:text="Sans"
             android:onClick="Adjust_style"
             android:textColor="@color/value"
-            app:buttonTint="@color/value"/>
+            android:buttonTint="@color/value"/>
 
         <RadioButton
             android:id="@+id/font_serif_rb"
@@ -263,7 +245,7 @@
             android:onClick="Adjust_style"
             android:textColor="@color/value"
             android:visibility="visible"
-            app:buttonTint="@color/value"/>
+            android:buttonTint="@color/value"/>
 
     </RadioGroup>
 
@@ -271,10 +253,10 @@
         android:id="@+id/rand_scroller"
         android:layout_width="235dp"
         android:layout_height="158dp"
-        android:layout_marginRight="340dp"
+        android:layout_marginRight="60dp"
         android:background="@drawable/border"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="-9dp"
         app:layout_constraintTop_toBottomOf="@+id/rand_list_tag">
 
         <LinearLayout
@@ -283,6 +265,24 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"/>
 
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/sent_scroller"
+        android:layout_width="235dp"
+        android:layout_height="158dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/border"
+        app:layout_constraintTop_toBottomOf="@+id/sent_list_tag"
+        android:layout_marginLeft="37dp"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <LinearLayout
+            android:id="@+id/sent_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#000000"
+            android:orientation="vertical"/>
     </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
