@@ -48,6 +48,8 @@ public class Student_info extends Force_login_activity {
 		Settings settings;
 		int	student_rave = 0;		// student's random and sentence average score
 		int student_save = 0;
+		int student_rlast = 0;		// last scores
+		int student_slast = 0;
 		Averages rave;				// average information  (overall and section)
 		Averages save;
 		int	raval;					// random and sentence average -- actual values
@@ -67,30 +69,51 @@ public class Student_info extends Force_login_activity {
 		student.setText( target_name );
 
 		s = dc.ExtractStudent( target_name );
-		last_e = s.GetLastEval();
 
 		section = (TextView) findViewById( R.id.section_name );
 		section.setText( s.GetSection() );
 
-		last_ev_score = (TextView) findViewById( R.id.last_eval_score );
-		ave_score = (TextView) findViewById( R.id.ave_score );
 		last_ev_date = (TextView) findViewById( R.id.last_eval_date );
+		last_e = s.GetLastEval( ) ; 											// get the most recent eval to pull date from
+		if( last_e != null ) {
+			last_ev_date.setText( last_e.GetDate() );
+		} else {
+			last_ev_date.setText( "None" );
+		}
+
+		last_e = s.GetLastEval( Evaluation.ET_SENTENCE );						// fill in sentence things
+		last_ev_score = (TextView) findViewById( R.id.last_seval_score );		// dig screen things to populate
+		ave_score = (TextView) findViewById( R.id.ave_sscore );
 
 		if( last_e != null ) {
 			mmai = s.GetMMAI( Student.SENTENCES );
-			student_save = (int) mmai[2];
-			last_ev_date.setText( last_e.GetDate() );
+			student_save = (int) mmai[2];										// save for graphing marker
+
 			ave_score.setText(  String.format( "%.0f wpm",  mmai[2] ) );
 			last_ev_score.setText(  String.format( "%.0f wpm", last_e.GetWpm() ) );
-			ave_score.setTextColor(  Color.parseColor( "#ffff00" ) );
-
-			mmai = s.GetMMAI( Student.RANDOM );			// get stats for random tests
-			student_rave = (int) mmai[2];
+			//ave_score.setTextColor(  Color.parseColor( "#ffff00" ) );
 		} else {
-			last_ev_date.setText( "None" );
-			ave_score.setText(  "0 wpm" );
-			last_ev_score.setText(  "0 wpm" );
+			ave_score.setText(  "-- wpm" );
+			last_ev_score.setText(  "-- wpm" );
 		}
+
+		last_e = s.GetLastEval( Evaluation.ET_RANDOM );						// fill in random things
+		last_ev_score = (TextView) findViewById( R.id.last_weval_score );		// dig screen things to populate
+		ave_score = (TextView) findViewById( R.id.ave_wscore );
+		last_ev_date = (TextView) findViewById( R.id.last_eval_date );
+
+		if( last_e != null ) {
+			mmai = s.GetMMAI( Student.RANDOM );									// get the random stats
+			student_rave = (int) mmai[2];										// save for graphing marker
+
+			ave_score.setText(  String.format( "%.0f wpm",  mmai[2] ) );
+			last_ev_score.setText(  String.format( "%.0f wpm", last_e.GetWpm() ) );
+			//ave_score.setTextColor(  Color.parseColor( "#ffff00" ) );
+		} else {
+			ave_score.setText(  "-- wpm" );
+			last_ev_score.setText(  "-- wpm" );
+		}
+
 
 		settings = s.GetSettings( );			// get settings so we can get last eval group used
 		rgroup = settings.GetRandGroup( );

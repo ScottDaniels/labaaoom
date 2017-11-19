@@ -9,8 +9,8 @@
 				File prefixes are:
 					student_
 					ave_
-					sgroup_
-					rgroup_
+					sgrp_
+					rgrp_
 
 	Date:		17 September 2017
 	Author:		E. Scott Daniels edaniels7@gatech for CS6460 Fall 2017
@@ -213,7 +213,7 @@ public class Datacache {
 				System.err.printf( ">>>>> load maps, group %s\n", agroups[i] );
 				tokens = agroups[i].split( "_" );
 				switch( tokens[0] ) {
-					case "sgroup":
+					case "sgroup":								// assets are sgroup_ and wgroup_ named (different than dc prefixes)
 						sgroups_map.put( tokens[1], true );
 						break;
 
@@ -361,7 +361,7 @@ public class Datacache {
 	}
 
 	/*
-		Read an unlimited amount (well within reason) and return the new line separated
+		Read an unlimited amount (well within reason) and return the newline separated
 		records as an array of strings.
 	*/
 	private String[] big_read_from_dc( String fname ) {
@@ -466,15 +466,14 @@ public class Datacache {
 		try {
 			f =	 ctx.getAssets().open( type + "/" + fname  );
 		} catch(  IOException e ) {
-			System.out.printf( ">>>> failed to read from asset: %s\n", type + "/" + fname );
-			//e.printStackTrace();
+			System.out.printf( ">>>> failed to read from asset: %s: %s\n", type + "/" + fname, e.toString() );
 			return null;
 		}
 
 		try {
 			if( (rlen = f.read( rbuf )) < 0 ) {
 				f.close();
-				System.out.printf( ">>>> read from dc fails for %s\n", type + "/" + fname );
+				System.out.printf( ">>>> read from dc fails for asset %s\n", type + "/" + fname );
 				return null;
 			}
 
@@ -504,6 +503,10 @@ public class Datacache {
 		two is the name prefix so that we can have random_grade1 and sent_grade1 such that
 		'grade1' is all that is displayed on the selection screen for clarity. Gtype is either
 		ET_SENTENCE or ET_RANDOM.
+
+		If 'all' is set to true, then both the assets and the sentence group that is in the
+		datacache (user defined) are read.  When false, only the user defined (datacache)
+		sentences are read.
 	*/
 	private Sentence_group read_group( String name, boolean all, String gtype ) {
 		String[] arecs = null;		// records from the asset
@@ -512,7 +515,6 @@ public class Datacache {
 		int rlen = 0;
 		Sentence_group sg;
 		String prefix;
-
 
 		switch( gtype ) {
 			case Evaluation.ET_SENTENCE:
@@ -630,7 +632,8 @@ public class Datacache {
 	// ----------------- generic delete --------------------------------------------------------
 
 	/*
-		Generic delete of a specific kind of something.
+		Generic delete of something (name) of type kind from the datacache.
+		Kind is Datacache.STUDENT or similar.
 	*/
 	public void Delete( String name, int kind ) {
 		String key;					// must convert name into a hash key (no spaces)

@@ -252,6 +252,30 @@ public class Student {
 	}
 
 	/*
+		Return the last eval of a specific type and return it or nil if no evals of that type  exist.
+		Etype is one of the Evaluation.ET_ constants.
+	*/
+	public Evaluation GetLastEval( String etype ) {
+		Evaluation ev = null;		// last evaluation for return
+
+		switch( etype ) {
+			case Evaluation.ET_SENTENCE:
+				if( sentence_evals != null ){
+					return sentence_evals.GetLast();
+				}
+				break;
+
+			case Evaluation.ET_RANDOM:
+				if( rand_evals != null ) {
+					return rand_evals.GetLast();
+				}
+				break;
+		}
+
+		return null;
+	}
+
+	/*
 		Return the stuent name.
 	*/
 	public String GetName() {
