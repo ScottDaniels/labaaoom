@@ -1,8 +1,11 @@
-package com.rocklizard.labaaoom; /**
- * Created by scooter on 9/17/17.
- */
+/*
+	Mnemonic:	Student_test.java
+	Abstract:	This class provides the unit test code for the student class.
 
-//package com.rocklizard.labaaoom;
+	Author:		E. Scott Daniels   edaniels7@gatech.edu for CS6460
+	Date:		17 September 2017
+*/
+package com.rocklizard.labaaoom; 
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
