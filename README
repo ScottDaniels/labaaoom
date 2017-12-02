@@ -1,0 +1,11 @@
+
+LaBaaooM is an oral reading fluency assessment tool designed for 7" Android tablets.
+
+This began as a Master's semester project at Georgia Institute of Technology (CS6460)
+in the fall of 2017. 
+
+The repo should contain all of the necessary code and surrounding Android Studio bits
+to build and extend the application.  The project was a learning experience both in
+terms of the subject matter (reading fluency) and in the development of an Android
+application.  There are lots of things that could be done differently/better from 
+an Android point of view. 
