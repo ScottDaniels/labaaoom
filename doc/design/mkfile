@@ -1,0 +1,13 @@
+
+ALL = figures labaaoom_design.pdf
+
+< ../master.mk
+
+local_clean = *.eps
+
+fig_src =  activity1 class1 screen_login screen_newstudent screen_hist screen_eval_start
+
+figures:V: ${fig_src:%=%.eps}
+
+
+labaaoom_design.pdf:: labaaoom_design.ps  figures 

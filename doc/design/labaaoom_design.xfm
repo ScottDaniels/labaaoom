@@ -1,0 +1,473 @@
+
+.dv doc_title1 LaBaaooM Design
+.gv Date
+.dv revision &_date
+
+.dv format_2col 1
+.dv col_width 3
+.dv oetarget col
+
+.dv et educational technology
+.dv Et Educational technology
+.dv ET Educational Technology
+
+.dv cow_path ../cow.eps
+.im ../setup.im
+.oe page  .rh LaBaaooM Design -- &_date
+
+.** .dh 1 u=no
+.sp
+.h1 Overview
+.** .dh 1 u=yes
+This document contains the basic, fairly high level, design for the LaBaaooM reading assessment prototype. 
+It also attempts to capture some of the reasoning behind a few aspects such as security concerns.
+We cover the application activity relationships, screen mock-ups, important data structures, APIs ,and 
+finally insert our feelings with respect to the code itself. 
+The intended audience is any software designer who wishes to extend the LaBaaooM code, or any person 
+with a good understanding of Android &trademark applications who wishes to understand the internals
+of the application.
+
+.sp .5
+This document also serves to introduce the LaBaaooM logo &note (in the top banner). 
+.cn start atbot Times-roman 8p .5i
+The cow logo is public domain clip art from
+http://www.clipartlord.com/ .sm category/ .sm animals- .sm clip- .sm art/ .sm large- .sm mammals- .sm clip- .sm art/ .sm cattle- .sm clip- .sm art/ .sm cow- .sm clip-art/
+.cn end
+This logo will be used as the application icon for starting the application on the device, and will be
+visible on the login page as a visual verification to the user that they are indeed on the correct login page.
+
+.h1 Activity Relationships
+Activities in LaBaaooM are fairly straight forward and will be illustrated in the following sections in 
+a fairly high level fashion. 
+The purpose of these illustrations is to provide a &ital( story board ) walk through of the application 
+which will be useful to a developer who wishes to extend the prototype. 
+
+.sp 
+.if format_2col
+	.dv act1_x 0i
+.ei
+	.dv act1_x .75ii
+.fi
+.ep activity1.eps x=&act1_x l=2i close proportional
+&figure( Relationships between the applications activities. )
+.sp
+
+The arrows indicate a &ital( forward ) progression of flow from one activity to the next as 
+controlled by the state of the active activity.
+For instance, progression to the main menu activity is allowed only when the log in activity has
+verified the user is valid.
+The reverse flow, caused when the user presses the &ital( back ) button, is implied in these diagrams
+to be the return to the activity that invoked it (a reverse of the forward arrow).
+
+.h2 Security Considerations
+The information that is maintained for each student, both evaluation scores, and settings which 
+might indicate special needs of a student that are not public knowledge, must be protected
+from unauthorised access.
+To do this, when the application is started the first activity is a log in page where the user 
+must enter a correct user name and password before the application will allow any of the following 
+pages to be displayed. 
+This is fine, but there are two additional security concerns which must be addressed:
+.sp .5
+&smindent
+.bd .25i a=1 f=%d)
+	.di : The device will be in direct control of the student during the evaluation process
+	.di : The Android application environment provides for application pausing and restart
+	through untrappable events such as the home button.
+.ed
+&usmindent
+.sp
+
+To address the first concern, when an evaluation completes, the login page will be shown rather than 
+returning to the evaluation setup activity. 
+This prevents the student from accidently navigating and seeing information that they are not authorised to.  
+The second concern is more difficult to address. 
+It is hoped that an active activity will be able to determine why it is being paused. 
+If this can be done, then it will be possible for the activity to force the login activity to 
+execute when the application is resumed after being 'hidden' from view. 
+It also will mean that the login activity needs to be aware of this: when being driven as the initial
+activity of the application control must be &ital( pushed forward ) into the main menu, and if being 
+driven at any other point in time, it must 'return' control to the caller upon success.
+.sp .5 
+
+The following scenario illustrates the need to handle the second case:
+.sp .5
+&smindent
+.bd .25i a=1 f=%d)
+	.di : The LaBaaooM  application is active (past the login activity)
+	.di : The &ital( Home ) button is used to return to the device menu of applications
+	.di : Another application icon is pressed, that application executes
+	.di : The &ital( Home ) button is used to return to the device menu
+	.di : The LaBaaooM icon is pressed
+.ed
+&usmindent
+.sp
+
+When the LaBaaooM icon is pressed the operating system will return control to the running activity, not attempt
+to start the application anew. 
+If the device is not being used by an authorised person at this point, the sensitive information managed
+by the application is at risk.  
+While it might be more inconvenient for the instructor, the application must prevent such 'back door' entry points
+for security reasons. 
+
+.h2 Screen Mock-ups
+The following figures offer the basic design layouts for the more complex activity screens. 
+These are shown without any reference to colours in an effort to make the document easier to print. 
+The LaBaaooM colour scheme is a black background with bright text.  Button colours are green for 
+buttons that advance or continue the operation, and red for buttons which cancel, or revert the activity. 
+In most cases there is no need for a generalised &ital( back ) button as the device navigation back button 
+should suffice.
+These are only samples; the final prototype might organise the information differently or have more and/or better
+information to display than is known at this time.
+
+.sp 2
+.cc 4i
+.ep screen_login.eps x=.5i  l=3.8i close proportional
+&figure( The mock-up of the login activity screen. )
+.sp 1
+
+.cc 4i
+.ep screen_newstudent.eps x=.5i  l=3.8i close proportional
+&figure( The mock-up of the new user activity screen. )
+.sp 1i
+
+.cc 4i
+.gv figure
+.dv eval_fig &_fig
+.ep screen_hist.eps x=.5i  l=3.8i close proportional
+&figure( The mock-up of the student evaluation history information showing possible graphs for sentence  and random word evaluations. )
+.sp 2
+
+.cc 4i
+.gv figure
+.ep screen_eval_start.eps x=.5i  l=3.8i close proportional
+&figure( The mock-up of the screen used to start an evaluation. )
+.sp 1
+
+The login and add student entry screens are fairly self explanatory.
+The evaluation screen, figure &eval_fig, shows the student name and section.  
+In addition it will show the date and score (words per minute) of the last evaluation along with 
+a graphical representation of the student's data.  
+.if false
+.cn start atbot Times-roman 8p .75i
+There are theories that persons with dyslexia have an easier time reading with lower contrast between 
+text and background.  The prototype will allow for a low contrast setting and will track these scores
+differently.
+.cn end
+.fi
+Not shown on the mock-up, for clarity, are two horizontal lines which will be placed across each graph
+indicating the student's over all average, as well as the overall average for the section. 
+These lines will provide a quick visual assessment for the instructor. 
+
+.sp .5
+The evaluation start screen allows the instructor to verify the settings that will be used for the evaluation, and
+to adjust them before starting. 
+The type of evaluation is selected by touching the appropriate button which begins the evaluation. 
+
+.h1 Data Structures
+The over arching Android application design places some constraints on the organisation of data structures
+within the application. 
+Specifically, each &ital( activity ) exists as an individual class which for the most part serves to provide
+functions rather than data. 
+For example, the Login class provides the functions which are invoked when the activity is first presented 
+on the screen (used to initialise fields), and functions which are invoked when the &ital( log in button )
+is pressed (used to validate the information entered and invoke the next activity when valid). 
+What we call the &bold( base ) data structures are those classes that exist to manage the data that
+the application needs. 
+
+.sp .5
+.gv figure
+.dv class_fig &_fig
+.ca start class.ca
+	.if format_2col
+		.dv class1_x 0i
+	.ei
+		.dv class1_x .65ii
+	.fi
+	.ep class1.eps x=&class1_x l=2i close proportional
+	&figure(  The relationships of the base classes. )
+	.sp 1.5
+.ca end
+.gv remain
+.if &_iremain 2.5 >
+	.im class.ca
+.ei
+	.oe &oetarget .im class.ca
+.fi
+
+Figure &class_fig illustrates the relationships between the base data structures. 
+The following sections provide details about each of these classes.
+
+.h2 Datacache
+The datacache class exists to provide an interface to the underlying storage mechanism that the application 
+will use to persist data. 
+Hiding the real storage mechanism (an SQL database, a flat file structure, object store, etc.) from the 
+remainder of the application allows the mechanism to be changed without adversely affecting the bulk of the 
+code. 
+.sp .5
+For simplicity, the prototype will use a flat file scheme, which should be sufficient to track 200 students, and 
+certainly could be scaled beyond that if specific index lists were maintained. 
+The filename will be used to indicate the data type, and the key with the following syntax:
+.sp .5
+&ex_start
+   <prefix>_<first-name>_<last-name>
+&ex_end
+Where &cw( <prefix> ) is the data type. 
+
+
+.sp .5
+Unlike most of the data structures in this application, the datacache is a singleton. 
+Any class which needs to access the information stored will invoke a &ital( Get ) function that will 
+create the singleton if it does not exist, or return a pointer to the instance if it does. 
+
+.sp .5
+.cc 1i
+.h3 The Datacache API
+The following is the list of functions supplied by the class instance:
+.sp .5
+.cc .5i
+&smindent
+.bl &lic1
+	.li Get reference to the datacache
+	.li Deposit a student's data
+	.li Extract a student's data
+	.li Deposit a sentence list
+	.li Extract a sentence list
+	.li Query existence of a student
+	.li Generate a list of students
+.el
+&usmindent
+.sp .5
+
+Information extracted or deposited is passed to/from the caller using an array of strings. 
+The datacache function to deposit information will examine string[0] with the assumption that
+it is of the form &cw( <key>:<value> )  where key is ignored, and value is used to create the 
+second portion of the underlying file name (spaces in the value will be replaced by underbar characters).
+The remainder of the information in the array is ignored. 
+
+.h3 Data Elements
+For the flat file environment, the order of the data deposited (array of strings) should match the order returned to 
+the application when extracted, however if the underlying mechanism to manage the data is changed, this
+might not always hold true.
+Thus, the application code &bold( should not ) assume that the data returned from an extract function 
+call is in any particular order. 
+To avoid any complications, the strings that are stashed into the datacache will have a <key>:<value> syntax
+allowing the data consumer code to be free of order dependencies. 
+
+.h2 Student
+The student class is used to track a single student in the application. 
+Obvious information, name, section, are maintained, along with the evaluation lists. 
+A reference to the settings class is managed for each student. 
+Two evaluation lists are maintained: one for sentence based evaluations and one for random word evaluations. 
+The following are exposed functions:
+.sp .5
+.cc 1i
+&smindent
+.bl &lic1
+	.li Add an evaluation to the student
+	.li Generate a datacache entry (array of strings) from the data
+	.li Get an array of evaluation score data (graphing)
+	.li Get the last evaluation 
+	.li Get student name
+	.li Get section
+	.li Get the max, min, mean values for an evaluation type.
+.el 
+&usmindent
+
+.h2 Settings
+The settings data structure allows evaluation settings for a student to persist across evaluations. 
+For students with specific needs, the settings allow for customised  font size, foreground and background inversion, 
+and text styles. 
+.** High and low contrast settings are also maintained, and are the only setting which is recorded with an evaluation.
+
+.h2 Evaluation 
+An evaluation class manages the information captured during a single evaluation. 
+Exposed functions from this class will include:
+.sp .5
+&smindent
+.bl &lic1
+	.li Get the words per minute (score)
+	.li Get the timestamp from when the evaluation was administered
+	.li Convert the evaluation information to a string
+.el 
+&usmindent
+
+.h2 Evaluation Set
+The evaluation set data structure is used to manage a set of evaluations for a student. 
+It provides mostly functions to manage the set, and very little data is maintained. 
+Exposed functions from this class will include:
+.sp .5
+&smindent
+.bl &lic1
+	.li Add evaluation
+	.li Generate an array of strings, one string per evaluation
+	.li Get the number of evaluations
+	.li Get an array of scores from the set
+	.li Get the last evaluation in the set
+	.li compute and return  the max, min, mean values from the set
+.el
+&usmindent
+
+.h2 Section
+A section is a group of students which could be entire classes of the same grade level, or could be subgroups within one
+grade level class. 
+The section is a simple list which is used to present students organised by section rather than presenting 
+an entire list of students to the user. 
+These functions will be exposed
+.sp .5
+.cc 1i
+&smindent
+.bl &lic1
+	.li Add student
+	.li Generate  an array of students for display
+	.li Generate a datacache entry (array of strings)
+.el
+&usmindent
+
+.h2 Bar Graph
+The graph class is a super class which provides manages data with the expectation of presenting the data
+as a bar graph.  
+In Androkd "painting" is done by constructing a bitmap, and then using the bitmap as the background of a container.
+If run, or scatter graphs, are desired, they will be subclasses to this class; at this point in time, adding additional
+graphs to the application will be considered only if time allows. 
+These functions will be exposed by the class:
+.sp .5
+.cc 1i
+&smindent
+.bl &lic1
+	.li Add a marker value (horizontal reference line)
+	.li Add a value to the data set to be graphed
+	.li Add an array of values to the data set
+	.li Reset the data
+	.li Paint the data (generate a bitmap)
+.el
+&usmindent
+
+
+.h1 Unit Tests
+Where possible, in built unit test code will be added to verify the initial functions coded for the prototype, 
+and to provide a set of regression tests as subsequent part of the prototype are added. 
+This document will be updated to reflect the areas for which tests are created. 
+
+.h1 The Evaluation Process
+The core of LaBaaooM is the evaluation. 
+It is driven by the &ital( evaluation activity class ) which in plain terms means that there is a 'screen'
+which is associated with a set of methods. 
+The activity starts, instance of the class created, when the setup evaluation activity recognises that one of 
+the two start buttons has been pressed; necessary information from the setup is captured, and the operating 
+system request to start the evaluation activity is made. 
+
+.sp .5
+.h2 Initialisation 
+Upon start, the class initialises by determining which type of evaluation is to be performed. 
+This is communicated by the setup activity, along with  a reference to the student. 
+The student's settings are retrieved and the screen objects are customised based on those settings. 
+As the last step the set of random words or sentences &note is fetched and the class enters a wait state. 
+.cn start atbot Times-roman 8p .5i
+	We will use sentences for the remainder of the discussion, though the actual meaning is 
+	sentence or group of words.
+.cn end
+
+.h2 Waiting to Begin
+The evaluation screen is completely void of any pictures, icons, or text with the exception of the sentence
+that is to be read, and a green button that the student touches to move to the next sentence.
+Immediately following initialisation, only the green button appears, and the application waits for a touch 
+on the button to display the first sentence.
+The instructor may indicate to the student that they are to touch the green button to begin.
+
+.h2 Button Touches
+The remainder of the evaluation is driven though callbacks of the &ital(onClick) function that is associated
+with the green button. 
+On the first touch of the green button, the timer is started and the first sentence is displayed.
+For subsequent touches, the next sentence is displayed. 
+
+.h2 Finalisation of the Evaluation
+When there are no more sentences to display, the touch of the green button causes several things to 
+happen:
+
+.sp .5
+&smindent
+.bl &lic1
+.li The timer is stopped and the reading rate (words per minute) is computed.
+.sp .3
+.li The evaluation information is saved in the datacache as a pending evaluation.
+.sp .3
+.li The main login activity is invoked
+.sp .3
+.li The evaluation finishes
+.el
+&usmindent
+.sp
+
+From the student's perspective they now see the login page and that is their cue to hand the device
+back to the instructor. 
+The switch to the log in device prevents accidental navigation by the student to any other part of the application 
+that might leak sensitive information about other students. 
+
+.h2 Accepting the Evaluation
+The purpose of reading aloud to an instructor is to allow for a monitoring of the evaluation. 
+This gives the instructor the opportunity to delete the evaluation should there be an interruption or 
+other distraction that invalidates the process.
+To that end, once the evaluation has completed, the instructor must review each of the unverified evaluations
+and either accept or reject them.
+Accepted evaluations are added to the student information maintained in the datacache, and rejected evaluations
+are deleted. 
+The instructor may opt to process all unverified evaluations at a later time; there is no requirement that an 
+evaluation be approved before starting the next evaluation.
+
+.im implement.im
+
+.qu
+
+.h1 Coding Guidelines
+Unless prohibited by the implementation language, the Go programming conventions are being followed.
+The Go conventions are well documented, make the code uniform and easy to read, and can help to prevent
+errors during maintenance. 
+The following paragraphs provide the more important aspects.
+
+.h2 Tabs, Indention and Spaces
+Lines are to be indented with tabs and the tab stop width should be set to 4 characters.  This makes the code
+easier to edit, and does not waste an extreme amount of horizontal space yet still makes the indentation visually useful. 
+There should be a space between opening and closing parentheses of any function call, if, while, or for loop
+statements. 
+There should &stress( not ) be spaces after/before any subscript brackets (e.g. [i] not `[ i ]).`
+
+.h2 Code blocks
+All blocks will be contained within opening and closing curly braces, even if the block is a single line. 
+This makes the code easier to maintain, and prevents accidental bugs if code is added to a block which 
+originally was not bracket enclosed (we have too many python programmers who come along and add lines of 
+code assuming that because the indention level matched the block was assumed).
+When an if statement requires an else clause,  the closing curly brace, else keyword and opening 
+curly brace shall appear on the same line; &cw( else if ) is to be avoided like the plague.
+
+.sp
+The opening curly brace for any block of code shall appear to the right of the statement that starts 
+the block (for, while, etc.) and not on the subsequent line; again this maximises the number 
+of lines visible in the window. 
+
+
+.h2 Code Lines
+Each line of code in the source shall have a single statement. 
+The use of unreasonably short lines is strongly discouraged, and using a line length of at least 135 characters
+is preferred.
+This maximises the number of lines of code which are visible in the window as space to the right is not wasted.
+
+.h2 Comments
+Block comments are to be enclosed in traditional C style /*  and */ notation and should  &bold( not )
+have leading asterisk (*) characters. 
+One line comments are generally to be added to the right of the code they reference, and should use the C++ 
+double slant ( .sm &cw( // ) .sm ) comment indicator. 
+Long one line comments can appear before the line of code they refer to, but as this breaks the flow of the 
+code it should be used only if unavoidable.
+
+
+.h2 Puplicly accessible Functions and Fields
+All fields and functions of a class which may be directly invoked by an &ital( outside ) piece of 
+code will have names which start with a capitalised letter. 
+While &ital( camel case ) function and variable names are &bold( not ) preferred as they are more 
+difficult to read, that seems to be the Java way and for publicly accessible function and 
+field names the illegible style will be used.  
+For functions and variables which are not outwardly visible, underbars are preferred and all 
+characters of the field or function name should be lower case. 
+
+
+

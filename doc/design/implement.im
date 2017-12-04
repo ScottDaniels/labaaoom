@@ -1,0 +1,83 @@
+
+.dv lb LaBaaooM
+
+.h1 Implementation
+This section contains details specific to the way &lb was implemented that
+may require a bit of explaination, or whose design when this document was
+first written was not solid.
+
+.h2 Forcing Re-Login
+The original design identified several security concerns which all revolved round the 
+ability to force the user to revalidate their credentials upon return to the application 
+should the application become paused allowing another to become active. 
+The &ital( normal ) Android operating paradigm in this type of situation is to 
+return the user to the paused applicaiton in exactly the same state as when 
+it was paused.  
+For most applicaitons, there is no problem with this, however for &lb the assumption 
+was that if the application were not exited before switching to another, that the 
+deivce could also have changed hands, and by forcing the user to validate their
+credentials, we ensure that the device is back in the hands of the authorised user.
+
+.sp .5
+&lb's goal is to detect that the active activity has been paused, and that the 
+activity which became active was &bold( not ) a &lb activity.  
+Upon return (resume) to the activity, the user is prompted for login and password
+information, and if validated, the interrupted activity is restarted as close to 
+the same state as is possible when it was interrupted.
+The only shift in what is the expected Android behavour is that validation 
+was required; the application is &bold( not ) completely restarted. 
+
+.sp .5
+To accompilsh the goal 
+an activity wrapper class, &cw( Force_login_activity ) (FLA) was introduced, 
+and two changes to the existing activities were needed:
+.sp .5
+
+.cc 1i
+&smindent
+.ju off
+.bd .25i f=%d) a=1
+	.di : Each class had to extend the FLA wrapper class
+	.sp .4
+	.di : Any &cw( startActivity() ) function calls had to be replaced with 
+		the &cw( Fork_internal() ) function provided by FLA
+.ed
+.ju on
+&usmindent
+
+.sp
+From our point of view, an activity may be paused for one of two fundimental
+reasons:  it started a new activity, or the system paused it to start another 
+application (e.g. via the home button).  
+As it is not possible to determine why an application is being paused, the FLA
+class manages a state which is set to either &ital( internal, ) or &ital( external. )
+If the resume function is executed when the status is &ital( external, ) 
+the validation activity is invoked. 
+Execution of the resume function when the state is &ital( internal ) allows the 
+activity to continue without redirecting control to the login activity.
+.sp .5
+
+The state is set to &ital( external ) when the class is created, and is set to 
+&ital( internal ) only when the &cw( fork_internal() ) function is invoked.
+This works based on the following assumptions about the Android environment and
+&lb code:
+.sp .5
+
+&indent
+.bl &lic1
+	.li &lb functions know when they are invoking internal activities, and can
+		use the standard start activity  function when/if it is necessary to start
+		an external activity and will use the fork internal FLA function when 
+		invoking other &lb activities.
+	.sp .4
+	.li When an application is paused, nothing in the pause and stop path
+		are responsible for updating the internal state.
+	.sp .4
+	.li When Android returns control to the application, the activity which was
+		active at the time of the pause will be resumed, and not some other
+		activity &ital( up the chain. )
+.el
+&usmindent
+.sp
+
+
