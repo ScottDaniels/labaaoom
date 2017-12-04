@@ -1,0 +1,186 @@
+.** basic setup for documents
+.** define format_2col for two column layout
+
+.sf Helvetica
+.st 10p
+
+.** this column width is extra wide for title and reset at the end of this file
+.cd 1 7.5i i=.5i
+
+.in 0i
+.hn off
+
+.dv lic1 l
+
+
+.dv start_count .gv words  .ev ^`.dv watstart ^^&_words` :
+.dv end_count  .dv tag $1 ^: .gv words .ev ^`.dv count ^[ ^^&_words ^^&watstart - ]`  ^:  .sv tag count ^:
+.sv end_count
+.dv ex_start .sp .5 .sf ^&cwfont .st ^[ ^&textsize 2 - ] .fo off
+.dv ex_end  .fo on .sf ^&textfont  .st ^&textsize  .sp 1
+
+
+.dv gtid 903049918
+.tm .9i
+.tg 0i
+.sy .5i
+.ju on
+.pn on center f=-%d- noline
+.ll 6.0i
+
+.if use_helvetica
+	.dv textfont Helvetica
+	.dv boldfont Helvetica-Bold
+	.dv titlefont Helvetica-Bold
+	.dv italfont Helvetica-Oblique
+.ei
+	.dv textfont Times-Roman
+	.dv boldfont Times-Bold
+	.dv italfont Times-Oblique
+	.dv titlefont Helvetica-Bold
+.ei
+.fi
+.dv cwfont Courier
+.if ! textsize
+	.dv textsize 10p
+.fi
+.dv fntextsize [ &textsize 2 - ]
+
+.** .dv bold .sf Helvetica-Bold $1 .sf ^&textfont
+.** .dv ital .sf Helvetica-Oblique $1 .sf ^&textfont
+.** .dv cw .sf Courier $1 .sf ^&textfont
+
+.dv bold .tf ^&boldfont ^&textsize $1 ^:
+.dv boldaf .tf $1 ^&textsize $2 ^:
+.dv lgbold .tf ^&boldfont ^[ ^&textsize 2 + ] $1 ^:
+.dv bold_center .sf ^&boldfont  .ce $1 ^: .sf ^&textfont
+.dv boldh_center .sf Helvetica-Bold  .ce $1 ^: .sf ^&textfont
+.dv ital .tf ^&italfont-Oblique ^&textsize $1 ^:
+.dv fnital .tf ^&italfont-Oblique ^&fntextsize $1 ^:
+.dv ital_center .sf ^italfont  .ce $1 ^: .sf ^&textfont
+.dv cw  .tf ^&cwfont ^&fontsize $1 ^:
+.dv pix pixel
+
+
+
+.if ! cow_path
+	.dv cow_path ./cow.eps
+.fi
+
+.ta 3i 1.4i 3i b=0
+
+.sp .5
+.if revision
+	Revised: &revision .br
+.fi
+
+
+.cl
+.st 18p
+.sf &titlefont
+.sp .5
+.ep &cow_path x=.25i  l=.75i center close proportional
+
+
+.cl : 
+.sp .
+.ce &doc_title1
+.if doc_title2
+	.if doc_title2_size
+		.st &doc_title2_size
+	.ei
+		.st 18p
+	.fi
+	.ce &doc_title2
+.fi
+
+.st &textsize
+.sf &textfont
+.et
+
+.tg .2i 
+.lw 1
+.ln 
+
+.** reset the col width for better running header placement after intro 
+.** i=.75i assuming an indention of .5 and a line length of 6i for 1.25 inches  marging on either side
+.cd 1 6.75i i=.75i
+.dv hdr_mar .5i
+
+.sy +12p
+.tt
+.sy -12p
+
+.ll 6.0i
+.in .5i
+
+.dv show_image .ep $1  x=-.15i l=2.25i proportional close
+
+.** references ref adds [n] to the output and increases n while defining $1 to translate to n
+.**            rnote smashes [$2] ($2 is a name) and maps $1 to the number
+.** ref_def and end_rd are better
+.dv rnum 1
+.** .dv ref   .sm ^[^&rnum] .dv $1 ^&rnum ^: .dv rnum ^[ ^&rnum 1 + ] ^: 
+.dv ref   .dv $1 ^&rnum ^: .dv rnum ^[ ^&rnum 1 + ] ^: 
+.dv rnote .sm ^[^&rnum] .sm $2 .dv $1 ^&rnum ^: .dv rnum ^[ ^&rnum 1 + ] ^: 
+
+.** use &ref_def(ohiou) followed by reference info then end_rd
+.** will define &ohou to use as [&ohiou] in the source
+.dv ref_def_space 1i
+.dv ref_def .ev ^`^&ref( $1 ) .if  ^^&imbed_refs 0 > ^: .sp .4 .cc ^&ref_def_space .di ^^&$1. ^: 
+.dv end_rd .fi
+
+.** page notes/foot notes adds a superscript and bumps the number
+.** 
+.dv note_num 1
+.dv note .sm .tf superscript 2/3 ^&note_num ^: .dv note_num ^[ ^&note_num 1 + ] ^:
+.dv trademark .sm  .tf d=5p Helvetica 1/2 TM ^: 
+
+.if false
+two col is basically sigchi format:
+	PAGE SIZE AND COLUMNS
+	On each page your material should fit within a rectangle of
+	7 x 9.25 in (18 x 23.5 cm), centered on a US letter page
+	(8.5x11 in), beginning 0.75 in (1.9 cm) from the top of the
+	page, with a 0.33 in (0.85 cm) space between two 3.3 in
+	(8.4 cm) columns. Right margins should be justified, not
+	ragged. Please be sure your document and PDF are US
+.fi
+
+.if format_2col 
+	.cd 2 3.33i i=.75i g=.33i
+	.dv two_col_mode .cd 2 3.33i i=.75i g=.33i
+	.in 0i
+	.dv hdr_mar 0i
+
+	.dv indent .ll -.35i .in +.2i
+	.dv uindent .sp .1 .in -.2i .ll +.35i
+	.dv smindent .ll -.35i .in +.2i
+	.dv usmindent .sp .1 .in -.2i .ll +.35i
+
+	.** very different header requirements, so easier just to bang them out here 
+	.** no space between any header and the first line of the paragraph
+	.oe page .dh 1 i=0 f=Helvetica-Bold e=off p=9p s=1,0   m=0i
+	.dh 1 i=0 f=Helvetica-Bold e=off p=9p s=1,0   m=0i r=1i u=on
+	.dh 2 i=0 f=Helvetica-Bold       p=9p s=1,0  m=0i i=0 r=.5i
+	.dh 3 i=0 f=Helvetica-Italic     p=9p s=1,0   m=0i i=0 r=.5i
+
+	.** sigchi requires centered figure text. font increased to 11 as .fg decreases size by 2
+	.dv figure .ju off .bc start .fg s=9p $1 ^: .bc end .ju on
+.ei
+	.ll 6.0i
+	.in .5i
+	.cd 1 6.75i i=.75i
+	.dv hdr_mar .5i
+
+	.dv indent .ll -1i .in +.5i
+	.dv uindent .sp .1 .in -.5i .ll +1i
+	.dv smindent .ll -.6i .in +.3i
+	.dv usmindent .sp .1 .in -.3i .ll +.6i
+	.** .oe page .dh 1 f=Helvetica-bold i=0 e=off p=14p s=1,0 m=&hdr_mar
+	.dh 1 i=0 f=Helvetica-bold e=off p=12p s=1,0 m=&hdr_mar
+	.dh 2 i=0 f=Helvetica-bold s=1,.2  m=&hdr_mar i=0 p=12
+	.dh 3 i=0 f=Helvetica-bold s=1,0 m=&hdr_mar i=0 p=10 r=.5i
+
+	.dv figure .fg $1 ^: 
+.fi

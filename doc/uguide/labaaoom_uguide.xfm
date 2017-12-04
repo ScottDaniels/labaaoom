@@ -1,0 +1,351 @@
+
+.if false
+=================================================================================================
+    (c) Copyright 2017 By E. Scott Daniels. All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification, are
+    permitted provided that the following conditions are met:
+
+        1. Redistributions of source code must retain the above copyright notice, this list of
+            conditions and the following disclaimer.
+
+        2. Redistributions in binary form must reproduce the above copyright notice, this list
+            of conditions and the following disclaimer in the documentation and/or other materials
+            provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY E. Scott Daniels 'AS IS' AND ANY EXPRESS OR IMPLIED
+    WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+    FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL E. Scott Daniels OR
+    CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+    ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+    ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    The views and conclusions contained in the software and documentation are those of the
+    authors and should not be interpreted as representing official policies, either expressed
+    or implied, of E. Scott Daniels.
+=================================================================================================
+.fi
+
+.if false
+	Mnemonic:	uguide.xfm
+	Abstract:	The LaBaaooM user guide source.
+	Author:		E. Scott Daniels
+	Date:		2 December 2017
+.fi
+
+.**  .dv set_fig .gv figure .dv $1 ^&_fig  ^:
+.dv set_fig .dv $1 ^&seq_fig ^: .dv seq_fig ^[ ^&seq_fig 1 + ]
+.dv ifroom .gv remain  .if ^&_iremain 5 > ^: .im $1 .ei .oe ^&oetarget .im $1 ^: .fi 
+.dv screen_shot .sp .5 .ep figures/$1.eps
+
+.dv seq_fig 1
+
+.dv assno 
+.dv doc_title1 LaBaaooM 
+.dv doc_title2_size 12p
+.gv Date
+.dv doc_title2  User's Guide
+.dv revision &_date
+
+.dv format_2col 1
+
+.dv col_width 3
+.dv oetarget col
+
+.** the logo
+.dv cow_path ../cow.eps
+.dv lb LaBaaooM
+
+.im ../setup.im
+.oe page  .rh &lb User's Guide -- &_date
+
+.sp
+.h1 Overview
+&lb &note is a specialised reading assessment tool designed to assist reading instructors with measuring oral fluency of early readers (K-4). 
+.cn start atbot Times-roman 8p .5i
+    What's in a name?  My kids grew up reading Sandra Boynton's children's books.
+    As a tribute, &lb is a play on the tile of of her book, and my favourite,  "Moo Baa La La La."
+	.sp .7
+.cn end
+This User's guide assumes that &lb has been installed, and that starting the application by 
+clicking on the cow &note icon results on the display of the main &lb login screen.
+.cn start atbot Times-roman 8p .75i
+The cow icon used for &lb is a bit of public domain clip art available from 
+http://www.clipartlord.com/ .sm category/ .sm animals-clip-art/ .sm large-mammals-clip-art/ .sm cattle-clip-art/ .sm cow-clip-art/
+.cn end
+This guide will walk through the following items:
+
+.sp .5
+&smindent
+.bl &lic1
+.li Adding, modifying, deleting a student
+.li Displaying student evaluation information
+.li Executing an evaluation
+.li Evaluation settings
+.el 
+&usmindent
+.sp
+
+
+
+.h1 Logging In
+The information that &lb collects on each student is sensitive, therefore the user must sign into the 
+application in order to use it. 
+When the application is started the login page is displayed, and the user must enter a valid user name and
+password combination to proceed past this page. 
+&set_fig( login_fig )
+Figure &login_fig illustrates this log in page.
+.sp
+
+.ca start login.ca
+	.sp  .5
+	.ep figures/labaaoom_login.eps x=.3i l=4i close proportional
+	&figure( The main entry page to &lb. )
+	.sp
+.ca end
+&ifroom( login.ca )
+
+.h2 Default Credentials
+When the application is first installed, the default user name is &ital( Teacher, ) and the 
+associated password is &ital( moobaa. )  
+The default credentials &bold( should ) be changed immediately, and once the credentials have been 
+set,  default values are not usable (if the username and password which are set up are forgotten, the &bold(  only )
+way to reset them is to reinstall the application which will cause all existing student data
+to be lost!). 
+
+.h2 Adding Instructor Credentials
+To add one or more instructor credentials, the &ital( Add/Del Instructor Credentials ) option should be selected 
+from the main menu.  
+A screen which allows the instructor name, and password is presented. 
+The desired name, and password should be entered, and a verification of the password should be typed in the 
+third text input area on the screen. 
+Once the desired credentials (instructor name, password and verification) are entered, the  &ital( Add  )  button should be clicked which will cause the 
+information to be saved in the &lb datacache.
+A green confirmation pop-up message will be displayed at the bottom of the screen on success, and a red 
+error message displayed if the attempt fails. 
+
+.**  embed early to get them started at the top of the next page
+.im screen_shots.im 
+
+.sp .5
+Once an instructor has been added to the system, the default credentials are no longer recognised. 
+This is a security precaution which prevents anybody who is familiar with the default login information from 
+accessing the sensitive data on the device. 
+
+.h2 Deleting An Instructor
+The same screen can be used to delete an instructor from the datacache.  
+To accomplish this, the existing instructor name and password is entered, leaving the validation field blank, 
+then the &ital( delete ) button must be touched. 
+To confirm, a pop-up dialogue window will appear asking for confirmation before actually removing the 
+instructor credentials from the datacache. 
+When the last instructor is deleted, the default credentials become valid and can be used to log into the 
+application. 
+
+.sp .5
+More than one instructor  credentials may be defined, but these only provide a gate into the application. 
+There isn't a separate "user space" for each instructor defined; all instructors will have access to all 
+student information stored on the device. 
+
+.h2 Main Menu
+Once the user has logged in, the main menu is displayed. 
+The menu consists of various tasks (e.g. add new user) which are segregated into different 
+categories.
+.sp
+The main menu is divided into &ital( evaluation oriented ) tasks, and &ital( student oriented )
+tasks. 
+Evaluation related tasks allow for a new evaluation to be initiated, and for a student's 
+evaluation statistics to be displayed. 
+Student oriented tasks allow for students to be added, deleted, and modified. 
+&set_fig( mm_fig )
+Figure  &mm_fig illustrates the main menu, showing all of the available options. 
+
+
+.h1 Managing Students
+Before any evaluations can be conducted, at least one student must be added.  
+Selecting the &ital( Add Student ) option from the main menu displays a short
+form that allows  a new student to be defined. 
+&set_fig( add_fig )
+Illustrated in  figure &add_fig, this screen prompts for the user name (first and last, or 
+last then first at the discretion of the instructor), and the section to which the 
+student belongs. 
+The information is any short name that the instructor wishes to use such as &ital( first.Meyers  )
+which might designate the grade and instructor.
+.sp .4
+Clicking the &ital( Add ) button at the bottom of the form causes the verification that a student
+with the same name does not exist, and if unique a student entry is created in the datacache. 
+
+.h2 Modifying Existing Students
+&set_fig( mod_fig )
+Selecting the &ital( Modify Student ) option from the main menu causes a scrollable list of all students
+to be displayed. 
+Touching any student's name causes the modify screen to be presented,
+illustrated in figure &mod_fig.
+This screen allows the instructor to make changes and save the student information back into the datacache.
+
+
+.h2 Deleting Students
+&set_fig( del_fig )
+When it is no longer necessary to track a student, they may be deleted from the datacache. 
+Select the &ital( Delete Student ) option from the main menu to again display a list of students.
+Unlike the list for the modify task, touching a name in this list causes the name to be highlighted, 
+and it is possible to highlight multiple students. 
+Figure &del_fig shows a student selection list with multiple students selected with the delete button option 
+at the bottom of the screen.
+When the &ital( Delete ) button is touched, the user will be asked to confirm the delete (once delted student 
+information cannot be retrieved), and if confirmed, the selected students will be deleted. 
+
+.h1 Evaluation Menu Options
+The top section of the main menu lists the options which are related to student evaluations.
+Specifically the option to start an evaluation and to show the evaluation history of a student.
+When either of these options is clicked, the current list is displayed and the instructor may select 
+a student to act on.  
+Touching the student name will cause the application to load either the evaluation setup page, or 
+to display the student evaluation history directory. 
+These subsequent pages are explained in the next paragraphs.
+
+.cc 2i
+.h2 The Evaluation 
+&lb is a single purpose application that is designed to measure the oral fluency of a reader.  
+Oral fluency is measured by presenting the student with a series of sentences &note which they 
+are to read aloud to the instructor.
+.cn start atbot Times-roman 8p 1i
+&fnital( Sentences ) presented during an evaluation may be actual sentences, or a set of random words presented in sentence
+form (e.g. father toy brown goat house car came). For ease, we will refer to both as sentences even though the jumble
+of words is clearly not a sentence.
+.cn end
+After the last sentence is read by the student, their reading rate (words per minute) is calculated and the 
+instructor is prompted to accept or reject the evaluation.  
+The following sections describe how to perform an evaluation and the various options which are available.
+
+
+.h2 Starting An Evaluation
+&set_fig( eval_fig )
+Touching the &ital( Start Evaluation ) option from the main menu causes the &ital( evaluation setup ) screen.
+The setup screen, figure &eval_fig, lists the options that the instructor may change for the student's evaluation, and allows
+the random word or sentence list to be selected. 
+Selections made on this screen are saved with the student's information such that the next time the student
+is evaluated the current settings will be used as the default and will save the instructor time during the 
+setup. 
+
+.sp .5
+The instructor may control three basic evaluations settings through a collection of radio button selection groups.
+These groups allow the instructor to change the font style, font size, and whether or not the background is inverted.  
+This should allow the evaluation to be tailored to accomodate students whose vision might require specialised settings.
+Each of these categories, and the possible settings, are explained below.
+
+.h3 Font Style
+The font style radio group allows the instructor to select either &ital( serf ) or &ital( sans-serf ) styled
+font for the evaluation text to be presented in.
+The words or sentences presented during the evaluation will be displayed using the style selected.
+
+.h3 Font Size
+&lb allows the instructor to select between three font sizes for the evaluation text. 
+The small size is approximately 18 point font, medium is approximately 24 point font, and 
+large is approximately 30 point font. 
+Instructors will likely need to test each font to determine which is appropriate for each individual 
+student.
+
+.h3 Text Inversion
+The last category that my be adjusted on the setup screen is whether or not to invert the text colours
+when conducting the evaluation. 
+Normally, the evaluation text is white on a dark background, however if a student requires dark text on 
+a light background, the inversion option should be marked. 
+
+.h3 Evaluation Lists
+The word and sentence lists are also displayed on the setup screen and the instructor may select 
+a different list before starting the evaluation. 
+The lists contains grade appropriate words and thus are named with a grade indication (e.g. Grade1). 
+These are presented in individual windows, above a button which starts the an evaluation using the 
+list selected in the window; the list can be scrolled if there are more than will fit.
+Should a list be selected that is not the top list, the next time the setup screen is presented for
+the current Student, that list will appear at the top allowing the instructor to only select a list
+when needing to change form the last evaluation. 
+.sp .5
+
+The evaluation lists are organised by grade level (e.g. Grade-1) and contain at least seven sets of 
+ten sentences each. 
+Each evaluation consists of the presentation of ten sentences. 
+With each evaluation that is started for a student, the next sentence group in the list is selected
+such that an evaluation will not be repeated until all sets have been presented. 
+
+.h3 Conducting The Evaluation 
+Once the instructor has selected the desired options for the student, the evaluation may be started
+by touching either the &ital( Start Random ) or &ital( Start Sentence ) buttons which appear below
+their respective list windows. 
+When the desired button is touched, the screen is blanked and only a single green button appears (if 
+the &ital( invert text ) option was selected, the text presentation area will appear as a white square).
+.sp .5
+
+At this point the device may be given to the student, and the student instructed to touch the green button
+to begin, and touch it when they have read the displayed sentence. 
+When the student touches the big button after reading the last sentence, the &lb logon screen will be 
+displayed, and the student should return the device to the instructor. 
+
+.h3 Concluding The Evaluation
+&set_fig( popup_fig )
+After re-entering a valid user name and password to verify that the device is back in the instructor's possession,
+a pop-up window, illustrated in figure &popup_fig,  will be displayed indicating that a  &ital( pending evaluation ) exists.
+In the window the following information will be displayed:
+.sp .5
+&smindent
+.bl &lic1
+.li The student name
+.li The evaluation type (random or sentence)
+.li The measured &ital( score ) (wpm)
+.li The date that the evaluation occurred
+.el 
+&usmindent
+.sp 
+The two buttons on the pop-up allow the instructor to accept or reject the evaluation.
+If accepted, the data will be saved with the student information, and if rejected it will be discarded.
+Reasons for rejecting an evaluation could include distraction during the evaluation, selection of the wrong 
+evaluation type, etc.  
+
+.h2 Student Evaluation History
+&set_fig( hist_fig)
+The benefit of using &lb is to provide a visualisation of a student's progress over time. 
+This is accomplished by displaying the overall history for a student. 
+Touching the &ital( View Student History ) option from the main menu causes a list of students to be presented; 
+touching a student's name in the list then displays the history screen illustrated in figure &hist_fig.
+
+.sp .5
+The history screen shows the student name and assigned section, the date of their last evaluation, and 
+both their overall average reading rate, and the rate of their last evaluation.
+Two graphs are also displayed which show the last 50 evaluations of each type (sentences or random words). 
+These graphs allow the instructor to easily visualise the student's progress over time. 
+Also indicated on the graphs are the student's average (yellow line), and the overall average of all students in 
+the same section (orange line).
+
+
+.h1 Security Concerns
+The &ital( Android way ) allows the user to switch between applications and when returning to a previously
+paused application, they resume where their activity left off.  
+This is convenient when following a link from Facebook which causes the browser to be invoked to display the 
+page, or invoking a PDF viewer to read a paper.
+However, &lb is managing sensitive student information that needs to be protected with a more conservative
+attitude when it comes to application re-entry.
+
+.sp .5
+At least as far as the prototype is concerned the application does not forward control outside of the application,
+however if the user uses the home button it is possible to pause &lb and navigate away during which time
+the device could be used by someone other than the instructor. 
+To prevent the Student information from being exposed to unauthorised persons, any time that control passes to 
+another application, the user will be prompted to enter their login credentials when &lb is activated again. 
+Once the user's credentials are validated, the application resumes at the point where it was paused; the &ital( Android way, )
+with a slight detour.
+
+.h1 Uninstalling The Application
+&lb can be removed from the device the way any other application is removed.
+From the master application list, touch and hold the &lb icon, then drag it to the &ital( remove ) area then lift your
+finger. 
+When the application is removed, &bold( all ) of the student evaluation data, and instructor credentials will be 
+removed with &bold( absolutely no way ) of recovering them.  
+Because removal is an action taken outside of the application, there is no way to prompt to confirm or warn that
+the data will be lost. 
+
+
+
+.qu

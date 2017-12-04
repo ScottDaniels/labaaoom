@@ -1,0 +1,48 @@
+
+
+.** places the first set of screen shots on the next page, and the second
+.** set on the following page.
+.ca start multi_eps1 
+	.cd 1 6.5i i=.45i 
+	.ta 1.8i 1.8i 1.8i 1.8i 
+		.ep figures/labaaoom_mainmenu.eps x=.0i l=3i close proportional
+		&figure( The main menu. )
+		.cl
+		.ep figures/labaaoom_addstudent.eps x=.0i l=3i close proportional
+		&figure( Add student. )
+		.cl
+		.ep figures/labaaoom_modstudent.eps x=.0i l=3i close proportional
+		&figure( Modify student. )
+		.cl
+		.ep figures/labaaoom_delstudent.eps x=.0i l=3i close proportional
+		&figure( Delete student. )
+	.et
+	.sp 1.5
+	.tt
+	&two_col_mode
+
+	.** set up the next batch of screenshots to load (captured below)
+	.oe page .im screens2.ca
+.ca end
+.oe page .im multi_eps1
+
+.** capture second set of screen shots loaded on page after the previous set
+.ca start screens2.ca
+	.cd 1 6.5i i=.45i 
+	.ta 1.8i 1.8i 1.8i 1.8i 
+		.ep figures/labaaoom_evalsetup.eps x=.0i l=3i close proportional
+		&figure( Evaluation setup. )
+		.cl
+		.ep figures/labaaoom_pending.eps x=.0i l=3i close proportional
+		&figure( Pending evaluation pop-up notification. )
+		.cl
+		.ep figures/labaaoom_student_info.eps x=.0i l=3i close proportional
+		&figure( Student History. )
+		.cl
+		.ep figures/labaaoom_selection.eps x=.0i l=3i close proportional
+		&figure( A student selection list. )
+	.et
+	.sp 1.5
+	.tt
+	&two_col_mode
+.ca end

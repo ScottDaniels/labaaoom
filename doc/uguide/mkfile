@@ -1,0 +1,6 @@
+
+ALL = labaaoom_uguide.pdf
+
+< ../master.mk
+
+labaaoom_uguide.pdf:: labaaoom_uguide.ps  
