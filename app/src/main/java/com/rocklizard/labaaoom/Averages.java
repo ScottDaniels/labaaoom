@@ -54,7 +54,6 @@ public class Averages {
 	public Averages( String sect, String list, String etype ) {
 		Datacache dc;
 
-		//System.out.printf( ">>> loading aves for %s %s %s\n", sect, list, etype );
 		dc = GetDatacache();
 		slt_aves = dc.ExtractAveData( sect, list, etype );
 		if(  slt_aves == null ) {
@@ -74,7 +73,6 @@ public class Averages {
 	public void AddVal( double val ) {
 		Datacache dc;
 
-		//System.out.printf( ">>> adding value %.2f\n", val );
 		dc = GetDatacache();
 
 		slt_aves.AddValue( val );

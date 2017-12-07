@@ -65,7 +65,6 @@ public class Ave_data {
 		}
 
 		for( i = 0; i < dclist.length; i++ ) {
-			System.out.printf( ">>>> adata parsing [%d] %s\n", i, dclist[i] );
 			tokens = dclist[i].split( ":" );
 			switch( tokens[0] ) {
 				case "name":
@@ -122,7 +121,6 @@ public class Ave_data {
 		Get the average.
 	*/
 	public Double GetAve( ) {
-		System.out.printf( ">>>> getting average sum=%.2f ele=%d\n", sum, elements );
 		if( elements > 0 ) {
 			return sum / (double) elements;
 		}

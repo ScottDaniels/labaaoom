@@ -18,7 +18,7 @@ $ALL::
 
 # general clean up, but leaves doc files
 clean:V:
-	rm -f *.ps  *.ca
+	rm -f *.ps  *.ca *.bcnfile $local_clean
 
 # trasshes everything that can be built, including documents
 nuke:V: clean

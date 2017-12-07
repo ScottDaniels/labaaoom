@@ -46,8 +46,6 @@ package com.rocklizard.labaaoom;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 public class Force_login_activity extends Activity {
 	private boolean spawned_internal;			// set to true if we spawn one of ours
@@ -67,7 +65,6 @@ public class Force_login_activity extends Activity {
 
 		if( ! spawned_internal ) {
 			System.out.printf( ">>>> on resume ext= %s starting login class! \n", spawned_internal ? "true" : "false " );
-			//Toast.makeText( this, "### WARNING ###  return from outside detected.", Toast.LENGTH_LONG ).show( );
 
 			target = new Intent( getApplicationContext( ), Login.class );
 			spawned_internal = true;				// must set so when this runs after login is finished we pass through

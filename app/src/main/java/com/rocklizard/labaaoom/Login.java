@@ -83,7 +83,6 @@ public class Login extends AppCompatActivity {
         EditText un_thing;        			// user name  field thingy to pull entered text from
         String  result;            			// hash result from password
 		Datacache dc;
-		//Toast t;
 
         pw_thing = (EditText) findViewById(R.id.password);
         un_thing = (EditText) findViewById(R.id.user_name);
@@ -93,7 +92,6 @@ public class Login extends AppCompatActivity {
 		dc = Datacache.Mk_datacache( getApplicationContext() );
 		if( dc == null ) {                        // shouldn't happen but parinoia prevents a crash without messages
 			System.out.printf( ">>> ###ERROR## no datacache pointer\n" );
-			//Toast.makeText( this, "###ERR### internal mishap: no datacache!", Toast.LENGTH_LONG ).show( );
 			Tools.PopError( this, "###ERR### internal mishap: no datacache!" );
 			return;
 		}
@@ -103,9 +101,6 @@ public class Login extends AppCompatActivity {
 				finish();
 				return;
 			} else {
-				//t = Toast.makeText( this, "Please use valid credentials.", Toast.LENGTH_LONG );
-				//t.setGravity( Gravity.TOP | Gravity.START, 250, 100 );
-				//t.show( );
 				Tools.PopError( this, "Please use valid credentials." );
 				return;			// must return here to prevent the system default creds being accepted when a password element exists
 			}
@@ -114,9 +109,6 @@ public class Login extends AppCompatActivity {
         if( result.equals( master_hash ) ) {            // future:  check what they might have changed it to as well
 			finish();
         } else {
-           //t = Toast.makeText(this, "Invalid credentials entered", Toast.LENGTH_LONG);
-           //t.setGravity( Gravity.TOP | Gravity.START, 250, 100);
-           //t.show();
 			Tools.PopError( this, "Invalid credentials entered." );
         }
     }
@@ -128,7 +120,6 @@ public class Login extends AppCompatActivity {
     */
 	@Override
 	public void onBackPressed() {
-		//Toast.makeText( this, "Enter valid user/password or press home button.", Toast.LENGTH_SHORT ).show( );
 		Tools.PopError( this, "Enter valid user/password or press home button." );
 	}
 }
